@@ -1,0 +1,11 @@
+C:\work\KomSync\Application\bin\Debug\net9.0\Application.deps.json
+C:\work\KomSync\Application\bin\Debug\net9.0\Application.dll
+C:\work\KomSync\Application\bin\Debug\net9.0\Application.pdb
+C:\work\KomSync\Application\obj\Debug\net9.0\Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\work\KomSync\Application\obj\Debug\net9.0\Application.AssemblyInfoInputs.cache
+C:\work\KomSync\Application\obj\Debug\net9.0\Application.AssemblyInfo.cs
+C:\work\KomSync\Application\obj\Debug\net9.0\Application.csproj.CoreCompileInputs.cache
+C:\work\KomSync\Application\obj\Debug\net9.0\Application.dll
+C:\work\KomSync\Application\obj\Debug\net9.0\refint\Application.dll
+C:\work\KomSync\Application\obj\Debug\net9.0\Application.pdb
+C:\work\KomSync\Application\obj\Debug\net9.0\ref\Application.dll
