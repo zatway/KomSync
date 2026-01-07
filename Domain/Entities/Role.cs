@@ -4,7 +4,6 @@ using Domain.Enums;
 namespace Domain.Entities;
 
 /// <summary>
-/// Роль пользователя в системе (например, Admin, Manager, Employee, ReadOnly).
 /// Определяет права доступа к различным функциям и данным.
 /// </summary>
 public class Role : BaseEntity
