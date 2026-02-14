@@ -1,0 +1,53 @@
+# .NET Build / Output
+**/bin/
+**/obj/
+**/TestResults/
+**/out/
+**/publish/
+
+# Rider / JetBrains
+.idea/
+*.sln.DotSettings
+*.sln.DotSettings.user
+*.user
+*.resharper
+*_Resharper.*
+
+# Visual Studio (на всякий случай)
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# NuGet / пакеты
+**/project.lock.json
+**/project.assets.json
+**/nuget.config   # ← если локальный
+
+# Entity Framework
+**/Migrations/*.Designer.cs
+# **/Migrations/    ← раскомменти, если миграции НЕ коммитятся
+
+# Docker / local env
+docker-compose.override.yml
+.env
+*.env
+
+# Логи и временные файлы
+*.log
+*.tmp
+*.cache
+*.pdb
+
+# macOS / Windows
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Rider-specific
+.idea/.idea.*/
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/tasks.xml
