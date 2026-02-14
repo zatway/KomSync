@@ -1,24 +1,21 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Persistence;
 
 /// <summary>
-/// Фабрика для создания экземпляров <see cref="KomSyncDbContext" />.
-/// Используется инструментами EF Core (например, Add-Migration) для создания контекста без запуска приложения.
+/// Фабрика для создания экземпляра контекста во время разработки (миграции).
+/// Подтягивает строку подключения из WebApi/appsettings.json.
 /// </summary>
 public class KomSyncDbContextFactory : IDesignTimeDbContextFactory<KomSyncDbContext>
 {
-    /// <summary>
-    /// Создает новый экземпляр контекста базы данных.
-    /// </summary>
-    /// <param name="args">Аргументы командной строки (не используются).</param>
-    /// <returns>Новый экземпляр <see cref="KomSyncDbContext" />.</returns>
     public KomSyncDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<KomSyncDbContext>();
-        optionsBuilder.UseNpgsql("Host=localhost;Database=komsync;Username=postgres;Password=postgres", 
-            builder => builder.MigrationsAssembly("Infrastructure"));
+        // Просто впиши строку подключения сюда на один раз
+        optionsBuilder.UseNpgsql("Host=localhost;Database=komSync;Username=postgres;Password=123", 
+            b => b.MigrationsAssembly("Infrastructure"));
 
         return new KomSyncDbContext(optionsBuilder.Options);
     }

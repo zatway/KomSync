@@ -1,108 +1,54 @@
-using Domain.Entities;
-using Domain.Entities.Common;
+using System.ComponentModel.DataAnnotations;
+using Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Entities;
 
 /// <summary>
-/// Пользователь системы. Может входить через локальную регистрацию или внешние провайдеры (VK, Yandex, Sber).
-/// Имеет связь с ролями, отделом, созданными и назначенными задачами, статьями и другими сущностями.
+/// Сущность пользователя системы.
 /// </summary>
-public class User : BaseEntity
+[Index(nameof(Email), IsUnique = true)]
+public class User
 {
-    /// <summary>
-    /// Уникальный email пользователя. Должен быть уникальным.
-    /// </summary>
-    public string Email { get; private set; } = null!;
+    /// <summary> Уникальный идентификатор пользователя. </summary>
+    [Key]
+    public Guid Id { get; set; }
 
-    /// <summary>
-    /// Нормализованный email (в верхнем регистре) для поиска без учета регистра.
-    /// </summary>
-    public string NormalizedEmail { get; private set; } = null!;
+    /// <summary> ФИО сотрудника. </summary>
+    [Required, MaxLength(255)]
+    public string FullName { get; set; } = null!;
 
-    /// <summary>
-    /// Полное имя пользователя (ФИО).
-    /// </summary>
-    public string Name { get; private set; } = null!;
+    /// <summary> Уникальный Email. </summary>
+    [Required, MaxLength(255)]
+    public string Email { get; set; } = null!;  
+    
+    /// <summary> Уникальный Email. </summary>
+    [Required, MaxLength(255)]
+    public string PasswordHash { get; set; } = null!;
 
-    /// <summary>
-    /// Должность пользователя (необязательно).
-    /// </summary>
-    public string? Position { get; init; }
+    /// <summary> Роль пользователя (0=ReadOnly, 1=Employee...). </summary>
+    public UserRole Role { get; set; }
 
-    /// <summary>
-    /// Идентификатор отдела, к которому принадлежит пользователь (необязательно).
-    /// </summary>
-    public Guid? DepartmentId { get; init; }
+    /// <summary> Должность. </summary>
+    [MaxLength(100)]
+    public string? Position { get; set; }
 
-    /// <summary>
-    /// Внешний провайдер аутентификации ("VK", "Yandex", "Sber") или null для локальной регистрации.
-    /// </summary>
-    public string? ExternalProvider { get; init; }
+    /// <summary> Отдел. </summary>
+    [MaxLength(100)]
+    public string? Department { get; set; }
 
-    /// <summary>
-    /// Идентификатор пользователя во внешней системе (например, в VK).
-    /// </summary>
-    public string? ExternalId { get; init; }
+    /// <summary> Провайдер аутентификации (VK, Yandex). </summary>
+    [MaxLength(50)]
+    public string? ExternalProvider { get; set; }
 
-    /// <summary>
-    /// URL аватара пользователя (из соцсети или загруженного файла).
-    /// </summary>
-    public string? PhotoUrl { get; init; }
+    /// <summary> ID пользователя во внешней системе. </summary>
+    [MaxLength(255)]
+    public string? ExternalId { get; set; }
 
-    /// <summary>
-    /// Дата и время последнего входа пользователя в систему (необязательно).
-    /// </summary>
-    public DateTimeOffset? LastLoginAt { get; init; }
+    /// <summary> Дата создания профиля. </summary>
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    // Навигационные свойства
-
-    /// <summary>
-    /// Отдел, к которому принадлежит пользователь.
-    /// </summary>
-    public Department? Department { get; init; }
-
-    /// <summary>
-    /// Роли, назначенные пользователю (связь многие-ко-многим).
-    /// </summary>
-    public ICollection<UserRole> UserRoles { get; private set; } = new List<UserRole>();
-
-    /// <summary>
-    /// Статьи, созданные пользователем.
-    /// </summary>
-    public ICollection<Article> AuthoredArticles { get; private set; } = new List<Article>();
-
-    /// <summary>
-    /// Версии статей, созданные пользователем.
-    /// </summary>
-    public ICollection<ArticleVersion> ArticleVersions { get; private set; } = new List<ArticleVersion>();
-
-    /// <summary>
-    /// Задачи, созданные пользователем.
-    /// </summary>
-    public ICollection<TaskEntity> CreatedTasks { get; private set; } = new List<TaskEntity>();
-
-    /// <summary>
-    /// Задачи, назначенные пользователю.
-    /// </summary>
-    public ICollection<TaskEntity> AssignedTasks { get; private set; } = new List<TaskEntity>();
-
-    /// <summary>
-    /// Комментарии к задачам, оставленные пользователем.
-    /// </summary>
-    public ICollection<TaskComment> TaskComments { get; private set; } = new List<TaskComment>();
-
-    /// <summary>
-    /// Комментарии к статьям, оставленные пользователем.
-    /// </summary>
-    public ICollection<ArticleComment> ArticleComments { get; private set; } = new List<ArticleComment>();
-
-    /// <summary>
-    /// Сообщения в чате, отправленные пользователем.
-    /// </summary>
-    public ICollection<ChatMessage> ChatMessages { get; private set; } = new List<ChatMessage>();
-
-    /// <summary>
-    /// Файлы, загруженные пользователем.
-    /// </summary>
-    public ICollection<FileEntity> UploadedFiles { get; private set; } = new List<FileEntity>();
+    // --- Навигационные поля ---
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+    public ICollection<Project> OwnedProjects { get; set; } = new List<Project>();
 }

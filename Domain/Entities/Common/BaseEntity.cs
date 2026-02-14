@@ -5,7 +5,6 @@ namespace Domain.Entities.Common;
 
 /// <summary>
 /// Базовый класс для всех сущностей домена.
-/// Содержит общие свойства Id, CreatedAt, UpdatedAt и метод обновления временной метки.
 /// </summary>
 public abstract class BaseEntity
 {

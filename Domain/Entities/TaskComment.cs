@@ -1,37 +1,27 @@
-using Domain.Entities.Common;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
+
 /// <summary>
-/// Комментарий к задаче. Используется для обсуждения задачи.
-/// Поддерживает упоминания пользователей (@username).
+/// Комментарий к задаче.
 /// </summary>
-public class TaskComment : BaseEntity
+public class TaskComment
 {
-    /// <summary>
-    /// Идентификатор задачи, к которой оставлен комментарий.
-    /// </summary>
-    public Guid TaskId { get; init; }
+    [Key]
+    public Guid Id { get; set; }
 
-    /// <summary>
-    /// Идентификатор автора комментария.
-    /// </summary>
-    public Guid AuthorId { get; init; }
+    public Guid TaskId { get; set; }
+    [ForeignKey(nameof(TaskId))]
+    public ProjectTask Task { get; set; } = null!;
 
-    /// <summary>
-    /// Текст комментария.
-    /// </summary>
-    public string Content { get; private set; } = null!;
+    public Guid UserId { get; set; }
+    [ForeignKey(nameof(UserId))]
+    public User User { get; set; } = null!;
 
-    // Навигационные свойства
+    [Required]
+    public string Content { get; set; } = null!;
 
-    /// <summary>
-    /// Задача, к которой относится комментарий.
-    /// </summary>
-    public TaskEntity Task { get; private set; } = null!;
-
-    /// <summary>
-    /// Автор комментария.
-    /// </summary>
-    public User Author { get; private set; } = null!;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
