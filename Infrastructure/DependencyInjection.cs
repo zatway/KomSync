@@ -1,4 +1,5 @@
 using Application.Interfaces;
+using Application.Mapping;
 using Infrastructure.Persistence;
 using Infrastructure.Service.Auth;
 using Microsoft.Extensions.DependencyInjection;

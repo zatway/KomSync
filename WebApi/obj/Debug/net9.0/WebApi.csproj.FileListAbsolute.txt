@@ -152,3 +152,10 @@ C:\work\KomSync\WebApi\obj\Debug\net9.0\refint\WebApi.dll
 C:\work\KomSync\WebApi\obj\Debug\net9.0\WebApi.pdb
 C:\work\KomSync\WebApi\obj\Debug\net9.0\WebApi.genruntimeconfig.cache
 C:\work\KomSync\WebApi\obj\Debug\net9.0\ref\WebApi.dll
+C:\work\KomSync\WebApi\bin\Debug\net9.0\BCrypt.Net-Next.dll
+C:\work\KomSync\WebApi\bin\Debug\net9.0\Microsoft.Extensions.Configuration.dll
+C:\work\KomSync\WebApi\bin\Debug\net9.0\Microsoft.Extensions.Configuration.FileExtensions.dll
+C:\work\KomSync\WebApi\bin\Debug\net9.0\Microsoft.Extensions.Configuration.Json.dll
+C:\work\KomSync\WebApi\bin\Debug\net9.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\work\KomSync\WebApi\bin\Debug\net9.0\Microsoft.Extensions.FileProviders.Physical.dll
+C:\work\KomSync\WebApi\bin\Debug\net9.0\Microsoft.Extensions.FileSystemGlobbing.dll

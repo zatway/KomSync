@@ -11,7 +11,6 @@ public class AuthController(IMediator mediator) : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest command)
     {
-        // Валидация сработает автоматически в ValidationBehavior!
         var response = await mediator.Send(command);
         return Ok(response);
     }

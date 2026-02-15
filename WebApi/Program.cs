@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi;
+using WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,10 @@ builder.Services.ConfigureAddInfrastructure(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// НАСТРОЙКА SWAGGER (Исправленная версия)
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
+// НАСТРОЙКА SWAGGER
 builder.Services.AddSwaggerGen(opt =>
 {
     opt.SwaggerDoc("v1", new OpenApiInfo
@@ -31,11 +35,10 @@ builder.Services.AddSwaggerGen(opt =>
         Description = "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
-        Scheme = "bearer",          // строго маленькими буквами
+        Scheme = "bearer",
         BearerFormat = "JWT"
     });
 
-    // ← Вот ключевое изменение для v10
     opt.AddSecurityRequirement(document => new OpenApiSecurityRequirement
     {
         [new OpenApiSecuritySchemeReference(bearerScheme, document)] = new List<string>()
@@ -66,6 +69,8 @@ builder.Services.AddAuthentication(x =>
 });
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {

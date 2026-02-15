@@ -1,8 +1,9 @@
 using Application.Projects.Commands;
+using Application.Projects.Commands.CreateProject;
 using AutoMapper;
 using Domain.Entities;
 
-namespace Infrastructure;
+namespace Application.Mapping;
 
 public class ProjectMappingProfile : Profile
 {
