@@ -30,7 +30,6 @@ public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TReq
                 throw new ValidationException(failures);
         }
 
-        // Если ошибок нет или валидаторов не нашлось — идем к следующему шагу (в Handler)
         return await next();
     }
 }
