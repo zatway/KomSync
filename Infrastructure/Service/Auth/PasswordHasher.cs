@@ -1,6 +1,6 @@
-using Application.DTO.Auth;
+using Application.Interfaces;
 
-namespace Infrastructure.Services.Auth;
+namespace Infrastructure.Service.Auth;
 
 public class PasswordHasher : IPasswordHasher
 {

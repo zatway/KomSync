@@ -1,7 +1,6 @@
-using Application.DTO.Auth;
 using Application.Interfaces;
 using Infrastructure.Persistence;
-using Infrastructure.Services.Auth;
+using Infrastructure.Service.Auth;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +17,11 @@ public static class DependencyInjection
             
         services.AddScoped<IKomSyncContext>(provider => provider.GetRequiredService<KomSyncDbContext>());
 
-        // Исправленная регистрация AutoMapper
-        services.AddAutoMapper(cfg => {}, typeof(AuthMappingProfile).Assembly);
-
-        // Регистрация сервисов аутентификации
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IJwtProvider, JwtProvider>();
-        services.AddScoped<IAuthService, AuthService>();
+        
+        // Исправленная регистрация AutoMapper
+        services.AddAutoMapper(cfg => {}, typeof(AuthMappingProfile).Assembly);
 
         return services;
     }

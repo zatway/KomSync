@@ -1,5 +1,6 @@
 using Domain.Enums;
+using MediatR;
 
 namespace Application.DTO.Auth;
 
-public record RegisterRequest(string FullName, string Email, string Password, UserRole Role, string? Position, string? Department, string? ExternalProvider);
+public record RegisterRequest(string FullName, string Email, string Password, UserRole Role, string? Position, string? Department, string? ExternalProvider) : IRequest<TokenResponse>;

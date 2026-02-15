@@ -11,9 +11,9 @@ public class RegisterHandler(
     IKomSyncContext context,
     IPasswordHasher passwordHasher,
     IJwtProvider jwtProvider,
-    IMapper mapper) : IRequestHandler<RegisterCommand, TokenResponse>
+    IMapper mapper) : IRequestHandler<RegisterRequest, TokenResponse>
 {
-    public async Task<TokenResponse> Handle(RegisterCommand request, CancellationToken cancellationToken)
+    public async Task<TokenResponse> Handle(RegisterRequest request, CancellationToken cancellationToken)
     {
         // 1. Проверка уникальности
         if (await context.Users.AnyAsync(u => u.Email == request.Email, cancellationToken))
@@ -23,22 +23,21 @@ public class RegisterHandler(
         var user = mapper.Map<User>(request);
         user.PasswordHash = passwordHasher.Hash(request.Password);
 
-        context.Users.Add(user);
+        await context.Users.AddAsync(user, cancellationToken);
         
         // 3. Генерация токенов (логику GenerateTokenPair можно вынести в хелпер или оставить здесь)
         var accessToken = jwtProvider.CreateAccessToken(user);
-        var refreshTokenValue = Convert.ToBase64String(Guid.NewGuid().ToByteArray()); // Упростил для примера
+        var refreshTokenValue = jwtProvider.CreateRefreshToken();
 
         var refreshToken = new RefreshToken
         {
-            Token = refreshTokenValue,
-            ExpiresAt = DateTime.UtcNow.AddDays(7),
+            Token = refreshTokenValue.RefreshToken,
+            ExpiresAt = refreshTokenValue.ExpiredTime,
             UserId = user.Id
         };
 
-        context.RefreshTokens.Add(refreshToken);
         await context.SaveChangesAsync(cancellationToken);
 
-        return new TokenResponse(accessToken, refreshTokenValue);
+        return new TokenResponse(accessToken, refreshToken);
     }
 }

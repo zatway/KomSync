@@ -8,8 +8,8 @@ using Microsoft.OpenApi;
 var builder = WebApplication.CreateBuilder(args);
 
 // Подключаем слои
-builder.Services.ConfigureAddInfrastructure(builder.Configuration);
 builder.Services.ConfigureAddApplication();
+builder.Services.ConfigureAddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

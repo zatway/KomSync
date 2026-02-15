@@ -1,4 +1,4 @@
-namespace Application.DTO.Auth;
+namespace Application.Interfaces;
 
 public interface IPasswordHasher
 {
