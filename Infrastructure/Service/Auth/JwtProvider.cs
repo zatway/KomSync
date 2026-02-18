@@ -4,7 +4,6 @@ using System.Security.Cryptography;
 using System.Text;
 using Application.DTO.Auth;
 using Application.Interfaces;
-using Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -19,7 +18,7 @@ public class JwtProvider : IJwtProvider
         _config = config ?? throw new ArgumentNullException(nameof(config));
     }
 
-    public string CreateAccessToken(User user)
+    public string CreateAccessToken(Domain.Entities.User user)
     {
         var secret = _config["JwtSettings:Secret"] 
             ?? throw new InvalidOperationException("JWT Secret not found in configuration");
@@ -29,7 +28,7 @@ public class JwtProvider : IJwtProvider
 
         var claims = new List<Claim>
         {
-            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new(JwtRegisteredClaimNames.Email, user.Email),
             new("fullName", user.FullName ?? string.Empty),

@@ -14,6 +14,7 @@ public class TaskHistoryConfiguration : IEntityTypeConfiguration<TaskHistory>
         builder.HasOne(h => h.Task)
             .WithMany(t => t.History)
             .HasForeignKey(h => h.TaskId)
-            .OnDelete(DeleteBehavior.Cascade);
-    }
+            .OnDelete(DeleteBehavior.Cascade); 
+    } 
+
 }

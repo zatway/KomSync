@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Domain.Entities;
 
 /// <summary>
-/// Группировка задач в рамках конкретного проекта.
+/// Группировка задач в рамках конкретного проекта
 /// </summary>
 public class Project
 {
-    [Key] public Guid Id { get; set; }
+    [Key] public Guid Id { get; set; } = Guid.NewGuid();
 
     /// <summary>
     /// Название проекта
@@ -24,14 +24,20 @@ public class Project
     /// <summary>
     /// Дата создания
     /// </summary>
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;    
+    
+    /// <summary>
+    /// Дата обновления
+    /// </summary>
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     /// <summary>
     /// Владелец проекта
     /// </summary>
     public Guid OwnerId { get; set; }
 
-    [ForeignKey(nameof(OwnerId))] public User Owner { get; set; } = null!;
+    [ForeignKey(nameof(OwnerId))] 
+    public User Owner { get; set; } = null!;
 
     public ICollection<ProjectTask> Tasks { get; set; } = new List<ProjectTask>();
 }

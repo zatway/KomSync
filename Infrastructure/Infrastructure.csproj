@@ -7,13 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="AI\" />
-      <Folder Include="Search\" />
-      <Folder Include="Storage\" />
-      <Folder Include="Service\" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.13" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.13" />

@@ -5,7 +5,7 @@ using FluentValidation;
 
 namespace Application;
 
-public static class DependencyInjection
+public static class DependencyInjection 
 {
     public static IServiceCollection ConfigureAddApplication(this IServiceCollection services)
     {
@@ -14,7 +14,7 @@ public static class DependencyInjection
             cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
 
-        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly()); 
 
         services.AddAutoMapper(cfg => {
             cfg.AddMaps(Assembly.GetExecutingAssembly());

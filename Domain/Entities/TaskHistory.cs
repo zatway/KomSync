@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Enums;
 
 namespace Domain.Entities;
 
@@ -9,7 +10,7 @@ namespace Domain.Entities;
 public class TaskHistory
 {
     [Key]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     public Guid TaskId { get; set; }
     [ForeignKey(nameof(TaskId))]
@@ -19,12 +20,18 @@ public class TaskHistory
     [ForeignKey(nameof(ChangedById))]
     public User ChangedBy { get; set; } = null!;
 
-    /// <summary> Имя измененного свойства (напр. Status). </summary>
+    // Название свойства (Title, Status, AssigneeId и т.д.)
     [Required, MaxLength(100)]
     public string PropertyName { get; set; } = null!;
 
+    // Значение ДО изменения
     public string? OldValue { get; set; }
+
+    // Значение ПОСЛЕ изменения
     public string? NewValue { get; set; }
+
+    // Тип действия (enum, который мы создали ранее)
+    public TaskHistoryAction Action { get; set; }
 
     public DateTime ChangedAt { get; set; } = DateTime.UtcNow;
 }

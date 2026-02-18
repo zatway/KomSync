@@ -1,8 +1,9 @@
+using Application.DTO.Projects;
 using FluentValidation;
 
 namespace Application.Projects.Commands.CreateProject;
 
-public class CreateProjectValidator : AbstractValidator<CreateProjectCommand>
+public class CreateProjectValidator : AbstractValidator<CreateProjectRequest>
 {
     public CreateProjectValidator()
     {

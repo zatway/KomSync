@@ -1,3 +1,4 @@
+using Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -13,10 +14,16 @@ public class KomSyncDbContextFactory : IDesignTimeDbContextFactory<KomSyncDbCont
     public KomSyncDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<KomSyncDbContext>();
-        // Просто впиши строку подключения сюда на один раз
         optionsBuilder.UseNpgsql("Host=localhost;Database=komSync;Username=postgres;Password=123", 
             b => b.MigrationsAssembly("Infrastructure"));
 
-        return new KomSyncDbContext(optionsBuilder.Options);
+        // Создаем заглушку сервиса пользователя для миграций
+        return new KomSyncDbContext(optionsBuilder.Options, new DesignTimeUserService());
     }
+}
+
+// Простая заглушка внутри того же файла
+public class DesignTimeUserService : ICurrentUserService
+{
+    public Guid? UserId => Guid.Empty;
 }

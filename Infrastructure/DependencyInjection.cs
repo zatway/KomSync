@@ -2,6 +2,7 @@ using Application.Interfaces;
 using Application.Mapping;
 using Infrastructure.Persistence;
 using Infrastructure.Service.Auth;
+using Infrastructure.Service.User;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ public static class DependencyInjection
 
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
         
         // Исправленная регистрация AutoMapper
         services.AddAutoMapper(cfg => {}, typeof(AuthMappingProfile).Assembly);
