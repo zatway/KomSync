@@ -24,5 +24,13 @@ public class TaskMappingProfile : Profile
         CreateMap<AssignUserRequest, ProjectTask>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+        CreateMap<ProjectTask, TaskDetailedDto>()
+            .ForMember(d => d.AssigneeId,
+                opt => opt.MapFrom(s => s.Assignee != null ? s.Assignee.FullName : "Не назначен"));
+        
+        CreateMap<ProjectTask, TaskShortDto>()
+            .ForMember(d => d.AssigneeId,
+                opt => opt.MapFrom(s => s.Assignee != null ? s.Assignee.FullName : "Не назначен"));
     }
 }

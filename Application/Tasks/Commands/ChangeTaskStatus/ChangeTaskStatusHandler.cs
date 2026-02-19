@@ -8,8 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Tasks.Commands.ChangeTaskStatus;
 
 public class ChangeTaskStatusHandler(
-    IKomSyncContext context,
-    ICurrentUserService currentUserService
+    IKomSyncContext context
 ) : IRequestHandler<ChangeTaskStatusCommand, bool>
 {
     public async Task<bool> Handle(ChangeTaskStatusCommand request, CancellationToken cancellationToken)
@@ -20,10 +19,7 @@ public class ChangeTaskStatusHandler(
 
         if (task == null) 
             return false; 
-        
-        var userId = currentUserService.UserId
-                     ?? throw new UnauthorizedAccessException("User must be logged in to create tasks.");
-        
+
         task.Status = request.NewStatus;
         task.UpdatedAt = DateTime.UtcNow;
         

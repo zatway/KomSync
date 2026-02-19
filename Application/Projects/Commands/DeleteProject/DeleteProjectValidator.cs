@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Projects.Commands.DeleteProject;
 
-public class DeleteProjectValidator : AbstractValidator<UpdateProjectRequest>
+public class DeleteProjectValidator : AbstractValidator<DeleteProjectRequest>
 {
     public DeleteProjectValidator()
     {

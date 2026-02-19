@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
-
 /// <summary>
 /// Комментарий к задаче.
 /// </summary>
@@ -24,4 +23,5 @@ public class TaskComment
     public string Content { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

@@ -21,8 +21,6 @@ public class CreateTaskHandler(
 
         // Назначаем создателя
         task.CreatorId = userId;
-        task.Id = Guid.NewGuid();
-        task.CreatedAt = DateTime.UtcNow;
 
         // Добавляем всё в контекст
         context.Tasks.Add(task);

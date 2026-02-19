@@ -11,7 +11,6 @@ public class UpdateProjectValidator : AbstractValidator<UpdateProjectRequest>
             .NotEmpty().WithMessage("ID проекта обязателен");
 
         RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("Название не может быть пустым")
             .MaximumLength(200).WithMessage("Название слишком длинное");
 
         RuleFor(x => x.Description)

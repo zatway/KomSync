@@ -30,12 +30,10 @@ public class KomSyncDbContext(DbContextOptions<KomSyncDbContext> options, ICurre
         var userId = _currentUserService.UserId ?? Guid.Empty;
         var now = DateTime.UtcNow;
 
-        // Автоматическое заполнение полей аудита
         foreach (var entry in ChangeTracker.Entries<IAuditable>())
         {
             if (entry.State == EntityState.Added)
             {
-                // Ищем свойство по строковому имени, если оно есть в БД
                 entry.Property("CreatedAt").CurrentValue = now;
                 entry.Property("CreatorId").CurrentValue = userId;
             }
@@ -77,7 +75,7 @@ public class KomSyncDbContext(DbContextOptions<KomSyncDbContext> options, ICurre
                 {
                     TaskId = taskId,
                     ChangedById = userId,
-                    PropertyName = "Task",
+                    PropertyName = "TaskComments",
                     NewValue = "Created",
                     Action = TaskHistoryAction.Created
                 });

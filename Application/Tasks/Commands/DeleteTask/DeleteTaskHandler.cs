@@ -21,12 +21,6 @@ public class DeleteTaskHandler(IKomSyncContext context)
         // 2. Удаляем
         context.Tasks.Remove(task);
         
-        var taskHistories = await context.TaskHistories.Where(x => x.Task.ParentTaskId == task.Id).ToListAsync(cancellationToken);
-        taskHistories.ForEach(x => context.TaskHistories.Remove(x));
-        
-        var taskComments = await context.TaskComments.Where(x => x.Task.ParentTaskId == task.Id).ToListAsync(cancellationToken);
-        taskComments.ForEach(x => context.TaskComments.Remove(x));
-
         // 3. Сохраняем
         await context.SaveChangesAsync(cancellationToken);
 

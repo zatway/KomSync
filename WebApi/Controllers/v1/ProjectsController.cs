@@ -4,7 +4,7 @@ using Application.Projects.Commands.CreateProject;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApi.Controllers;
+namespace WebApi.Controllers.v1;
 
 [ApiController]
 [Route("api/v1/[controller]")]
@@ -26,7 +26,7 @@ public class ProjectsController(IMediator mediator) : ControllerBase
         if (!result)
             return NotFound(new { message = "Проект не найден" });
 
-        return NoContent(); // 204 — успешно обновлено, возвращать нечего
+        return Ok(result);
     }
     
     [HttpDelete("{id:guid}")] // Параметр в URL
@@ -38,7 +38,7 @@ public class ProjectsController(IMediator mediator) : ControllerBase
         if (!result)
             return NotFound(new { message = "Проект не найден" });
 
-        return NoContent(); // Стандарт для DELETE — 204 No Content
+        return Ok(result);
     }
     
     [HttpGet]

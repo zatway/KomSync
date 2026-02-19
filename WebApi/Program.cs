@@ -74,6 +74,8 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 app.UseExceptionHandler();
