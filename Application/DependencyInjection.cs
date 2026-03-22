@@ -1,25 +1,31 @@
-using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using Application.Common.Behaviors;
+using MediatR;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
+using Application.Common.Behaviors;
 
-namespace Application;
-
-public static class DependencyInjection 
+namespace Application
 {
-    public static IServiceCollection ConfigureAddApplication(this IServiceCollection services)
+    public static class DependencyInjection
     {
-        services.AddMediatR(cfg => {
-            cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-            cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
-        });
+        public static IServiceCollection ConfigureAddApplication(this IServiceCollection services)
+        {
+            var applicationAssembly = typeof(DependencyInjection).Assembly;
 
-        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly()); 
+            services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssembly(applicationAssembly);
+                cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+            });
 
-        services.AddAutoMapper(cfg => {
-            cfg.AddMaps(Assembly.GetExecutingAssembly());
-        });
-        
-        return services;
+            services.AddValidatorsFromAssembly(applicationAssembly);
+
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddMaps(applicationAssembly);
+            });
+
+            return services;
+        }
     }
 }

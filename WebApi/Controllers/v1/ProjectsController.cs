@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebApi.Controllers.v1
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/projects")]
     [Authorize]
     public class ProjectsController : ControllerBase
     {
@@ -18,7 +18,6 @@ namespace WebApi.Controllers.v1
             _mediator = mediator;
         }
 
-        // --- Список проектов ---
         [HttpGet]
         public async Task<IActionResult> GetProjects()
         {
@@ -26,7 +25,6 @@ namespace WebApi.Controllers.v1
             return Ok(result);
         }
 
-        // --- Детали проекта ---
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetProjectById(Guid id)
         {
@@ -34,8 +32,7 @@ namespace WebApi.Controllers.v1
             return Ok(result);
         }
 
-        // --- Создать проект ---
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> CreateProject([FromBody] CreateProjectRequest request)
         {
             var projectId = await _mediator.Send(request);
@@ -67,7 +64,7 @@ namespace WebApi.Controllers.v1
         }
 
         // --- Комментарии ---
-        [HttpPost("{id:guid}/comments")]
+        [HttpPut("{id:guid}/comments")]
         public async Task<IActionResult> AddComment(Guid id, [FromBody] CreateProjectCommentRequest request)
         {
             var comment = await _mediator.Send(request with { ProjectId = id });

@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Projects.Queries.GetProjects
 {
     public class GetProjectsHandler(IKomSyncContext context)
-        : IRequestHandler<GetProjectsQuery, IEnumerable<ProjectBriefDto>>
+        : IRequestHandler<GetProjectsQuery, List<ProjectBriefDto>>
     {
-        public async Task<IEnumerable<ProjectBriefDto>> Handle(GetProjectsQuery request, CancellationToken cancellationToken)
+        public async Task<List<ProjectBriefDto>> Handle(GetProjectsQuery request, CancellationToken cancellationToken)
         {
             var projects = await context.Projects
                 .Include(p => p.Owner)
@@ -35,7 +35,7 @@ namespace Application.Projects.Queries.GetProjects
                 p.UpdatedAt,
                 p.Color,
                 p.Icon?.ToString()
-            ));
+            )).ToList();
         }
     }
 }

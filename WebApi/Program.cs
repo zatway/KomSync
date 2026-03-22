@@ -1,4 +1,4 @@
-using Infrastructure; 
+using Infrastructure;
 using Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -8,23 +8,31 @@ using WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ---------------------------
 // Подключаем слои
+// ---------------------------
 builder.Services.ConfigureAddApplication();
 builder.Services.ConfigureAddInfrastructure(builder.Configuration);
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddProblemDetails();
-
+// ---------------------------
+// Контроллеры и JSON
+// ---------------------------
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
     });
+builder.Services.AddEndpointsApiExplorer();
 
-// НАСТРОЙКА SWAGGER
+// ---------------------------
+// Глобальный обработчик ошибок
+// ---------------------------
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
+// ---------------------------
+// Swagger
+// ---------------------------
 builder.Services.AddSwaggerGen(opt =>
 {
     opt.SwaggerDoc("v1", new OpenApiInfo
@@ -51,7 +59,9 @@ builder.Services.AddSwaggerGen(opt =>
     });
 });
 
-// Настройка JWT
+// ---------------------------
+// JWT Authentication
+// ---------------------------
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secret = jwtSettings["Secret"] ?? "Super_Secret_Key_At_Least_32_Chars_Long";
 var key = Encoding.ASCII.GetBytes(secret);
@@ -74,21 +84,32 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
+// ---------------------------
+// HTTP Context
+// ---------------------------
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
+// ---------------------------
+// Middleware pipeline
+// ---------------------------
 app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "KomSync API V1");
+        c.RoutePrefix = string.Empty;
+    });
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication(); 
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
