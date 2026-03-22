@@ -2,7 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Application.Auth.AccessToken;
+using Application.Common.AccessToken;
 using Application.DTO.Auth;
 using Application.Interfaces;
 using Microsoft.Extensions.Configuration;

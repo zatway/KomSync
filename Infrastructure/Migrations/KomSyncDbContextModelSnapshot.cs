@@ -22,13 +22,61 @@ namespace Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Entities.Project", b =>
+            modelBuilder.Entity("Domain.Entities.ApplicationForRegistration", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ApplicationForRegistrations");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Department", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
@@ -39,17 +87,181 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
+                    b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Position", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("DepartmentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("Positions");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Project", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("character varying(6)");
+
+                    b.Property<DateTimeOffset?>("CompletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("DepartmentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTimeOffset?>("DueDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<char?>("Icon")
+                        .HasColumnType("character(1)");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Progress")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTimeOffset>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ProjectComment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectComments");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ProjectHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ChangedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Field")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NewValue")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.Property<string>("OldValue")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChangedById");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectHistories");
                 });
 
             modelBuilder.Entity("Domain.Entities.ProjectTask", b =>
@@ -136,6 +348,32 @@ namespace Infrastructure.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("Tags");
+                });
+
             modelBuilder.Entity("Domain.Entities.TaskComment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -212,60 +450,162 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<byte[]>("Avatar")
+                        .HasColumnType("bytea");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Department")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                    b.Property<Guid>("DepartmentId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
-                    b.Property<string>("ExternalId")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("ExternalProvider")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
+                    b.Property<string>("NormalizedEmail")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasColumnType("text");
 
-                    b.Property<string>("Position")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                    b.Property<Guid>("PositionId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Role")
                         .HasColumnType("integer");
 
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
 
                     b.HasIndex("Email")
                         .IsUnique();
 
+                    b.HasIndex("NormalizedEmail")
+                        .IsUnique();
+
+                    b.HasIndex("PositionId");
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ProjectUser", b =>
+                {
+                    b.Property<Guid>("MembersId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProjectsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("MembersId", "ProjectsId");
+
+                    b.HasIndex("ProjectsId");
+
+                    b.ToTable("ProjectUser");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ApplicationForRegistration", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Category", b =>
+                {
+                    b.HasOne("Domain.Entities.Project", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("ProjectId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Position", b =>
+                {
+                    b.HasOne("Domain.Entities.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("Domain.Entities.Project", b =>
                 {
+                    b.HasOne("Domain.Entities.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.User", "Owner")
                         .WithMany("OwnedProjects")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("Department");
+
                     b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ProjectComment", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.ProjectComment", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
+
+                    b.HasOne("Domain.Entities.Project", "Project")
+                        .WithMany("ProjectComments")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ProjectHistory", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "ChangedBy")
+                        .WithMany()
+                        .HasForeignKey("ChangedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Project", "Project")
+                        .WithMany("ProjectHistories")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ChangedBy");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("Domain.Entities.ProjectTask", b =>
@@ -276,7 +616,7 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.User", "Creator")
-                        .WithMany()
+                        .WithMany("OwnedTasks")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -310,6 +650,13 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Tag", b =>
+                {
+                    b.HasOne("Domain.Entities.Project", null)
+                        .WithMany("Tags")
+                        .HasForeignKey("ProjectId");
                 });
 
             modelBuilder.Entity("Domain.Entities.TaskComment", b =>
@@ -350,9 +697,61 @@ namespace Infrastructure.Migrations
                     b.Navigation("Task");
                 });
 
+            modelBuilder.Entity("Domain.Entities.User", b =>
+                {
+                    b.HasOne("Domain.Entities.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Position", "Position")
+                        .WithMany("Users")
+                        .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Position");
+                });
+
+            modelBuilder.Entity("ProjectUser", b =>
+                {
+                    b.HasOne("Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("MembersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.Position", b =>
+                {
+                    b.Navigation("Users");
+                });
+
             modelBuilder.Entity("Domain.Entities.Project", b =>
                 {
+                    b.Navigation("Categories");
+
+                    b.Navigation("ProjectComments");
+
+                    b.Navigation("ProjectHistories");
+
+                    b.Navigation("Tags");
+
                     b.Navigation("Tasks");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ProjectComment", b =>
+                {
+                    b.Navigation("Children");
                 });
 
             modelBuilder.Entity("Domain.Entities.ProjectTask", b =>
@@ -367,6 +766,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Navigation("OwnedProjects");
+
+                    b.Navigation("OwnedTasks");
 
                     b.Navigation("RefreshTokens");
                 });

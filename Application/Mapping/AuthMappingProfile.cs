@@ -9,13 +9,18 @@ public class AuthMappingProfile : Profile
 {
     public AuthMappingProfile()
     {
-        CreateMap<LoginRequest, User>()
-            .ForMember(dest => dest.PasswordHash, opt => opt.Ignore()) // Пароль маппим сами
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()));
-
         CreateMap<RegisterRequest, User>()
-            .ForMember(dest => dest.PasswordHash, opt => opt.Ignore()) // Пароль маппим сами
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()))
-            .ForMember(dest => dest.NormalizedEmail, opt => opt.MapFrom(_ => _.Email));
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
+            .ForMember(dest => dest.Avatar, opt => opt.Ignore())
+            
+            .ForMember(dest => dest.NormalizedEmail, opt =>
+                opt.MapFrom(src => src.Email.Trim().ToUpper()))
+            
+            .ForMember(dest => dest.DepartmentId, opt =>
+                opt.MapFrom(src => Guid.Parse(src.DepartmentId)))
+            
+            .ForMember(dest => dest.PositionId, opt =>
+                opt.MapFrom(src => Guid.Parse(src.PositionId)));
     }
 }

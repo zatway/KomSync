@@ -1,4 +1,5 @@
 using Application.DTO.Auth;
+using Application.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,26 +7,26 @@ namespace WebApi.Controllers.v1;
 
 [ApiController]
 [Route("api/v1/[controller]")]
-public class AuthController(IMediator mediator) : ControllerBase
+public class AuthController(IMediator mediator, ICurrentUserService _currentUser) : ControllerBase
 {
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest command)
     {
-        var response = await mediator.Send(command);
-        return Ok(response);
+        await mediator.Send(command);
+        return Ok();
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] MeRequest command)
+    public async Task<IActionResult> Login([FromBody] LoginRequest command)
     {
         var response = await mediator.Send(command); 
         return Ok(response);
     } 
     
-    [HttpPost("me")]
-    public async Task<IActionResult> Login()
+    [HttpGet("me")]
+    public async Task<IActionResult> Me()
     {
-        var response = await mediator.Send(); 
+        var response = await mediator.Send(new MeRequest(_currentUser.UserId)); 
         return Ok(response);
     }
 
@@ -37,9 +38,9 @@ public class AuthController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost("logout")]
-    public async Task<IActionResult> Logout([FromBody] RevokeTokenRequest refreshToken)
+    public async Task<IActionResult> Logout()
     {
-        var response = await mediator.Send(refreshToken); 
+        var response = await mediator.Send(new RevokeTokenRequest(_currentUser.UserId)); 
         return Ok(response);
     }
 }

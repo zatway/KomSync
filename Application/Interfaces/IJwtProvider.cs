@@ -1,4 +1,4 @@
-using Application.Auth.AccessToken;
+using Application.Common.AccessToken;
 using Application.DTO.Auth;
 using Domain.Entities;
 
