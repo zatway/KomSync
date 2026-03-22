@@ -1,12 +1,21 @@
 namespace Application.DTO.Projects;
 
-public record ProjectBriefDto
-{
-    public ProjectBriefDto() { } 
-
-    public Guid Id { get; init; }
-    public string Name { get; init; }
-    public string? Description { get; init; }
-    public string OwnerName { get; init; }
-    public DateTime CreatedAt { get; init; }
-}
+public record ProjectBriefDto(
+    Guid Id,
+    string Key,
+    string Name,
+    string? Description,
+    Guid OwnerId,
+    string OwnerName,
+    int MemberCount,
+    int TaskCount,
+    int OpenTaskCount,
+    int? CompletedTaskCount,
+    decimal Progress,
+    DateTimeOffset? DueDate,
+    DateTimeOffset? LastActivityAt,
+    DateTimeOffset CreatedAt,
+    DateTimeOffset? UpdatedAt,
+    string? Color,
+    string? Icon
+);

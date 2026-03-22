@@ -22,6 +22,7 @@
 
     <ItemGroup>
       <Folder Include="DTO\TaskComment\" />
+      <Folder Include="UserProfile\Queries\" />
     </ItemGroup>
 
 </Project>

@@ -1,12 +1,24 @@
 namespace Application.DTO.Projects;
-    
-public record ProjectDetailedDto
-{
-    public ProjectDetailedDto() { } 
-
-    public Guid Id { get; init; }
-    public string Name { get; init; }
-    public string? Description { get; init; }
-    public string OwnerName { get; init; }
-    public DateTime CreatedAt { get; init; }
-} 
+public record ProjectDetailedDto(
+    Guid Id,
+    string Key,
+    string Name,
+    string? Description,
+    DateTimeOffset? StartDate,
+    DateTimeOffset? DueDate,
+    DateTimeOffset? CompletedAt,
+    DateTimeOffset CreatedAt,
+    DateTimeOffset? UpdatedAt,
+    string? Color,
+    string? Icon,
+    OwnerDto Owner,
+    IEnumerable<MemberDto> Members,
+    TaskStatsDto TaskStats,
+    decimal Progress,
+    IEnumerable<string>? Tags,
+    string? Category,
+    string? Department,
+    bool IsFavorite,
+    PermissionsDto Permissions,
+    IDictionary<string, object>? CustomFields
+);

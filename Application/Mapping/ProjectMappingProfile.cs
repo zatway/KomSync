@@ -2,30 +2,35 @@ using Application.DTO.Projects;
 using AutoMapper;
 using Domain.Entities;
 
-namespace Application.Mapping;
-
-public class ProjectMappingProfile : AutoMapper.Profile
+namespace Application.Mapping
 {
-    public ProjectMappingProfile()
+    public class ProjectMappingProfile : Profile
     {
-        // 1. Создание проекта
-        CreateMap<CreateProjectRequest, Project>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()))
-            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow));
-        
-        // 2. Частичное обновление (Patch)
-        CreateMap<UpdateProjectRequest, Project>()
-            // Игнорируем Id при маппинге, чтобы случайно не сменить ID проекта
-            .ForMember(dest => dest.Id, opt => opt.Ignore()) 
-            // Мапим только те поля, которые не null в запросе
-            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-       
-        // 3. Маппинг для списков и деталей (Projection)
-        // Используй .ProjectTo<ProjectBriefDto>(configuration) в репозитории/хендлере
-        CreateMap<Project, ProjectBriefDto>()
-            .ForMember(d => d.OwnerName, opt => opt.MapFrom(s => s.Owner != null ? s.Owner.FullName : "Не назначен"));
+        public ProjectMappingProfile()
+        {
+            CreateMap<CreateProjectRequest, Project>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()))
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow));
 
-        CreateMap<Project, ProjectDetailedDto>()
-            .ForMember(d => d.OwnerName, opt => opt.MapFrom(s => s.Owner != null ? s.Owner.FullName : "Не назначен"));
+            CreateMap<UpdateProjectRequest, Project>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<Project, ProjectBriefDto>()
+                .ForMember(d => d.OwnerName, opt => opt.MapFrom(s => s.Owner != null ? s.Owner.FullName : "Не назначен"));
+
+            CreateMap<Project, MemberDto>();
+
+            CreateMap<ProjectComment, ProjectCommentDto>()
+                .ForMember(d => d.Author, opt => opt.MapFrom(s => s.Author))
+                .ForMember(d => d.Replies, opt => opt.MapFrom(s => s.Children));
+
+            CreateMap<User, AuthorDto>();
+
+            CreateMap<ProjectHistory, ProjectHistoryEntryDto>()
+                .ForMember(d => d.ChangedBy, opt => opt.MapFrom(s => s.ChangedBy));
+            
+            CreateMap<User, ChangedByDto>();
+        }
     }
 }

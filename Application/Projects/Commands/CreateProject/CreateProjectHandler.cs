@@ -1,26 +1,26 @@
 using Application.DTO.Projects;
 using Application.Interfaces;
-using Domain.Entities;
 using AutoMapper;
+using Domain.Entities;
 using MediatR;
 
-namespace Application.Projects.Commands.CreateProject;
-
-public class CreateProjectHandler(
-    IKomSyncContext context, 
-    IMapper mapper) : IRequestHandler<CreateProjectRequest, Guid>
+namespace Application.Projects.Commands.CreateProject
 {
-    public async Task<Guid> Handle(CreateProjectRequest request, CancellationToken cancellationToken)
+    public class CreateProjectHandler(IKomSyncContext context, IMapper mapper, ICurrentUserService currentUser)
+        : IRequestHandler<CreateProjectRequest, Guid>
     {
-        var project = mapper.Map<Project>(request);
+        public async Task<Guid> Handle(CreateProjectRequest request, CancellationToken cancellationToken)
+        {
+            if (currentUser.UserId == null)
+                throw new UnauthorizedAccessException("User not authorized");
 
-        // Добавляем в контекст
-        context.Projects.Add(project);
-        
-        // Сохраняем (интерфейс IKomSyncContext должен иметь SaveChangesAsync)
-        await context.SaveChangesAsync(cancellationToken);
+            var project = mapper.Map<Project>(request);
+            project.OwnerId = currentUser.UserId.Value;
 
-        // 4. Возвращаем ID созданного проекта
-        return project.Id;
+            await context.Projects.AddAsync(project, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
+
+            return project.Id;
+        }
     }
 }

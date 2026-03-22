@@ -3,7 +3,7 @@ using Application.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.UserProfile.Commands.Me;
+namespace Application.UserProfile.Queries.Me;
 
 public class MeHandler(
     IKomSyncContext context

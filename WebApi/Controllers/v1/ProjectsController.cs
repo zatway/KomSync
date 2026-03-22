@@ -1,60 +1,91 @@
 using Application.DTO.Projects;
-using Application.Projects.Commands;
-using Application.Projects.Commands.CreateProject;
+using Application.Interfaces;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApi.Controllers.v1;
-
-[ApiController]
-[Route("api/v1/[controller]")]
-public class ProjectsController(IMediator mediator) : ControllerBase
+namespace WebApi.Controllers.v1
 {
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateProjectRequest command)
+    [ApiController]
+    [Route("api/v1/[controller]")]
+    [Authorize]
+    public class ProjectsController : ControllerBase
     {
-        var projectId = await mediator.Send(command);
-        
-        return Ok(projectId);
-    }
-    
-    [HttpPatch("{id:guid}")]
-    public async Task<IActionResult> Update([FromBody] UpdateProjectRequest command)
-    {
-        var result = await mediator.Send(command);
+        private readonly IMediator _mediator;
 
-        if (!result)
-            return NotFound(new { message = "Проект не найден" });
+        public ProjectsController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
 
-        return Ok(result);
-    }
-    
-    [HttpDelete("{id:guid}")] // Параметр в URL
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
-    {
-        // Создаем запрос вручную, передавая ID из маршрута
-        var result = await mediator.Send(new DeleteProjectRequest(id));
+        // --- Список проектов ---
+        [HttpGet]
+        public async Task<IActionResult> GetProjects()
+        {
+            var result = await _mediator.Send(new GetProjectsQuery());
+            return Ok(result);
+        }
 
-        if (!result)
-            return NotFound(new { message = "Проект не найден" });
+        // --- Детали проекта ---
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetProjectById(Guid id)
+        {
+            var result = await _mediator.Send(new GetProjectByIdQuery(id));
+            return Ok(result);
+        }
 
-        return Ok(result);
-    }
-    
-    [HttpGet]
-    public async Task<ActionResult<List<ProjectBriefDto>>> GetAll()
-    {
-        return Ok(await mediator.Send(new GetProjectsListQuery()));
-    }
+        // --- Создать проект ---
+        [HttpPost]
+        public async Task<IActionResult> CreateProject([FromBody] CreateProjectRequest request)
+        {
+            var projectId = await _mediator.Send(request);
+            return Ok(projectId);
+        }
 
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<ProjectDetailedDto>> GetById(Guid id)
-    {
-        var result = await mediator.Send(new GetProjectByIdQuery(id));
-    
-        if (result == null) 
-            return NotFound();
+        // --- Обновить проект ---
+        [HttpPatch("{id:guid}")]
+        public async Task<IActionResult> UpdateProject(Guid id, [FromBody] UpdateProjectRequest request)
+        {
+            var updated = await _mediator.Send(request with { Id = id });
+            return Ok(updated);
+        }
 
-        return Ok(result);
+        // --- Удалить проект ---
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteProject(Guid id)
+        {
+            var result = await _mediator.Send(new DeleteProjectRequest(id));
+            return Ok(result);
+        }
+
+        // --- История проекта ---
+        [HttpGet("{id:guid}/history")]
+        public async Task<IActionResult> GetProjectHistory(Guid id)
+        {
+            var result = await _mediator.Send(new GetProjectHistoryQuery(id));
+            return Ok(result);
+        }
+
+        // --- Комментарии ---
+        [HttpPost("{id:guid}/comments")]
+        public async Task<IActionResult> AddComment(Guid id, [FromBody] CreateProjectCommentRequest request)
+        {
+            var comment = await _mediator.Send(request with { ProjectId = id });
+            return Ok(comment);
+        }
+
+        [HttpPatch("comments/{id:guid}")]
+        public async Task<IActionResult> UpdateComment(Guid id, [FromBody] UpdateProjectCommentRequest request)
+        {
+            var updated = await _mediator.Send(request with { Id = id });
+            return Ok(updated);
+        }
+
+        [HttpGet("{id:guid}/comments")]
+        public async Task<IActionResult> GetComments(Guid id)
+        {
+            var comments = await _mediator.Send(new GetProjectCommentsQuery(id));
+            return Ok(comments);
+        }
     }
 }

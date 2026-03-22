@@ -4,7 +4,7 @@ using Application.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.UserProfile.Commands.MeAvatar;
+namespace Application.UserProfile.Queries.MeAvatar;
 
 public class MeAvatarHandler(
     IKomSyncContext context

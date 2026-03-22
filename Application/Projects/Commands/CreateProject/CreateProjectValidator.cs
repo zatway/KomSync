@@ -7,11 +7,7 @@ public class CreateProjectValidator : AbstractValidator<CreateProjectRequest>
 {
     public CreateProjectValidator()
     {
-        RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("Название проекта обязательно")
-            .MaximumLength(200).WithMessage("Название не может быть длиннее 200 символов");
-            
-        RuleFor(x => x.OwnerId)
-            .NotEmpty().WithMessage("Не указан владелец проекта");
+        RuleFor(x => x.Name).NotEmpty().MinimumLength(3);
+        RuleFor(x => x.Key).NotEmpty().Matches("^[A-Z0-9_-]{2,10}$");
     }
 }

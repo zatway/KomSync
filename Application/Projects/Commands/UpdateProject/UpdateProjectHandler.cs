@@ -1,32 +1,28 @@
 using Application.DTO.Projects;
 using Application.Interfaces;
 using AutoMapper;
+using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Projects.Commands.UpdateProject;
-
-public class UpdateProjectHandler(
-    IKomSyncContext context, 
-    IMapper mapper) : IRequestHandler<UpdateProjectRequest, bool>
+namespace Application.Projects.Commands.UpdateProject
 {
-    public async Task<bool> Handle(UpdateProjectRequest request, CancellationToken cancellationToken)
+    public class UpdateProjectHandler(IKomSyncContext context, IMapper mapper)
+        : IRequestHandler<UpdateProjectRequest, bool>
     {
-        // 1. Ищем проект
-        var project = await context.Projects
-            .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
+        public async Task<bool> Handle(UpdateProjectRequest request, CancellationToken cancellationToken)
+        {
+            var project = await context.Projects
+                .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
 
-        if (project == null) 
-            return false; 
+            if (project == null)
+                throw new Exception("Project not found");
 
-        // 2. Обновляем существующую сущность данными из запроса
-        mapper.Map(request, project);
+            mapper.Map(request, project);
+            project.UpdateTimestamp();
 
-        project.UpdateTimestamp();
-
-        // 3. Сохраняем изменения
-        await context.SaveChangesAsync(cancellationToken);
-        
-        return true;
+            await context.SaveChangesAsync(cancellationToken);
+            return true;
+        }
     }
 }

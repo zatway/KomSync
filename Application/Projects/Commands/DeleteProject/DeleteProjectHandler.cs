@@ -3,26 +3,21 @@ using Application.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Projects.Commands.DeleteProject;
-
-public class DeleteProjectHandler(IKomSyncContext context) 
-    : IRequestHandler<DeleteProjectRequest, bool>
+namespace Application.Projects.Commands.DeleteProject
 {
-    public async Task<bool> Handle(DeleteProjectRequest request, CancellationToken cancellationToken)
+    public class DeleteProjectHandler(IKomSyncContext context) : IRequestHandler<DeleteProjectRequest, bool>
     {
-        // 1. Ищем проект в базе
-        var project = await context.Projects
-            .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
+        public async Task<bool> Handle(DeleteProjectRequest request, CancellationToken cancellationToken)
+        {
+            var project = await context.Projects
+                .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
 
-        if (project == null)
-            return false;
+            if (project == null)
+                throw new Exception("Project not found");
 
-        // 2. Удаляем
-        context.Projects.Remove(project);
-        
-        // 3. Сохраняем
-        await context.SaveChangesAsync(cancellationToken);
-        
-        return true;
+            context.Projects.Remove(project);
+            await context.SaveChangesAsync(cancellationToken);
+            return true;
+        }
     }
 }
