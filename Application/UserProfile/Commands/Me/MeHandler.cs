@@ -1,11 +1,9 @@
+using Application.DTO.UserProfile;
 using Application.Interfaces;
-using Domain.Entities;
-using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Application.DTO.Auth;
 
-namespace Application.Auth.Commands.Me;
+namespace Application.UserProfile.Commands.Me;
 
 public class MeHandler(
     IKomSyncContext context
@@ -14,18 +12,19 @@ public class MeHandler(
     public async Task<UserResponse> Handle(MeRequest request, CancellationToken cancellationToken)
     {
         var user = await context.Users
-            .FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
-
+            .Where(u => u.Id == request.UserId)
+            .Select(u => new UserResponse(
+                u.FullName,
+                u.Email,
+                u.Role,
+                u.Department.Name,
+                u.Position.Name
+            ))
+            .FirstOrDefaultAsync(cancellationToken);
+        
         if (user == null)
             throw new UnauthorizedAccessException("Invalid user");
 
-        return new UserResponse(
-            user.Avatar,
-            user.FullName,
-            user.Email,
-            user.Role,
-            user.Department.Name,
-            user.Position.Name
-        );
+        return user;
     }
 }

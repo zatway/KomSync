@@ -1,12 +1,10 @@
 using Application.DTO.Task;
 using Application.DTO.TaskComments;
-using Application.DTO.Tasks;
-using AutoMapper;
 using Domain.Entities;
 
 namespace Application.Mapping;
 
-public class TaskCommentMappingProfile : Profile
+public class TaskCommentMappingProfile : AutoMapper.Profile
 {
     public TaskCommentMappingProfile()
     {

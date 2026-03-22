@@ -15,13 +15,16 @@ public class RegisterHandler(
     public async Task Handle(RegisterRequest request, CancellationToken cancellationToken)
     {
         // 1. Проверка уникальности
-        if (await context.Users.AnyAsync(u => u.Email == request.Email, cancellationToken))
-            throw new Exception("Пользователь с таким Email уже существует");
-        
-        if (await context.Departments.AnyAsync(u => u.Id.ToString() == request.DepartmentId, cancellationToken))
+        if (!await context.Departments.AnyAsync(u => u.Id.ToString() == request.DepartmentId, cancellationToken))
             throw new Exception("Подразделение не существует");      
         
-        if (await context.Positions.AnyAsync(u => u.Id.ToString() == request.PositionId, cancellationToken))
+        var departmentId = Guid.Parse(request.DepartmentId);
+        var positionId = Guid.Parse(request.PositionId);
+
+        if (!await context.Departments.AnyAsync(u => u.Id == departmentId, cancellationToken))
+            throw new Exception("Подразделение не существует");
+
+        if (!await context.Positions.AnyAsync(u => u.Id == positionId, cancellationToken))
             throw new Exception("Должность не существует");
         
         // 2. Создание пользователя
@@ -29,6 +32,7 @@ public class RegisterHandler(
         user.PasswordHash = passwordHasher.Hash(request.Password);
 
         await context.ApplicationForRegistrations.AddAsync(new ApplicationForRegistration() { User = user }, cancellationToken);
+        await context.Users.AddAsync(user, cancellationToken);
 
         await context.SaveChangesAsync(cancellationToken);
     }

@@ -1,5 +1,5 @@
 using MediatR;
 
-namespace Application.DTO.Auth;
+namespace Application.DTO.UserProfile;
 
 public record MeRequest(Guid? UserId) : IRequest<UserResponse>;

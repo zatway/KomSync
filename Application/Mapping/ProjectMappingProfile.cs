@@ -4,7 +4,7 @@ using Domain.Entities;
 
 namespace Application.Mapping;
 
-public class ProjectMappingProfile : Profile
+public class ProjectMappingProfile : AutoMapper.Profile
 {
     public ProjectMappingProfile()
     {

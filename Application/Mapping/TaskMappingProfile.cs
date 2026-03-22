@@ -4,7 +4,7 @@ using Domain.Entities;
 
 namespace Application.Mapping;
 
-public class TaskMappingProfile : Profile
+public class TaskMappingProfile : AutoMapper.Profile
 {
     public TaskMappingProfile()
     {

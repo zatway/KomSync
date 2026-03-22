@@ -1,0 +1,38 @@
+using Application.DTO.Auth;
+using Application.DTO.UserProfile;
+using Application.Interfaces;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace WebApi.Controllers.v1;
+
+[ApiController]
+[Route("api/v1/profile")]
+public class UserProfileController(IMediator mediator, ICurrentUserService _currentUser) : ControllerBase
+{
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> Me()
+    {
+        var response = await mediator.Send(new MeRequest(_currentUser.UserId)); 
+        return Ok(response);
+    }
+    
+    [Authorize]
+    [HttpPost("update-profile")]
+    public async Task<IActionResult> UpdateProfile([FromForm] UpdateUserProfileRequest request)
+    {
+        var result = await mediator.Send(request);
+        return Ok(result);
+    }
+    
+    [Authorize]
+    [HttpGet("me/avatar")]
+    public async Task<IActionResult> GetAvatar()
+    {
+        var result = await mediator.Send(new MeAvatarRequest(_currentUser.UserId));
+
+        return File(result.Data, result.ContentType);
+    }
+}

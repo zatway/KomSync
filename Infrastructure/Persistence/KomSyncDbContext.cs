@@ -31,90 +31,45 @@ public class KomSyncDbContext(DbContextOptions<KomSyncDbContext> options, ICurre
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(KomSyncDbContext).Assembly);
     }
-
+    
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var userId = _currentUserService.UserId ?? Guid.Empty;
-        var now = DateTime.UtcNow;
+        var ignored = new[] { "UpdatedAt", "CreatedAt" };
+        
+        var historyEntries = new List<ProjectHistory>();
 
-        foreach (var entry in ChangeTracker.Entries<IAuditable>())
+        var entries = ChangeTracker.Entries<Project>()
+            .Where(e => e.State == EntityState.Modified);
+
+        foreach (var entry in entries)
         {
-            if (entry.State == EntityState.Added)
+            var projectId = entry.Entity.Id;
+
+            foreach (var property in entry.Properties)
             {
-                entry.Property("CreatedAt").CurrentValue = now;
-                entry.Property("CreatorId").CurrentValue = userId;
-            }
-            else if (entry.State == EntityState.Modified)
-            {
-                entry.Property("UpdatedAt").CurrentValue = now;
-                entry.Property("LastModifiedById").CurrentValue = userId;
-            }
-        }
+                if (ignored.Contains(property.Metadata.Name) || !property.IsModified)
+                    continue;
 
-        var historyEntries = OnBeforeSaveChanges();
-        var result = await base.SaveChangesAsync(cancellationToken);
+                var oldValue = property.OriginalValue?.ToString();
+                var newValue = property.CurrentValue?.ToString();
 
-        if (historyEntries.Any())
-        {
-            TaskHistories.AddRange(historyEntries);
-            await base.SaveChangesAsync(cancellationToken);
-        }
+                if (oldValue == newValue) continue;
 
-        return result;
-    }
-
-    private List<TaskHistory> OnBeforeSaveChanges()
-    {
-        ChangeTracker.DetectChanges();
-        var historyEntries = new List<TaskHistory>();
-        var userId = _currentUserService.UserId ?? Guid.Empty;
-
-        foreach (var entry in ChangeTracker.Entries<IAuditable>())
-        {
-            if (entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
-                continue;
-
-            var taskId = (Guid)entry.Property("Id").CurrentValue!;
-
-            if (entry.State == EntityState.Added)
-            {
-                historyEntries.Add(new TaskHistory
+                historyEntries.Add(new ProjectHistory
                 {
-                    TaskId = taskId,
-                    ChangedById = userId,
-                    PropertyName = "TaskComments",
-                    NewValue = "Created",
-                    Action = TaskHistoryAction.Created
+                    ProjectId = projectId,
+                    Field = property.Metadata.Name,
+                    OldValue = oldValue ?? string.Empty,
+                    NewValue = newValue ?? string.Empty,
+                    ChangedById = _currentUserService.UserId
                 });
             }
-            else if (entry.State == EntityState.Modified)
-            {
-                foreach (var property in entry.Properties)
-                {
-                    if (!property.IsModified || property.Metadata.Name == "UpdatedAt")
-                        continue;
-
-                    historyEntries.Add(new TaskHistory
-                    {
-                        TaskId = taskId,
-                        ChangedById = userId,
-                        PropertyName = property.Metadata.Name,
-                        OldValue = property.OriginalValue?.ToString(),
-                        NewValue = property.CurrentValue?.ToString(),
-                        Action = DetermineAction(property.Metadata.Name)
-                    });
-                }
-            }
         }
 
-        return historyEntries;
+        if (historyEntries.Count > 0)
+            await ProjectHistories.AddRangeAsync(historyEntries, cancellationToken);
+
+        return await base.SaveChangesAsync(cancellationToken);
     }
 
-    private TaskHistoryAction DetermineAction(string propertyName) => propertyName switch
-    {
-        "Status" => TaskHistoryAction.StatusChanged,
-        "AssigneeId" => TaskHistoryAction.AssigneeChanged,
-        "Priority" => TaskHistoryAction.PriorityChanged,
-        _ => TaskHistoryAction.Updated
-    };
 }

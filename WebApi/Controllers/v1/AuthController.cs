@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebApi.Controllers.v1;
 
 [ApiController]
-[Route("api/v1/[controller]")]
+[Route("api/v1/auth")]
 public class AuthController(IMediator mediator, ICurrentUserService _currentUser) : ControllerBase
 {
     [HttpPost("register")]
@@ -22,13 +22,6 @@ public class AuthController(IMediator mediator, ICurrentUserService _currentUser
         var response = await mediator.Send(command); 
         return Ok(response);
     } 
-    
-    [HttpGet("me")]
-    public async Task<IActionResult> Me()
-    {
-        var response = await mediator.Send(new MeRequest(_currentUser.UserId)); 
-        return Ok(response);
-    }
 
     [HttpPost("refresh")]
     public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest refreshToken)

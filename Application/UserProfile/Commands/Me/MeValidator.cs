@@ -1,7 +1,7 @@
-using Application.DTO.Auth;
+using Application.DTO.UserProfile;
 using FluentValidation;
 
-namespace Application.Auth.Commands.Me;
+namespace Application.UserProfile.Commands.Me;
 
 public class MeValidator : AbstractValidator<MeRequest>
 {

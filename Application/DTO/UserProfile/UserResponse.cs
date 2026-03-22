@@ -1,7 +1,7 @@
 using Domain.Enums;
 
-namespace Application.DTO.Auth;
+namespace Application.DTO.UserProfile;
 
-public record UserResponse(byte[]? Avatar,   string FullName,
+public record UserResponse(string FullName,
     string Email, UserRole Role, string DepartmentName,
     string PositionName);

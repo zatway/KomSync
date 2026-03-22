@@ -1,11 +1,10 @@
 
 namespace Application.Mapping;
 
-using AutoMapper;
 using Domain.Entities;
 using Application.DTO.Auth;
 
-public class AuthMappingProfile : Profile
+public class AuthMappingProfile :  AutoMapper.Profile
 {
     public AuthMappingProfile()
     {

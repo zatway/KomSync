@@ -35,7 +35,7 @@ public class ProjectHistory : BaseEntity
     /// <summary>
     /// Инициатор изменения
     /// </summary>
-    public Guid ChangedById { get; set; }
+    public Guid? ChangedById { get; set; }
 
     [ForeignKey(nameof(ChangedById))] public User ChangedBy { get; set; } = null!;
 }
