@@ -2,7 +2,6 @@ namespace Application.DTO.Projects;
 
 public record ProjectBriefDto
 {
-    // Оставляем пустой конструктор для AutoMapper
     public ProjectBriefDto() { } 
 
     public Guid Id { get; init; }

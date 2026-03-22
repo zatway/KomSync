@@ -1,5 +1,3 @@
-using Domain.Entities;
-
 namespace Application.DTO.Auth;
 
-public record TokenResponse(string AccessToken, RefreshToken RefreshToken);
+public record TokenResponse(string AccessToken, string RefreshToken, DateTime AccessTokenExpiredAt, DateTime RefreshTokenExpiredAt);

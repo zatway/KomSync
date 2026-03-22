@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Entities.Common;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,48 +9,46 @@ namespace Domain.Entities;
 /// <summary>
 /// Сущность пользователя системы.
 /// </summary>
-[Index(nameof(Email), IsUnique = true)]
-public class User
+[Index(nameof(NormalizedEmail), IsUnique = true)]
+public class User : BaseEntity
 {
-    /// <summary> Уникальный идентификатор пользователя. </summary>
-    [Key]
-    public Guid Id { get; set; }
-
+    /// <summary> Аватар сотрудника. </summary>
+    public byte[]? Avatar { get; set; }
+    
     /// <summary> ФИО сотрудника. </summary>
     [Required, MaxLength(255)]
     public string FullName { get; set; } = null!;
 
     /// <summary> Уникальный Email. </summary>
     [Required, MaxLength(255)]
-    public string Email { get; set; } = null!;  
+    [EmailAddress]
+    public string Email { get; set; } = null!;
+
+    [Required]
+    public string NormalizedEmail { get; set; } = null!;
     
     /// <summary> Уникальный Email. </summary>
-    [Required, MaxLength(255)]
+    [Required]
     public string PasswordHash { get; set; } = null!;
 
-    /// <summary> Роль пользователя (0=ReadOnly, 1=Employee...). </summary>
-    public UserRole Role { get; set; }
-
+    /// <summary> Роль пользователя </summary>
+    public UserRole Role { get; set; } = UserRole.Employee;
+    
     /// <summary> Должность. </summary>
-    [MaxLength(100)]
-    public string? Position { get; set; }
+    [Required]
+    public Guid PositionId { get; set; }
+    [ForeignKey(nameof(PositionId))] 
+    public Position Position { get; set; } = null!;
 
     /// <summary> Отдел. </summary>
-    [MaxLength(100)]
-    public string? Department { get; set; }
-
-    /// <summary> Провайдер аутентификации (VK, Yandex). </summary>
-    [MaxLength(50)]
-    public string? ExternalProvider { get; set; }
-
-    /// <summary> ID пользователя во внешней системе. </summary>
-    [MaxLength(255)]
-    public string? ExternalId { get; set; }
-
-    /// <summary> Дата создания профиля. </summary>
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    [Required]
+    public Guid DepartmentId { get; set; }
+    [ForeignKey(nameof(DepartmentId))] 
+    public Department Department { get; set; } = null!;
 
     // --- Навигационные поля ---
     public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     public ICollection<Project> OwnedProjects { get; set; } = new List<Project>();
+    public ICollection<ProjectTask> OwnedTasks { get; set; } = new List<ProjectTask>();
+    public ICollection<Project> Projects { get; set; } = new List<Project>();
 }

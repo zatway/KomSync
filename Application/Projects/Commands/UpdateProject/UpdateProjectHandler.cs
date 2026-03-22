@@ -22,7 +22,7 @@ public class UpdateProjectHandler(
         // 2. Обновляем существующую сущность данными из запроса
         mapper.Map(request, project);
 
-        project.UpdatedAt = DateTime.UtcNow;
+        project.UpdateTimestamp();
 
         // 3. Сохраняем изменения
         await context.SaveChangesAsync(cancellationToken);

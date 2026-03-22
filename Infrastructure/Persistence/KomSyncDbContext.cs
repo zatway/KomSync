@@ -12,6 +12,13 @@ public class KomSyncDbContext(DbContextOptions<KomSyncDbContext> options, ICurre
     : DbContext(options), IKomSyncContext
 {
     public DbSet<User> Users => Set<User>();
+    public DbSet<ApplicationForRegistration> ApplicationForRegistrations => Set<ApplicationForRegistration>();
+    public DbSet<Category> Categories => Set<Category>();
+    public DbSet<Position> Positions => Set<Position>();
+    public DbSet<Department> Departments => Set<Department>();
+    public DbSet<ProjectComment> ProjectComments => Set<ProjectComment>();
+    public DbSet<ProjectHistory> ProjectHistories => Set<ProjectHistory>();
+    public DbSet<Tag> Tags => Set<Tag>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<Project> Projects => Set<Project>();
     public DbSet<ProjectTask> Tasks => Set<ProjectTask>();

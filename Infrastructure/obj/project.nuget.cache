@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "aOpKGGcPnh8=",
+  "dgSpecHash": "P7ckVhGdY7E=",
   "success": true,
-  "projectFilePath": "C:\\work\\KomSync\\Infrastructure\\Infrastructure.csproj",
+  "projectFilePath": "C:\\work\\kom_Sync\\KomSync\\Infrastructure\\Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\zatway\\.nuget\\packages\\automapper\\16.0.0\\automapper.16.0.0.nupkg.sha512",
     "C:\\Users\\zatway\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",

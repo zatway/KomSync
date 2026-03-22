@@ -10,7 +10,7 @@ namespace WebApi.Controllers.v1;
 public class TaskCommentsController(IMediator mediator) : ControllerBase
 {
     // POST api/v1/Task
-    [HttpPost]
+    [HttpPut]
     public async Task<IActionResult> Add([FromBody] AddTaskCommentRequest command)
     {
         var taskId = await mediator.Send(command);

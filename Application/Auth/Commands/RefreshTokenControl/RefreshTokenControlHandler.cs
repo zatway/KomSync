@@ -10,39 +10,49 @@ namespace Application.Auth.Commands.RefreshTokenControl;
 public class RefreshTokenControlHandler(
     IKomSyncContext context,
     IJwtProvider jwtProvider
-    ) : IRequestHandler<RefreshTokenRequest, TokenResponse>
+) : IRequestHandler<RefreshTokenRequest, TokenResponse>
 {
     public async Task<TokenResponse> Handle(RefreshTokenRequest request, CancellationToken cancellationToken)
     {
-        // Ищем пользователя, у которого есть этот активный токен
-        var user = await context.Users
-            .Include(u => u.RefreshTokens)
-            .FirstOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == request.RefreshToken && !t.IsRevoked), cancellationToken);
+        var existingToken = await context.RefreshTokens
+            .Include(t => t.User)
+            .FirstOrDefaultAsync(t =>
+                    t.Token == request.RefreshToken &&
+                    !t.IsRevoked,
+                cancellationToken);
 
-        if (user == null) throw new Exception("Не найден пользователь с таким токеном");
-        
-        var existingToken = user.RefreshTokens.First(t => t.Token == request.RefreshToken);
+        if (existingToken == null)
+            throw new UnauthorizedAccessException("Invalid refresh token");
 
-        // Проверяем срок годности
         if (existingToken.ExpiresAt < DateTime.UtcNow)
         {
-            context.RefreshTokens.Remove(existingToken);
+            existingToken.IsRevoked = true;
             await context.SaveChangesAsync(cancellationToken);
-            throw new Exception("Токен истек");
+            throw new UnauthorizedAccessException("Refresh token expired");
         }
-        
-        context.RefreshTokens.Remove(existingToken);
-        
-        var accessToken = jwtProvider.CreateAccessToken(user);
-        var refreshTokenValue = jwtProvider.CreateRefreshToken();
 
-        var refreshToken = new RefreshToken
+        var user = existingToken.User;
+
+        existingToken.IsRevoked = true;
+
+        var accessToken = jwtProvider.CreateAccessToken(user);
+        var newRefreshTokenData = jwtProvider.CreateRefreshToken();
+
+        var newRefreshToken = new RefreshToken
         {
-            Token = refreshTokenValue.RefreshToken,
-            ExpiresAt = refreshTokenValue.ExpiredTime,
+            Token = newRefreshTokenData.RefreshToken,
+            ExpiresAt = newRefreshTokenData.ExpiredTime,
             UserId = user.Id
         };
 
-        return new TokenResponse(accessToken, refreshToken);
+        await context.RefreshTokens.AddAsync(newRefreshToken, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
+
+        return new TokenResponse(
+            accessToken.Token,
+            newRefreshToken.Token,
+            accessToken.ExpiresAt,
+            newRefreshToken.ExpiresAt
+        );
     }
 }

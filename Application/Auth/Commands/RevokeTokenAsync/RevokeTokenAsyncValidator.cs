@@ -3,10 +3,10 @@ using FluentValidation;
 
 namespace Application.Auth.Commands.RevokeTokenAsync;
 
-public class RevokeTokenAsyncValidator : AbstractValidator<RefreshTokenRequest>
+public class RevokeTokenAsyncValidator : AbstractValidator<RevokeTokenRequest>
 {
     public RevokeTokenAsyncValidator()
     {
-        RuleFor(x => x.RefreshToken).NotEmpty();
+        RuleFor(x => x.UserId).NotEmpty();
     }
 }

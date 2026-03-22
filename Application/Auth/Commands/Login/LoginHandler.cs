@@ -11,27 +11,42 @@ public class LoginHandler(
     IKomSyncContext context,
     IPasswordHasher passwordHasher,
     IJwtProvider jwtProvider
-    ) : IRequestHandler<LoginRequest, TokenResponse>
+) : IRequestHandler<LoginRequest, TokenResponse>
 {
     public async Task<TokenResponse> Handle(LoginRequest request, CancellationToken cancellationToken)
     {
+        var normalizedEmail = request.Email.Trim().ToUpper();
+
         var user = await context.Users
-            .Include(u => u.RefreshTokens)
-            .FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
+            .FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, cancellationToken);
 
         if (user == null || !passwordHasher.Verify(request.Password, user.PasswordHash))
-            throw new Exception("Пользователя с таким email не существует или неверный пароль");
-        
+            throw new UnauthorizedAccessException("Invalid email or password");
+
         var accessToken = jwtProvider.CreateAccessToken(user);
-        var refreshTokenValue = jwtProvider.CreateRefreshToken();
+
+        var refreshTokenData = jwtProvider.CreateRefreshToken();
 
         var refreshToken = new RefreshToken
         {
-            Token = refreshTokenValue.RefreshToken,
-            ExpiresAt = refreshTokenValue.ExpiredTime,
+            Token = refreshTokenData.RefreshToken,
+            ExpiresAt = refreshTokenData.ExpiredTime,
             UserId = user.Id
         };
 
-        return new TokenResponse(accessToken, refreshToken);
+        var oldTokens = context.RefreshTokens
+            .Where(t => t.UserId == user.Id && t.ExpiresAt < DateTimeOffset.UtcNow);
+
+        context.RefreshTokens.RemoveRange(oldTokens);
+
+        await context.RefreshTokens.AddAsync(refreshToken, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
+
+        return new TokenResponse(
+            accessToken.Token,
+            refreshToken.Token,
+            accessToken.ExpiresAt,
+            refreshToken.ExpiresAt
+        );
     }
 }

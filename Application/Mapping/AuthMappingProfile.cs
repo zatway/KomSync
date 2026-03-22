@@ -1,3 +1,4 @@
+
 namespace Application.Mapping;
 
 using AutoMapper;
@@ -8,9 +9,13 @@ public class AuthMappingProfile : Profile
 {
     public AuthMappingProfile()
     {
+        CreateMap<LoginRequest, User>()
+            .ForMember(dest => dest.PasswordHash, opt => opt.Ignore()) // Пароль маппим сами
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()));
+
         CreateMap<RegisterRequest, User>()
             .ForMember(dest => dest.PasswordHash, opt => opt.Ignore()) // Пароль маппим сами
             .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()))
-            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow));
+            .ForMember(dest => dest.NormalizedEmail, opt => opt.MapFrom(_ => _.Email));
     }
 }

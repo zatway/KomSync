@@ -12,7 +12,7 @@ namespace WebApi.Controllers.v1;
 public class TaskController(IMediator mediator) : ControllerBase
 {
     // POST api/v1/Task
-    [HttpPost]
+    [HttpPut]
     public async Task<IActionResult> Create([FromBody] CreateTaskRequest command)
     {
         var taskId = await mediator.Send(command);
@@ -56,14 +56,14 @@ public class TaskController(IMediator mediator) : ControllerBase
     // GET api/v1/Task/project/{projectId}
     // Изменили путь, чтобы не конфликтовать с получением одной задачи
     [HttpGet("project/{projectId:guid}")]
-    public async Task<ActionResult<List<ProjectBriefDto>>> GetTasksList(Guid projectId)
+    public async Task<ActionResult<List<ProjectBriefDto>>> GetTasksList([FromRoute] Guid projectId)
     {
         return Ok(await mediator.Send(new GetTasksListQuery(projectId)));
     }
 
     // GET api/v1/Task/{id}
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<TaskDetailedDto>> GetTaskById(Guid id)
+    public async Task<ActionResult<TaskDetailedDto>> GetTaskById([FromRoute] Guid id)
     {
         var result = await mediator.Send(new GetTaskByIdQuery(id));
         return result != null ? Ok(result) : NotFound();

@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Application.Auth.AccessToken;
 using Application.DTO.Auth;
 using Application.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -18,13 +19,16 @@ public class JwtProvider : IJwtProvider
         _config = config ?? throw new ArgumentNullException(nameof(config));
     }
 
-    public string CreateAccessToken(Domain.Entities.User user)
+    public AccessTokenResult CreateAccessToken(Domain.Entities.User user)
     {
         var secret = _config["JwtSettings:Secret"] 
-            ?? throw new InvalidOperationException("JWT Secret not found in configuration");
+                     ?? throw new InvalidOperationException("JWT Secret not found");
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var expiresInMinutes = GetNumericConfig("JwtSettings:AccessTokenLifetimeMinutes", 15);
+        var expiresAt = DateTime.UtcNow.AddMinutes(expiresInMinutes);
 
         var claims = new List<Claim>
         {
@@ -35,17 +39,17 @@ public class JwtProvider : IJwtProvider
             new(ClaimTypes.Role, user.Role.ToString()),
         };
 
-        var expiresInMinutes = GetNumericConfig("JwtSettings:AccessTokenLifetimeMinutes", 15);
-
         var token = new JwtSecurityToken(
-            issuer:    _config["JwtSettings:Issuer"],
-            audience:  _config["JwtSettings:Audience"],
-            claims:    claims,
+            issuer: _config["JwtSettings:Issuer"],
+            audience: _config["JwtSettings:Audience"],
+            claims: claims,
             notBefore: DateTime.UtcNow,
-            expires:   DateTime.UtcNow.AddMinutes(expiresInMinutes),
+            expires: expiresAt,
             signingCredentials: credentials);
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+        return new AccessTokenResult(tokenString, expiresAt);
     }
 
     public RefreshTokenResponse CreateRefreshToken()

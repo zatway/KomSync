@@ -14,7 +14,7 @@ public class RevokeTokenAsyncHandler(
     public async Task<bool> Handle(RevokeTokenRequest request, CancellationToken cancellationToken)
     {
         var token = await context.RefreshTokens
-            .FirstOrDefaultAsync(t => t.Token == request.RefreshToken, cancellationToken);
+            .FirstOrDefaultAsync(t => t.UserId == request.UserId, cancellationToken);
 
         if (token == null) return false;
 
