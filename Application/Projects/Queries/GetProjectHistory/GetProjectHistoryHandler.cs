@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Projects.Queries.GetProjectHistory
 {
     public class GetProjectHistoryHandler(IKomSyncContext context)
-        : IRequestHandler<GetProjectHistoryQuery, IEnumerable<ProjectHistoryEntryDto>>
+        : IRequestHandler<GetProjectHistoryQuery, List<ProjectHistoryEntryDto>>
     {
-        public async Task<IEnumerable<ProjectHistoryEntryDto>> Handle(GetProjectHistoryQuery request, CancellationToken cancellationToken)
+        public async Task<List<ProjectHistoryEntryDto>> Handle(GetProjectHistoryQuery request, CancellationToken cancellationToken)
         {
             var history = await context.ProjectHistories
                 .Include(h => h.ChangedBy)
@@ -23,7 +23,7 @@ namespace Application.Projects.Queries.GetProjectHistory
                 h.NewValue,
                 new ChangedByDto(h.ChangedById ?? Guid.Empty, h.ChangedBy.FullName),
                 h.CreatedAt
-            ));
+            )).ToList();
         }
     }
 }

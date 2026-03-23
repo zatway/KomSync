@@ -10,19 +10,29 @@ namespace Application
     {
         public static IServiceCollection ConfigureAddApplication(this IServiceCollection services)
         {
-            var applicationAssembly = typeof(DependencyInjection).Assembly;
+            // Находим все сборки приложения
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+                .Where(a => !a.IsDynamic && a.GetName().Name!.StartsWith("Application"))
+                .ToArray();
 
+            // === MediatR: автоматическая регистрация всех IRequestHandler<>
             services.AddMediatR(cfg =>
             {
-                cfg.RegisterServicesFromAssembly(applicationAssembly);
-                cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+                cfg.RegisterServicesFromAssemblies(assemblies);
+                cfg.AddOpenBehavior(typeof(ValidationBehavior<,>)); // Pipeline Behavior
             });
 
-            services.AddValidatorsFromAssembly(applicationAssembly);
+            // === FluentValidation: автоматическая регистрация всех IValidator<>
+            foreach (var assembly in assemblies)
+            {
+                services.AddValidatorsFromAssembly(assembly);
+            }
 
+            // === AutoMapper: автоматическая регистрация всех Mapping Profiles
             services.AddAutoMapper(cfg =>
             {
-                cfg.AddMaps(applicationAssembly);
+                foreach (var assembly in assemblies)
+                    cfg.AddMaps(assembly);
             });
 
             return services;

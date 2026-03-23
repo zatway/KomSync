@@ -59,6 +59,23 @@ builder.Services.AddSwaggerGen(opt =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontendDev", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://localhost:3000",     // React/Vite/Next и т.д.
+                "http://localhost:5173",     // Vite default
+                "http://localhost:4200",     // Angular
+                "https://your-frontend-domain.com"   // продакшен потом
+            )
+            .AllowAnyHeader()           // ← важно для Content-Type, Authorization и т.д.
+            .AllowAnyMethod()           // GET, POST, PUT, PATCH, DELETE, OPTIONS
+            .AllowCredentials();        // если используешь куки / credentials: 'include'
+    });
+});
+
 // ---------------------------
 // JWT Authentication
 // ---------------------------
@@ -107,6 +124,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowFrontendDev");
+
 app.UseAuthentication();
 app.UseAuthorization();
 

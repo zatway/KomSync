@@ -51,7 +51,7 @@ public class Project : BaseEntity
     /// <summary>
     /// Эмодзи проекта.
     /// </summary>
-    public char? Icon { get; set; }
+    public string? Icon { get; set; }
 
     /// <summary>
     /// Владелец проекта

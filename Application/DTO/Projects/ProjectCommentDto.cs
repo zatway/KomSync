@@ -11,6 +11,4 @@ public record ProjectCommentDto(
 )
 {
     public List<ProjectCommentDto> Replies { get; set; } = new List<ProjectCommentDto>();
-
-    public record AuthorDto(Guid Id, string Name, string? Email);
 }

@@ -10,5 +10,6 @@ public record CreateProjectRequest(
     DateTime? DueDate,
     string? Color,
     string? Icon,
+    Guid DepartmentId,
     List<string>? Tags
 ) : IRequest<Guid>;

@@ -10,15 +10,18 @@ namespace Application.Mapping
         {
             CreateMap<CreateProjectRequest, Project>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()))
-                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow));
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.Icon ?? ""));
 
             CreateMap<UpdateProjectRequest, Project>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.Icon ?? ""))
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<Project, ProjectBriefDto>()
-                .ForMember(d => d.OwnerName, opt => opt.MapFrom(s => s.Owner != null ? s.Owner.FullName : "Не назначен"));
-
+                .ForMember(d => d.OwnerName, opt => opt.MapFrom(s => s.Owner != null ? s.Owner.FullName : "Не назначен"))
+                .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.Icon ?? ""));
+            
             CreateMap<Project, MemberDto>();
 
             CreateMap<ProjectComment, ProjectCommentDto>()

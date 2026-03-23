@@ -153,8 +153,8 @@ namespace Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("DueDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<char?>("Icon")
-                        .HasColumnType("character(1)");
+                    b.Property<string>("Icon")
+                        .HasColumnType("text");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -499,20 +499,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("PositionId");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("10ca3dbd-eaa5-4361-9a0f-49be6bc8549d"),
-                            CreatedAt = new DateTimeOffset(new DateTime(2026, 3, 22, 17, 14, 5, 610, DateTimeKind.Unspecified).AddTicks(2746), new TimeSpan(0, 0, 0, 0, 0)),
-                            DepartmentId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Email = "admin@komsync.local",
-                            FullName = "System Admin",
-                            NormalizedEmail = "ADMIN@KOMSYNC.LOCAL",
-                            PasswordHash = "$2a$11$FlSzLJ4dRThnNSEs/S0hBej69RsK2DYPM0jaOsCUrBFilURG.7pma",
-                            PositionId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Role = 3
-                        });
                 });
 
             modelBuilder.Entity("ProjectUser", b =>

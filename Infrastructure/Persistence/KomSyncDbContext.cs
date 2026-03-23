@@ -31,7 +31,6 @@ public class KomSyncDbContext(DbContextOptions<KomSyncDbContext> options, ICurre
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(KomSyncDbContext).Assembly);
     }
-    
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var ignored = new[] { "UpdatedAt", "CreatedAt" };

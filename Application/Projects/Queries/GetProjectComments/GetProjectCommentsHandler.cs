@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Projects.Queries.GetProjectComments
 {
     public class GetProjectCommentsHandler(IKomSyncContext context)
-        : IRequestHandler<GetProjectCommentsQuery, IEnumerable<ProjectCommentDto>>
+        : IRequestHandler<GetProjectCommentsQuery, List<ProjectCommentDto>>
     {
-        public async Task<IEnumerable<ProjectCommentDto>> Handle(GetProjectCommentsQuery request, CancellationToken cancellationToken)
+        public async Task<List<ProjectCommentDto>> Handle(GetProjectCommentsQuery request, CancellationToken cancellationToken)
         {
             // Получаем все комментарии проекта с авторами
             var comments = await context.ProjectComments
