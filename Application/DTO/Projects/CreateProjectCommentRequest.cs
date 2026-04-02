@@ -5,5 +5,6 @@ namespace Application.DTO.Projects;
 public record CreateProjectCommentRequest(
     Guid ProjectId,
     string Content,
-    Guid? ParentId
+    Guid? ParentId,
+    IReadOnlyList<Guid>? MentionsUserIds = null
 ) : IRequest<ProjectCommentDto>;

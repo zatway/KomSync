@@ -9,7 +9,7 @@ public class CreateTaskValidator : AbstractValidator<CreateTaskRequest>
     {
         RuleFor(x => x.Title).NotEmpty().MaximumLength(500);
         RuleFor(x => x.ProjectId).NotEmpty();
-        RuleFor(x => x.Status).IsInEnum();
+        RuleFor(x => x.ProjectTaskStatusColumnId).NotEmpty();
         RuleFor(x => x.Priority).IsInEnum();
     }
 }

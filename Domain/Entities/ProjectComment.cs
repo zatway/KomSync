@@ -19,8 +19,10 @@ public class ProjectComment : BaseEntity
     /// Текст комментария.
     /// </summary>
     [Required, MaxLength(200)]
-    public string Content { get; set; }         
-    
+    public string Content { get; set; }
+
+    public string? MentionsUserIdsJson { get; set; }
+
     /// <summary>
     /// Родительский комментраий
     /// </summary>
@@ -38,4 +40,6 @@ public class ProjectComment : BaseEntity
 
     [ForeignKey(nameof(AuthorId))] 
     public User Author { get; set; } = null!;
+
+    public ICollection<ProjectCommentAttachment> Attachments { get; set; } = new List<ProjectCommentAttachment>();
 }

@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,6 +32,23 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
             await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
+            return true;
+        }
+
+        // Treat EF constraint/type/length issues as a 400 (invalid input),
+        // so API never returns 500 for "you sent invalid data".
+        if (exception is DbUpdateException dbUpdateException)
+        {
+            var details = new ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Validation Error",
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                Detail = dbUpdateException.InnerException?.Message ?? dbUpdateException.Message
+            };
+
+            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await httpContext.Response.WriteAsJsonAsync(details, cancellationToken);
             return true;
         }
 

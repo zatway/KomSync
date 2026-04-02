@@ -1,8 +1,13 @@
 using Application.DTO.Projects;
 using Application.Interfaces;
+using Application.Projects.Commands.CreateProjectTaskStatusColumn;
+using Application.Projects.Commands.UploadProjectCommentAttachments;
+using Application.Projects.Queries.GetProjectTaskStatusColumns;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Controllers.v1
 {
@@ -31,6 +36,22 @@ namespace WebApi.Controllers.v1
             var result = await _mediator.Send(new GetProjectByIdQuery(id));
             return Ok(result);
         }
+
+        [HttpGet("{id:guid}/task-status-columns")]
+        public async Task<IActionResult> GetTaskStatusColumns(Guid id)
+        {
+            var result = await _mediator.Send(new GetProjectTaskStatusColumnsQuery(id));
+            return Ok(result);
+        }
+
+        [HttpPut("{id:guid}/task-status-columns")]
+        public async Task<IActionResult> CreateTaskStatusColumn(Guid id, [FromBody] CreateTaskStatusColumnBody body)
+        {
+            var colId = await _mediator.Send(new CreateProjectTaskStatusColumnCommand(id, body.Name, body.ColorHex));
+            return Ok(colId);
+        }
+
+        public record CreateTaskStatusColumnBody(string Name, string? ColorHex);
 
         [HttpPut]
         public async Task<IActionResult> CreateProject([FromBody] CreateProjectRequest request)
@@ -83,6 +104,32 @@ namespace WebApi.Controllers.v1
         {
             var comments = await _mediator.Send(new GetProjectCommentsQuery(id));
             return Ok(comments);
+        }
+
+        [HttpPost("comments/{id:guid}/attachments")]
+        public async Task<IActionResult> UploadProjectCommentAttachments([FromRoute] Guid id, [FromForm] List<IFormFile> files)
+        {
+            var result = await _mediator.Send(new UploadProjectCommentAttachmentsCommand(id, files));
+            return Ok(result);
+        }
+
+        [HttpGet("comment-attachments/{id:guid}")]
+        public async Task<IActionResult> DownloadProjectCommentAttachment(
+            [FromServices] IKomSyncContext context,
+            [FromServices] IFileStorage storage,
+            [FromRoute] Guid id,
+            CancellationToken cancellationToken)
+        {
+            var att = await context.ProjectCommentAttachments
+                .AsNoTracking()
+                .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
+
+            if (att == null) return NotFound();
+
+            var stream = await storage.OpenReadAsync(att.StoredPath, cancellationToken);
+            if (stream == null) return NotFound();
+
+            return File(stream, att.ContentType ?? "application/octet-stream", att.FileName);
         }
     }
 }

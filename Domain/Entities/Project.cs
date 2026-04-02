@@ -45,8 +45,9 @@ public class Project : BaseEntity
     /// <summary>
     /// Цвет проекта.
     /// </summary>
-    [Required, MaxLength(6)]
-    public string Color { get; set; } = "0000ff";
+    // keep the leading '#' to match frontend and avoid ambiguity
+    [Required, MaxLength(7)]
+    public string Color { get; set; } = "#0000ff";
     
     /// <summary>
     /// Эмодзи проекта.
@@ -63,6 +64,7 @@ public class Project : BaseEntity
     
     public ICollection<User> Members { get; set; } = new List<User>();
     public ICollection<ProjectTask> Tasks { get; set; } = new List<ProjectTask>();
+    public ICollection<ProjectTaskStatusColumn> TaskStatusColumns { get; set; } = new List<ProjectTaskStatusColumn>();
     public ICollection<Tag> Tags { get; set; } = new List<Tag>();
     public ICollection<Category> Categories { get; set; } = new List<Category>();
     

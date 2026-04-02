@@ -1,31 +1,55 @@
 using Application.DTO.Tasks;
 using Application.Interfaces;
-using Domain.Entities;
-using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Tasks.Commands.ChangeTaskStatus;
 
 public class ChangeTaskStatusHandler(
-    IKomSyncContext context
+    IKomSyncContext context,
+    ICurrentUserService currentUserService,
+    IRealtimeNotificationPublisher notifications
 ) : IRequestHandler<ChangeTaskStatusCommand, bool>
 {
     public async Task<bool> Handle(ChangeTaskStatusCommand request, CancellationToken cancellationToken)
     {
-        // 1. Ищем задачу
         var task = await context.Tasks
             .FirstOrDefaultAsync(p => p.Id == request.TaskId, cancellationToken);
 
-        if (task == null) 
-            return false; 
+        if (task == null)
+            return false;
 
-        task.Status = request.NewStatus;
+        if (task.ProjectId != request.ProjectId)
+            return false;
+
+        var columnOk = await context.ProjectTaskStatusColumns
+            .AnyAsync(c => c.Id == request.NewStatusColumnId && c.ProjectId == request.ProjectId, cancellationToken);
+        if (!columnOk)
+            return false;
+
+        task.ProjectTaskStatusColumnId = request.NewStatusColumnId;
+        if (request.NewSortOrder.HasValue)
+            task.SortOrder = request.NewSortOrder.Value;
+
         task.UpdatedAt = DateTime.UtcNow;
-        
-        // 3. Сохраняем изменения
+
         await context.SaveChangesAsync(cancellationToken);
-        
+
+        var actorId = currentUserService.UserId;
+        var recipients = new HashSet<Guid> { task.CreatorId };
+        if (task.AssigneeId.HasValue) recipients.Add(task.AssigneeId.Value);
+        if (task.ResponsibleId.HasValue) recipients.Add(task.ResponsibleId.Value);
+        if (actorId.HasValue) recipients.Remove(actorId.Value);
+
+        foreach (var recipientId in recipients)
+        {
+            await notifications.PublishToUserAsync(
+                recipientId,
+                "task.status.changed",
+                new { taskId = task.Id, newStatusColumnId = request.NewStatusColumnId, byUserId = actorId },
+                cancellationToken);
+        }
+
         return true;
     }
 }

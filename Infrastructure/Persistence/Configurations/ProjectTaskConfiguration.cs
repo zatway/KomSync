@@ -22,5 +22,15 @@ public class ProjectTaskConfiguration : IEntityTypeConfiguration<ProjectTask>
             .WithMany()
             .HasForeignKey(t => t.AssigneeId)
             .OnDelete(DeleteBehavior.SetNull); // Если юзер удален, задача остается "ничьей"
+
+        builder.HasOne(t => t.Responsible)
+            .WithMany()
+            .HasForeignKey(t => t.ResponsibleId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.HasOne(t => t.StatusColumn)
+            .WithMany(c => c.Tasks)
+            .HasForeignKey(t => t.ProjectTaskStatusColumnId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -6,16 +6,29 @@ namespace Application.Mapping
 {
     public class ProjectMappingProfile : Profile
     {
+        private static string NormalizeHexColorWithHash(string? color)
+        {
+            if (string.IsNullOrWhiteSpace(color)) return "#0000ff";
+            var c = color.Trim();
+            if (!c.StartsWith("#", StringComparison.Ordinal)) c = $"#{c}";
+            // allow 3-digit shorthand (#abc) -> expand to 6 (#aabbcc)
+            if (c.Length == 4)
+                c = $"#{c[1]}{c[1]}{c[2]}{c[2]}{c[3]}{c[3]}";
+            return c.Length > 7 ? c[..7] : c;
+        }
+
         public ProjectMappingProfile()
         {
             CreateMap<CreateProjectRequest, Project>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()))
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
-                .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.Icon ?? ""));
+                .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.Icon ?? ""))
+                .ForMember(dest => dest.Color, opt => opt.MapFrom(src => NormalizeHexColorWithHash(src.Color)));
 
             CreateMap<UpdateProjectRequest, Project>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.Icon ?? ""))
+                .ForMember(dest => dest.Color, opt => opt.MapFrom(src => src.Color == null ? null : NormalizeHexColorWithHash(src.Color)))
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<Project, ProjectBriefDto>()

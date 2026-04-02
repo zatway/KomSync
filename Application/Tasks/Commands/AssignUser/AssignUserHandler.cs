@@ -9,7 +9,8 @@ namespace Application.Tasks.Commands.AssignUser;
 
 public class AssignUserHandler(
     IKomSyncContext context,
-    ICurrentUserService currentUserService
+    ICurrentUserService currentUserService,
+    IRealtimeNotificationPublisher notifications
 ) : IRequestHandler<AssignUserRequest, bool>
 {
     public async Task<bool> Handle(AssignUserRequest request, CancellationToken cancellationToken)
@@ -29,6 +30,15 @@ public class AssignUserHandler(
         
         // 3. Сохраняем изменения
         await context.SaveChangesAsync(cancellationToken);
+
+        if (request.AssigneeId.HasValue && request.AssigneeId.Value != userId)
+        {
+            await notifications.PublishToUserAsync(
+                request.AssigneeId.Value,
+                "task.assigned",
+                new { taskId = task.Id, byUserId = userId },
+                cancellationToken);
+        }
         
         return true;
     }

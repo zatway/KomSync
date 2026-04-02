@@ -1,5 +1,6 @@
 using Application.DTO.Projects;
 using Application.Interfaces;
+using Application.Projects.ProjectTaskStatusColumns;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -18,6 +19,7 @@ namespace Application.Projects.Commands.CreateProject
             project.OwnerId = currentUser.UserId.Value;
 
             await context.Projects.AddAsync(project, cancellationToken);
+            ProjectTaskStatusColumnSeeder.SeedDefaultsForProject(context, project.Id);
             await context.SaveChangesAsync(cancellationToken);
 
             return project.Id;

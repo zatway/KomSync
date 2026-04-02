@@ -1,4 +1,5 @@
 using Application.DTO.Projects;
+using Application.DTO.Attachments;
 using Application.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ namespace Application.Projects.Queries.GetProjectComments
             // Получаем все комментарии проекта с авторами
             var comments = await context.ProjectComments
                 .Include(c => c.Author)
+                .Include(c => c.Attachments)
                 .Where(c => c.ProjectId == request.ProjectId)
                 .OrderBy(c => c.CreatedAt)
                 .ToListAsync(cancellationToken);
@@ -29,6 +31,19 @@ namespace Application.Projects.Queries.GetProjectComments
                     c.UpdatedAt,
                     c.ParentId
                 )
+                {
+                    Attachments = c.Attachments
+                        .OrderBy(a => a.CreatedAt)
+                        .Select(a => new CommentAttachmentDto(
+                            a.Id,
+                            a.FileName,
+                            a.ContentType,
+                            a.SizeBytes,
+                            $"/api/v1/projects/comment-attachments/{a.Id}",
+                            a.CreatedAt
+                        ))
+                        .ToList()
+                }
             );
 
             // Инициализируем Replies

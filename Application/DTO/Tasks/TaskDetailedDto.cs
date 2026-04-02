@@ -6,19 +6,23 @@ namespace Application.DTO.Tasks;
 
 public class TaskDetailedDto
 {
-    public TaskDetailedDto()
-    {
-    }
-
     public Guid Id { get; init; }
-    public string Title { get; init; }
+    public string Key { get; set; } = null!;
+    public string Title { get; init; } = null!;
     public string? Description { get; init; }
-    public ProjectTaskStatus Status { get; init; }
+    public TaskStatusColumnDto Status { get; init; } = null!;
     public ProjectTaskPriority Priority { get; init; }
-    public Guid CreatorId {get; set;}
-    public DateTime? UpdatedAt {get; set;}
-    public Guid? AssigneeId {get; set;}
-    public Guid? ParentTaskId {get; set;}
-    public TaskCommentDto[] Comments {get; set;}
-    public TaskHistoryDto[] History {get; set;}
+    public Guid ProjectId { get; init; }
+    public Guid CreatorId { get; init; }
+    public DateTime CreatedAt { get; init; }
+    public DateTime? UpdatedAt { get; init; }
+    public DateTime? Deadline { get; init; }
+    public Guid? ParentTaskId { get; init; }
+    public int TaskNumber { get; init; }
+    public int SortOrder { get; init; }
+    public TaskAssigneeDto? Assignee { get; init; }
+    public TaskAssigneeDto? Responsible { get; init; }
+    public IReadOnlyList<TaskAssigneeDto> Watchers { get; set; } = Array.Empty<TaskAssigneeDto>();
+    public TaskCommentDto[] Comments { get; set; } = [];
+    public TaskHistoryDto[] History { get; set; } = [];
 }

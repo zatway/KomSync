@@ -1,5 +1,10 @@
 using MediatR;
 
-namespace Application.DTO.Task;
+namespace Application.DTO.TaskComments;
 
-public record AddTaskCommentRequest(Guid TaskId, string Content) : IRequest<Guid>;
+public record AddTaskCommentRequest(
+    Guid TaskId,
+    string Content,
+    IReadOnlyList<Guid>? MentionsUserIds = null,
+    Guid? ReplyToUserId = null
+) : IRequest<Guid>;

@@ -1,5 +1,6 @@
 using Infrastructure;
 using Application;
+using Application.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -13,6 +14,11 @@ var builder = WebApplication.CreateBuilder(args);
 // ---------------------------
 builder.Services.ConfigureAddApplication();
 builder.Services.ConfigureAddInfrastructure(builder.Configuration);
+builder.Services.AddSignalR();
+builder.Services.AddScoped<IRealtimeNotificationPublisher, WebApi.Services.SignalRNotificationPublisher>();
+builder.Services.AddScoped<IFileStorage, WebApi.Services.LocalFileStorage>();
+builder.Services.Configure<WebApi.Services.SeedAdminSettings>(builder.Configuration.GetSection("SeedAdmin"));
+builder.Services.AddHostedService<WebApi.Services.SeedAdminHostedService>();
 
 // ---------------------------
 // Контроллеры и JSON
@@ -67,6 +73,7 @@ builder.Services.AddCors(options =>
             .WithOrigins(
                 "http://localhost:3000",     // React/Vite/Next и т.д.
                 "http://localhost:5173",     // Vite default
+                "http://localhost:5174",     // Vite (другой порт)
                 "http://localhost:4200",     // Angular
                 "https://your-frontend-domain.com"   // продакшен потом
             )
@@ -99,6 +106,20 @@ builder.Services.AddAuthentication(x =>
         ValidateIssuer = false,
         ValidateAudience = false
     };
+    x.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var path = context.HttpContext.Request.Path;
+            if (path.StartsWithSegments("/hubs"))
+            {
+                var accessToken = context.Request.Query["access_token"];
+                if (!string.IsNullOrEmpty(accessToken))
+                    context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
+    };
 });
 
 // ---------------------------
@@ -130,5 +151,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<WebApi.Hubs.NotificationHub>("/hubs/notifications");
 
 app.Run();

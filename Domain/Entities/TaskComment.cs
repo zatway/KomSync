@@ -22,6 +22,11 @@ public class TaskComment
     [Required]
     public string Content { get; set; } = null!;
 
+    /// <summary>JSON-массив Guid упомянутых пользователей.</summary>
+    public string? MentionsUserIdsJson { get; set; }
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+    public ICollection<TaskCommentAttachment> Attachments { get; set; } = new List<TaskCommentAttachment>();
 }

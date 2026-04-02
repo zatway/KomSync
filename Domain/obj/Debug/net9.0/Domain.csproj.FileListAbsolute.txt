@@ -24,3 +24,16 @@ C:\work\kom_Sync\KomSync\Domain\obj\Debug\net9.0\Domain.dll
 C:\work\kom_Sync\KomSync\Domain\obj\Debug\net9.0\refint\Domain.dll
 C:\work\kom_Sync\KomSync\Domain\obj\Debug\net9.0\Domain.pdb
 C:\work\kom_Sync\KomSync\Domain\obj\Debug\net9.0\ref\Domain.dll
+E:\KomSync\back\Domain\bin\Debug\net9.0\Domain.deps.json
+E:\KomSync\back\Domain\bin\Debug\net9.0\Domain.dll
+E:\KomSync\back\Domain\bin\Debug\net9.0\Domain.pdb
+E:\KomSync\back\Domain\obj\Debug\net9.0\Domain.csproj.AssemblyReference.cache
+E:\KomSync\back\Domain\obj\Debug\net9.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+E:\KomSync\back\Domain\obj\Debug\net9.0\Domain.AssemblyInfoInputs.cache
+E:\KomSync\back\Domain\obj\Debug\net9.0\Domain.AssemblyInfo.cs
+E:\KomSync\back\Domain\obj\Debug\net9.0\Domain.csproj.CoreCompileInputs.cache
+E:\KomSync\back\Domain\obj\Debug\net9.0\Domain.sourcelink.json
+E:\KomSync\back\Domain\obj\Debug\net9.0\Domain.dll
+E:\KomSync\back\Domain\obj\Debug\net9.0\refint\Domain.dll
+E:\KomSync\back\Domain\obj\Debug\net9.0\Domain.pdb
+E:\KomSync\back\Domain\obj\Debug\net9.0\ref\Domain.dll

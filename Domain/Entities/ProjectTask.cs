@@ -15,7 +15,10 @@ public class ProjectTask : IAuditable
 
     public string? Description { get; set; }
 
-    public ProjectTaskStatus Status { get; set; } = ProjectTaskStatus.Todo;
+    public Guid ProjectTaskStatusColumnId { get; set; }
+    [ForeignKey(nameof(ProjectTaskStatusColumnId))]
+    public ProjectTaskStatusColumn StatusColumn { get; set; } = null!;
+
     public ProjectTaskPriority Priority { get; set; } = ProjectTaskPriority.Medium;
 
     public DateTime? Deadline { get; set; }
@@ -42,6 +45,19 @@ public class ProjectTask : IAuditable
     public Guid? AssigneeId { get; set; }
     [ForeignKey(nameof(AssigneeId))]
     public User? Assignee { get; set; }
+
+    /// <summary>Ответственный за задачу (может отличаться от исполнителя).</summary>
+    public Guid? ResponsibleId { get; set; }
+    [ForeignKey(nameof(ResponsibleId))]
+    public User? Responsible { get; set; }
+
+    /// <summary>Порядковый номер задачи в рамках проекта (для ключа PROJ-12).</summary>
+    public int TaskNumber { get; set; }
+
+    /// <summary>Порядок карточки внутри колонки статуса.</summary>
+    public int SortOrder { get; set; }
+
+    public ICollection<ProjectTaskWatcher> Watchers { get; set; } = new List<ProjectTaskWatcher>();
 
     public ICollection<TaskComment> Comments { get; set; } = new List<TaskComment>();
     public ICollection<TaskHistory> History { get; set; } = new List<TaskHistory>();

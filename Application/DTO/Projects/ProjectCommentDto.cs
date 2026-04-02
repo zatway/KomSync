@@ -1,3 +1,5 @@
+using Application.DTO.Attachments;
+
 namespace Application.DTO.Projects;
 
 public record ProjectCommentDto(
@@ -11,4 +13,5 @@ public record ProjectCommentDto(
 )
 {
     public List<ProjectCommentDto> Replies { get; set; } = new List<ProjectCommentDto>();
+    public IReadOnlyList<CommentAttachmentDto> Attachments { get; set; } = Array.Empty<CommentAttachmentDto>();
 }

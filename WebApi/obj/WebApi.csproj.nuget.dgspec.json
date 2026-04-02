@@ -1,40 +1,34 @@
 {
   "format": 1,
   "restore": {
-    "C:\\work\\kom_Sync\\KomSync\\WebApi\\WebApi.csproj": {}
+    "E:\\KomSync\\back\\WebApi\\WebApi.csproj": {}
   },
   "projects": {
-    "C:\\work\\kom_Sync\\KomSync\\Application\\Application.csproj": {
+    "E:\\KomSync\\back\\Application\\Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\work\\kom_Sync\\KomSync\\Application\\Application.csproj",
+        "projectUniqueName": "E:\\KomSync\\back\\Application\\Application.csproj",
         "projectName": "Application",
-        "projectPath": "C:\\work\\kom_Sync\\KomSync\\Application\\Application.csproj",
+        "projectPath": "E:\\KomSync\\back\\Application\\Application.csproj",
         "packagesPath": "C:\\Users\\zatway\\.nuget\\packages\\",
-        "outputPath": "C:\\work\\kom_Sync\\KomSync\\Application\\obj\\",
+        "outputPath": "E:\\KomSync\\back\\Application\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\zatway\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\zatway\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
+          "http://192.168.2.53:8040/repository/kd/": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\work\\kom_Sync\\KomSync\\Domain\\Domain.csproj": {
-                "projectPath": "C:\\work\\kom_Sync\\KomSync\\Domain\\Domain.csproj"
+              "E:\\KomSync\\back\\Domain\\Domain.csproj": {
+                "projectPath": "E:\\KomSync\\back\\Domain\\Domain.csproj"
               }
             }
           }
@@ -98,15 +92,15 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[9.0.12, 9.0.12]"
+              "version": "[9.0.11, 9.0.11]"
             },
             {
               "name": "Microsoft.NETCore.App.Ref",
-              "version": "[9.0.12, 9.0.12]"
+              "version": "[9.0.11, 9.0.11]"
             },
             {
               "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[9.0.12, 9.0.12]"
+              "version": "[9.0.11, 9.0.11]"
             }
           ],
           "frameworkReferences": {
@@ -114,33 +108,27 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\work\\kom_Sync\\KomSync\\Domain\\Domain.csproj": {
+    "E:\\KomSync\\back\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\work\\kom_Sync\\KomSync\\Domain\\Domain.csproj",
+        "projectUniqueName": "E:\\KomSync\\back\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "C:\\work\\kom_Sync\\KomSync\\Domain\\Domain.csproj",
+        "projectPath": "E:\\KomSync\\back\\Domain\\Domain.csproj",
         "packagesPath": "C:\\Users\\zatway\\.nuget\\packages\\",
-        "outputPath": "C:\\work\\kom_Sync\\KomSync\\Domain\\obj\\",
+        "outputPath": "E:\\KomSync\\back\\Domain\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\zatway\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\zatway\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
+          "http://192.168.2.53:8040/repository/kd/": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -184,15 +172,15 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[9.0.12, 9.0.12]"
+              "version": "[9.0.11, 9.0.11]"
             },
             {
               "name": "Microsoft.NETCore.App.Ref",
-              "version": "[9.0.12, 9.0.12]"
+              "version": "[9.0.11, 9.0.11]"
             },
             {
               "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[9.0.12, 9.0.12]"
+              "version": "[9.0.11, 9.0.11]"
             }
           ],
           "frameworkReferences": {
@@ -200,44 +188,38 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\work\\kom_Sync\\KomSync\\Infrastructure\\Infrastructure.csproj": {
+    "E:\\KomSync\\back\\Infrastructure\\Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\work\\kom_Sync\\KomSync\\Infrastructure\\Infrastructure.csproj",
+        "projectUniqueName": "E:\\KomSync\\back\\Infrastructure\\Infrastructure.csproj",
         "projectName": "Infrastructure",
-        "projectPath": "C:\\work\\kom_Sync\\KomSync\\Infrastructure\\Infrastructure.csproj",
+        "projectPath": "E:\\KomSync\\back\\Infrastructure\\Infrastructure.csproj",
         "packagesPath": "C:\\Users\\zatway\\.nuget\\packages\\",
-        "outputPath": "C:\\work\\kom_Sync\\KomSync\\Infrastructure\\obj\\",
+        "outputPath": "E:\\KomSync\\back\\Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\zatway\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\zatway\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
+          "http://192.168.2.53:8040/repository/kd/": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\work\\kom_Sync\\KomSync\\Application\\Application.csproj": {
-                "projectPath": "C:\\work\\kom_Sync\\KomSync\\Application\\Application.csproj"
+              "E:\\KomSync\\back\\Application\\Application.csproj": {
+                "projectPath": "E:\\KomSync\\back\\Application\\Application.csproj"
               },
-              "C:\\work\\kom_Sync\\KomSync\\Domain\\Domain.csproj": {
-                "projectPath": "C:\\work\\kom_Sync\\KomSync\\Domain\\Domain.csproj"
+              "E:\\KomSync\\back\\Domain\\Domain.csproj": {
+                "projectPath": "E:\\KomSync\\back\\Domain\\Domain.csproj"
               }
             }
           }
@@ -297,15 +279,15 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[9.0.12, 9.0.12]"
+              "version": "[9.0.11, 9.0.11]"
             },
             {
               "name": "Microsoft.NETCore.App.Ref",
-              "version": "[9.0.12, 9.0.12]"
+              "version": "[9.0.11, 9.0.11]"
             },
             {
               "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[9.0.12, 9.0.12]"
+              "version": "[9.0.11, 9.0.11]"
             }
           ],
           "frameworkReferences": {
@@ -313,44 +295,38 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\work\\kom_Sync\\KomSync\\WebApi\\WebApi.csproj": {
+    "E:\\KomSync\\back\\WebApi\\WebApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\work\\kom_Sync\\KomSync\\WebApi\\WebApi.csproj",
+        "projectUniqueName": "E:\\KomSync\\back\\WebApi\\WebApi.csproj",
         "projectName": "WebApi",
-        "projectPath": "C:\\work\\kom_Sync\\KomSync\\WebApi\\WebApi.csproj",
+        "projectPath": "E:\\KomSync\\back\\WebApi\\WebApi.csproj",
         "packagesPath": "C:\\Users\\zatway\\.nuget\\packages\\",
-        "outputPath": "C:\\work\\kom_Sync\\KomSync\\WebApi\\obj\\",
+        "outputPath": "E:\\KomSync\\back\\WebApi\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\zatway\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\zatway\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
+          "http://192.168.2.53:8040/repository/kd/": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\work\\kom_Sync\\KomSync\\Application\\Application.csproj": {
-                "projectPath": "C:\\work\\kom_Sync\\KomSync\\Application\\Application.csproj"
+              "E:\\KomSync\\back\\Application\\Application.csproj": {
+                "projectPath": "E:\\KomSync\\back\\Application\\Application.csproj"
               },
-              "C:\\work\\kom_Sync\\KomSync\\Infrastructure\\Infrastructure.csproj": {
-                "projectPath": "C:\\work\\kom_Sync\\KomSync\\Infrastructure\\Infrastructure.csproj"
+              "E:\\KomSync\\back\\Infrastructure\\Infrastructure.csproj": {
+                "projectPath": "E:\\KomSync\\back\\Infrastructure\\Infrastructure.csproj"
               }
             }
           }
@@ -394,19 +370,19 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[9.0.12, 9.0.12]"
+              "version": "[9.0.11, 9.0.11]"
             },
             {
               "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[9.0.12, 9.0.12]"
+              "version": "[9.0.11, 9.0.11]"
             },
             {
               "name": "Microsoft.NETCore.App.Ref",
-              "version": "[9.0.12, 9.0.12]"
+              "version": "[9.0.11, 9.0.11]"
             },
             {
               "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[9.0.12, 9.0.12]"
+              "version": "[9.0.11, 9.0.11]"
             }
           ],
           "frameworkReferences": {
@@ -417,7 +393,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

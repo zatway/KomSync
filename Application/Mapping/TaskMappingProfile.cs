@@ -1,4 +1,7 @@
+using Application.DTO.TaskComment;
+using Application.DTO.TaskHistory;
 using Application.DTO.Tasks;
+using Application.DTO.Attachments;
 using AutoMapper;
 using Domain.Entities;
 
@@ -11,26 +14,63 @@ public class TaskMappingProfile : AutoMapper.Profile
         CreateMap<CreateTaskRequest, ProjectTask>()
             .ForMember(d => d.Id, opt => opt.Ignore())
             .ForMember(d => d.CreatorId, opt => opt.Ignore())
-            .ForMember(d => d.History, opt => opt.Ignore());
+            .ForMember(d => d.History, opt => opt.Ignore())
+            .ForMember(d => d.Comments, opt => opt.Ignore())
+            .ForMember(d => d.Watchers, opt => opt.Ignore())
+            .ForMember(d => d.TaskNumber, opt => opt.Ignore())
+            .ForMember(d => d.SortOrder, opt => opt.Ignore())
+            .ForMember(d => d.Project, opt => opt.Ignore())
+            .ForMember(d => d.Assignee, opt => opt.Ignore())
+            .ForMember(d => d.Responsible, opt => opt.Ignore())
+            .ForMember(d => d.Creator, opt => opt.Ignore())
+            .ForMember(d => d.ParentTask, opt => opt.Ignore())
+            .ForMember(d => d.SubTasks, opt => opt.Ignore())
+            .ForMember(d => d.StatusColumn, opt => opt.Ignore());
 
         CreateMap<UpdateTaskRequest, ProjectTask>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
-            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-
-        CreateMap<ChangeTaskStatusCommand, ProjectTask>()
-            .ForMember(dest => dest.Id, opt => opt.Ignore())
-            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            .ForMember(dest => dest.Watchers, opt => opt.Ignore())
+            .ForMember(dest => dest.AssigneeId, opt => opt.Ignore())
+            .ForMember(dest => dest.StatusColumn, opt => opt.Ignore())
+            .ForAllMembers(opts => opts.Condition((_, _, srcMember) => srcMember != null));
 
         CreateMap<AssignUserRequest, ProjectTask>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
-            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            .ForAllMembers(opts => opts.Condition((_, _, srcMember) => srcMember != null));
+
+        CreateMap<TaskComment, TaskCommentDto>()
+            .ForMember(d => d.AuthorName, opt => opt.MapFrom(s => s.User.FullName))
+            .ForMember(d => d.Attachments, opt => opt.Ignore());
+
+        CreateMap<TaskCommentAttachment, CommentAttachmentDto>()
+            .ConstructUsing(a => new CommentAttachmentDto(
+                a.Id,
+                a.FileName,
+                a.ContentType,
+                a.SizeBytes,
+                $"/api/v1/TaskComments/attachments/{a.Id}",
+                a.CreatedAt
+            ));
+
+        CreateMap<TaskHistory, TaskHistoryDto>();
+
+        CreateMap<User, TaskAssigneeDto>()
+            .ConstructUsing(u => new TaskAssigneeDto(u.Id, u.FullName, null));
+
+        CreateMap<ProjectTaskStatusColumn, TaskStatusColumnDto>();
+
+        CreateMap<ProjectTask, TaskShortDto>()
+            .ForMember(d => d.Key, opt => opt.MapFrom(s =>
+                s.Project != null ? $"{s.Project.Key}-{s.TaskNumber}" : s.TaskNumber.ToString()))
+            .ForMember(d => d.Assignee, opt => opt.MapFrom(s => s.Assignee))
+            .ForMember(d => d.Responsible, opt => opt.MapFrom(s => s.Responsible))
+            .ForMember(d => d.Status, opt => opt.MapFrom(s => s.StatusColumn));
 
         CreateMap<ProjectTask, TaskDetailedDto>()
-            .ForMember(d => d.AssigneeId,
-                opt => opt.MapFrom(s => s.Assignee != null ? s.Assignee.FullName : "Не назначен"));
-        
-        CreateMap<ProjectTask, TaskShortDto>()
-            .ForMember(d => d.AssigneeId,
-                opt => opt.MapFrom(s => s.Assignee != null ? s.Assignee.FullName : "Не назначен"));
+            .ForMember(d => d.Key, opt => opt.Ignore())
+            .ForMember(d => d.Comments, opt => opt.Ignore())
+            .ForMember(d => d.History, opt => opt.Ignore())
+            .ForMember(d => d.Watchers, opt => opt.Ignore())
+            .ForMember(d => d.Status, opt => opt.MapFrom(s => s.StatusColumn));
     }
 }

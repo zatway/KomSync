@@ -16,6 +16,10 @@ public interface IKomSyncContext
     DbSet<RefreshToken> RefreshTokens { get; }
     DbSet<Project> Projects { get; }
     DbSet<ProjectTask> Tasks { get; }
+    DbSet<ProjectTaskStatusColumn> ProjectTaskStatusColumns { get; }
+    DbSet<ProjectTaskWatcher> ProjectTaskWatchers { get; }
+    DbSet<TaskCommentAttachment> TaskCommentAttachments { get; }
+    DbSet<ProjectCommentAttachment> ProjectCommentAttachments { get; }
     DbSet<TaskHistory> TaskHistories { get; }
     DbSet<TaskComment> TaskComments { get; }
 

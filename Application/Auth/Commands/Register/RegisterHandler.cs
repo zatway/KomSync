@@ -1,5 +1,6 @@
 using Application.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,9 @@ public class RegisterHandler(
 {
     public async Task Handle(RegisterRequest request, CancellationToken cancellationToken)
     {
-        // 1. Проверка уникальности
         if (!await context.Departments.AnyAsync(u => u.Id.ToString() == request.DepartmentId, cancellationToken))
-            throw new Exception("Подразделение не существует");      
-        
+            throw new Exception("Подразделение не существует");
+
         var departmentId = Guid.Parse(request.DepartmentId);
         var positionId = Guid.Parse(request.PositionId);
 
@@ -26,13 +26,18 @@ public class RegisterHandler(
 
         if (!await context.Positions.AnyAsync(u => u.Id == positionId, cancellationToken))
             throw new Exception("Должность не существует");
-        
-        // 2. Создание пользователя
+
         var user = mapper.Map<User>(request);
         user.PasswordHash = passwordHasher.Hash(request.Password);
 
-        await context.ApplicationForRegistrations.AddAsync(new ApplicationForRegistration() { User = user }, cancellationToken);
         await context.Users.AddAsync(user, cancellationToken);
+
+        await context.ApplicationForRegistrations.AddAsync(new ApplicationForRegistration
+        {
+            UserId = user.Id,
+            RequestedRole = request.Role,
+            Status = RegistrationApplicationStatus.Pending
+        }, cancellationToken);
 
         await context.SaveChangesAsync(cancellationToken);
     }

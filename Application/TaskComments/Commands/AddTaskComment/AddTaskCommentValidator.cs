@@ -1,5 +1,4 @@
-using Application.DTO.Task;
-using Application.DTO.Tasks;
+using Application.DTO.TaskComments;
 using FluentValidation;
 
 namespace Application.TaskComments.Commands.AddTaskComment;

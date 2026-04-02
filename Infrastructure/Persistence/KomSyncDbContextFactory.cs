@@ -14,8 +14,19 @@ public class KomSyncDbContextFactory : IDesignTimeDbContextFactory<KomSyncDbCont
     public KomSyncDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<KomSyncDbContext>();
-        optionsBuilder.UseNpgsql("Host=localhost;Database=komSync;Username=postgres;Password=123", 
-            b => b.MigrationsAssembly("Infrastructure"));
+        
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "..", "WebApi"))
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+            .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: false)
+            .AddEnvironmentVariables()
+            .Build();
+
+        var cs = configuration.GetConnectionString("DefaultConnection");
+        if (string.IsNullOrWhiteSpace(cs))
+            throw new InvalidOperationException("Connection string 'DefaultConnection' is missing.");
+
+        optionsBuilder.UseNpgsql(cs, b => b.MigrationsAssembly("Infrastructure"));
 
         // Создаем заглушку сервиса пользователя для миграций
         return new KomSyncDbContext(optionsBuilder.Options, new DesignTimeUserService());

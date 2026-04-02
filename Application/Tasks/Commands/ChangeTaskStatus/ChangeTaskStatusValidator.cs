@@ -7,10 +7,8 @@ public class ChangeTaskStatusValidator : AbstractValidator<ChangeTaskStatusComma
 {
     public ChangeTaskStatusValidator()
     {
-        RuleFor(x => x.TaskId)
-            .NotEmpty().WithMessage("ID проекта обязателен");
-
-        RuleFor(x => x.NewStatus)
-            .NotEmpty().WithMessage("Статус не может быть пустым");
+        RuleFor(x => x.TaskId).NotEmpty();
+        RuleFor(x => x.ProjectId).NotEmpty();
+        RuleFor(x => x.NewStatusColumnId).NotEmpty();
     }
 }

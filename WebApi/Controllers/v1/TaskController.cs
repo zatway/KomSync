@@ -1,14 +1,13 @@
-using Application.DTO.Projects;
 using Application.DTO.Tasks;
-using Application.Projects.Commands;
-using Application.Projects.Commands.CreateProject;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.v1;
 
 [ApiController]
 [Route("api/v1/[controller]")]
+[Authorize]
 public class TaskController(IMediator mediator) : ControllerBase
 {
     // POST api/v1/Task
@@ -56,7 +55,7 @@ public class TaskController(IMediator mediator) : ControllerBase
     // GET api/v1/Task/project/{projectId}
     // Изменили путь, чтобы не конфликтовать с получением одной задачи
     [HttpGet("project/{projectId:guid}")]
-    public async Task<ActionResult<List<ProjectBriefDto>>> GetTasksList([FromRoute] Guid projectId)
+    public async Task<ActionResult<List<TaskShortDto>>> GetTasksList([FromRoute] Guid projectId)
     {
         return Ok(await mediator.Send(new GetTasksListQuery(projectId)));
     }

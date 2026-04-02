@@ -23,6 +23,9 @@ public class LoginHandler(
         if (user == null || !passwordHasher.Verify(request.Password, user.PasswordHash))
             throw new UnauthorizedAccessException("Invalid email or password");
 
+        if (!user.IsApproved)
+            throw new UnauthorizedAccessException("Регистрация ещё не подтверждена администратором");
+
         var accessToken = jwtProvider.CreateAccessToken(user);
 
         var refreshTokenData = jwtProvider.CreateRefreshToken();

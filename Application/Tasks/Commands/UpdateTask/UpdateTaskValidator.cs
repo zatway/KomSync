@@ -8,13 +8,17 @@ public class UpdateTaskValidator : AbstractValidator<UpdateTaskRequest>
     public UpdateTaskValidator()
     {
         RuleFor(x => x.Id)
-            .NotEmpty().WithMessage("ID проекта обязателен");
+            .NotEmpty().WithMessage("ID задачи обязателен");
+
+        RuleFor(x => x.ProjectId)
+            .NotEmpty();
 
         RuleFor(x => x.Title)
-            .NotEmpty().WithMessage("Название не может быть пустым")
-            .MaximumLength(500).WithMessage("Название слишком длинное");
+            .MaximumLength(500)
+            .When(x => x.Title != null);
 
         RuleFor(x => x.Description)
-            .MaximumLength(1000).WithMessage("Описание слишком длинное");
+            .MaximumLength(4000)
+            .When(x => x.Description != null);
     }
 }

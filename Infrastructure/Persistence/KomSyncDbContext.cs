@@ -22,6 +22,10 @@ public class KomSyncDbContext(DbContextOptions<KomSyncDbContext> options, ICurre
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<Project> Projects => Set<Project>();
     public DbSet<ProjectTask> Tasks => Set<ProjectTask>();
+    public DbSet<ProjectTaskStatusColumn> ProjectTaskStatusColumns => Set<ProjectTaskStatusColumn>();
+    public DbSet<ProjectTaskWatcher> ProjectTaskWatchers => Set<ProjectTaskWatcher>();
+    public DbSet<TaskCommentAttachment> TaskCommentAttachments => Set<TaskCommentAttachment>();
+    public DbSet<ProjectCommentAttachment> ProjectCommentAttachments => Set<ProjectCommentAttachment>();
     public DbSet<TaskHistory> TaskHistories => Set<TaskHistory>();
     public DbSet<TaskComment> TaskComments => Set<TaskComment>();
 

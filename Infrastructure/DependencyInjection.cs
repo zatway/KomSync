@@ -1,11 +1,14 @@
 using Application.Interfaces;
 using Application.Mapping;
 using Infrastructure.Persistence;
+using Application.Interfaces;
 using Infrastructure.Service.Auth;
+using Infrastructure.Service.Notifications;
 using Infrastructure.Service.User;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure;
 
@@ -22,6 +25,15 @@ public static class DependencyInjection
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+        services.Configure<SmtpEmailSettings>(configuration.GetSection("SmtpEmail"));
+        services.AddSingleton<IEmailSender>(sp =>
+        {
+            var settings = sp.GetRequiredService<IOptions<SmtpEmailSettings>>().Value;
+            if (settings.Enabled)
+                return new SmtpEmailSender(sp.GetRequiredService<IOptions<SmtpEmailSettings>>());
+            return new LoggingEmailSender(sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<LoggingEmailSender>>());
+        });
         
         // Исправленная регистрация AutoMapper
         services.AddAutoMapper(cfg => {}, typeof(AuthMappingProfile).Assembly);

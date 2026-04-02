@@ -5,7 +5,12 @@ namespace Application.DTO.Tasks;
 
 public record CreateTaskRequest(
     string Title,
-    string Description,
-    ProjectTaskStatus Status,
+    string? Description,
+    Guid ProjectTaskStatusColumnId,
     ProjectTaskPriority Priority,
-    Guid ProjectId) : IRequest<Guid>;
+    Guid ProjectId,
+    Guid? AssigneeId,
+    Guid? ResponsibleId,
+    DateTime? Deadline,
+    IReadOnlyList<Guid>? WatcherUserIds
+) : IRequest<Guid>;

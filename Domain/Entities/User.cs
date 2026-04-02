@@ -33,6 +33,9 @@ public class User : BaseEntity
 
     /// <summary> Роль пользователя </summary>
     public UserRole Role { get; set; } = UserRole.Employee;
+
+    /// <summary> Доступ в систему после одобрения заявки (кроме сид-админа).</summary>
+    public bool IsApproved { get; set; }
     
     /// <summary> Должность. </summary>
     [Required]
