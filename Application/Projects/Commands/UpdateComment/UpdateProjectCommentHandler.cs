@@ -1,3 +1,4 @@
+using Application.Common.Exceptions;
 using Application.DTO.Projects;
 using Application.Interfaces;
 using Domain.Entities;
@@ -18,10 +19,10 @@ namespace Application.Projects.Commands.UpdateComment
                 .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
 
             if (comment == null)
-                throw new Exception("Comment not found");
+                throw new NotFoundException("Комментарий не найден");
 
             if (comment.AuthorId != currentUser.UserId)
-                throw new UnauthorizedAccessException("Cannot edit another user's comment");
+                throw new ForbiddenException("Нельзя редактировать чужой комментарий");
 
             comment.Content = request.Content;
             comment.UpdateTimestamp();

@@ -1,3 +1,4 @@
+using Application.Common.Exceptions;
 using Application.DTO.Projects;
 using Application.Interfaces;
 using Domain.Entities;
@@ -22,7 +23,7 @@ namespace Application.Projects.Commands.AddProjectComment
                 .FirstOrDefaultAsync(u => u.Id == currentUser.UserId, cancellationToken);
 
             if (user == null)
-                throw new Exception("User not found");
+                throw new NotFoundException("Пользователь не найден");
 
             var comment = new ProjectComment
             {

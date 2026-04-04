@@ -26,14 +26,14 @@ public class TaskCommentsController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> Update([FromBody] UpdateTaskCommentRequest command)
     {
         var result = await mediator.Send(command);
-        return result ? Ok(result) : NotFound();
+        return result ? NoContent() : NotFound();
     }
     
     [HttpDelete]
     public async Task<IActionResult> Delete([FromBody] DeleteTaskCommentRequest command)
     {
         var result = await mediator.Send(command);
-        return result ? Ok(result) : BadRequest();
+        return result ? NoContent() : NotFound();
     }
 
     [HttpPost("{commentId:guid}/attachments")]

@@ -25,7 +25,7 @@ public class TaskController(IMediator mediator) : ControllerBase
         if (id != command.Id) return BadRequest("ID mismatch");
 
         var result = await mediator.Send(command);
-        return result ? Ok(result) : NotFound();
+        return result ? NoContent() : NotFound();
     }
 
     // POST api/v1/Task/assign
@@ -33,7 +33,7 @@ public class TaskController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> AssignUser([FromBody] AssignUserRequest command)
     {
         var result = await mediator.Send(command);
-        return result ? Ok(result) : NotFound();
+        return result ? NoContent() : NotFound();
     }
 
     // POST api/v1/Task/status
@@ -41,7 +41,7 @@ public class TaskController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> ChangeTaskStatus([FromBody] ChangeTaskStatusCommand command)
     {
         var result = await mediator.Send(command);
-        return result ? Ok(result) : NotFound();
+        return result ? NoContent() : NotFound();
     }
 
     // DELETE api/v1/Task/{id}
@@ -49,7 +49,7 @@ public class TaskController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         var result = await mediator.Send(new DeleteTaskRequest(id));
-        return result ? Ok(result) : NotFound();
+        return result ? NoContent() : NotFound();
     }
 
     // GET api/v1/Task/project/{projectId}

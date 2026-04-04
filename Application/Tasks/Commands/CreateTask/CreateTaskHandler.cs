@@ -1,3 +1,4 @@
+using Application.Common.Exceptions;
 using Application.DTO.Tasks;
 using Application.Interfaces;
 using Domain.Entities;
@@ -20,12 +21,12 @@ public class CreateTaskHandler(
 
         var projectExists = await context.Projects.AnyAsync(p => p.Id == request.ProjectId, cancellationToken);
         if (!projectExists)
-            throw new InvalidOperationException("Project not found.");
+            throw new NotFoundException("Проект не найден");
 
         var columnOk = await context.ProjectTaskStatusColumns
             .AnyAsync(c => c.Id == request.ProjectTaskStatusColumnId && c.ProjectId == request.ProjectId, cancellationToken);
         if (!columnOk)
-            throw new InvalidOperationException("Invalid task status column for this project.");
+            throw new BadRequestException("Некорректная колонка статуса для этого проекта");
 
         var task = mapper.Map<ProjectTask>(request);
         task.Id = Guid.NewGuid();

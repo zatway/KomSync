@@ -13,7 +13,7 @@ public class AuthController(IMediator mediator, ICurrentUserService _currentUser
     public async Task<IActionResult> Register([FromBody] RegisterRequest command)
     {
         await mediator.Send(command);
-        return Ok();
+        return NoContent();
     }
 
     [HttpPost("login")]
@@ -33,7 +33,7 @@ public class AuthController(IMediator mediator, ICurrentUserService _currentUser
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
-        var response = await mediator.Send(new RevokeTokenRequest(_currentUser.UserId)); 
-        return Ok(response);
+        await mediator.Send(new RevokeTokenRequest(_currentUser.UserId));
+        return NoContent();
     }
 }

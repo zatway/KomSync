@@ -1,3 +1,4 @@
+using Application.Common.Exceptions;
 using Application.DTO.Projects;
 using Application.Interfaces;
 using MediatR;
@@ -20,7 +21,7 @@ public class GetProjectByIdHandler(IKomSyncContext context, ICurrentUserService 
             .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
 
         if (project == null)
-            throw new Exception("Project not found");
+            throw new NotFoundException("Проект не найден");
 
         var currentUserId = currentUser.UserId ?? Guid.Empty;
 

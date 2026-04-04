@@ -1,3 +1,4 @@
+using Application.Common.Exceptions;
 using Application.Interfaces;
 using Domain.Entities;
 using MediatR;
@@ -20,7 +21,7 @@ public class CreateProjectTaskStatusColumnHandler(IKomSyncContext context, ICurr
 
         var exists = await context.Projects.AnyAsync(p => p.Id == request.ProjectId, cancellationToken);
         if (!exists)
-            throw new InvalidOperationException("Project not found");
+            throw new NotFoundException("Проект не найден");
 
         var maxOrder = await context.ProjectTaskStatusColumns
             .Where(c => c.ProjectId == request.ProjectId)

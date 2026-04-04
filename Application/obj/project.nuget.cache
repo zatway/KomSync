@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "WiQ5tnsxJOs=",
+  "dgSpecHash": "MAwyhJS9Z9k=",
   "success": true,
-  "projectFilePath": "E:\\KomSync\\back\\Application\\Application.csproj",
+  "projectFilePath": "C:\\work\\kom_Sync\\KomSync\\Application\\Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\zatway\\.nuget\\packages\\automapper\\16.0.0\\automapper.16.0.0.nupkg.sha512",
     "C:\\Users\\zatway\\.nuget\\packages\\fluentvalidation\\12.1.1\\fluentvalidation.12.1.1.nupkg.sha512",
@@ -30,18 +30,18 @@
     "C:\\Users\\zatway\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\10.1.3\\swashbuckle.aspnetcore.swaggerui.10.1.3.nupkg.sha512",
     "C:\\Users\\zatway\\.nuget\\packages\\system.diagnostics.diagnosticsource\\10.0.0\\system.diagnostics.diagnosticsource.10.0.0.nupkg.sha512",
     "C:\\Users\\zatway\\.nuget\\packages\\system.text.json\\8.0.5\\system.text.json.8.0.5.nupkg.sha512",
-    "C:\\Users\\zatway\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.11\\microsoft.netcore.app.ref.9.0.11.nupkg.sha512",
-    "C:\\Users\\zatway\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\9.0.11\\microsoft.windowsdesktop.app.ref.9.0.11.nupkg.sha512",
-    "C:\\Users\\zatway\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\9.0.11\\microsoft.aspnetcore.app.ref.9.0.11.nupkg.sha512"
+    "C:\\Users\\zatway\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.12\\microsoft.netcore.app.ref.9.0.12.nupkg.sha512",
+    "C:\\Users\\zatway\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\9.0.12\\microsoft.windowsdesktop.app.ref.9.0.12.nupkg.sha512",
+    "C:\\Users\\zatway\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\9.0.12\\microsoft.aspnetcore.app.ref.9.0.12.nupkg.sha512"
   ],
   "logs": [
     {
       "code": "NU1903",
       "level": "Warning",
-      "message": "У пакета \"AutoMapper\" 16.0.0 есть известная уязвимость https://github.com/advisories/GHSA-rvv3-g6hj-g44x (уровень серьезности: высокий уровень)",
-      "projectPath": "E:\\KomSync\\back\\Application\\Application.csproj",
+      "message": "У пакета \"AutoMapper\" 16.0.0 есть известная уязвимость https://github.com/advisories/GHSA-rvv3-g6hj-g44x (уровень серьезности: высокий)",
+      "projectPath": "C:\\work\\kom_Sync\\KomSync\\Application\\Application.csproj",
       "warningLevel": 1,
-      "filePath": "E:\\KomSync\\back\\Application\\Application.csproj",
+      "filePath": "C:\\work\\kom_Sync\\KomSync\\Application\\Application.csproj",
       "libraryId": "AutoMapper",
       "targetGraphs": [
         "net9.0"

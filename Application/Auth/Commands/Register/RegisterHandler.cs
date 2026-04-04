@@ -1,10 +1,11 @@
+using Application.Common.Exceptions;
 using Application.Interfaces;
+using Application.DTO.Auth;
+using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
-using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Application.DTO.Auth;
 
 namespace Application.Auth.Commands.Register;
 
@@ -16,16 +17,16 @@ public class RegisterHandler(
     public async Task Handle(RegisterRequest request, CancellationToken cancellationToken)
     {
         if (!await context.Departments.AnyAsync(u => u.Id.ToString() == request.DepartmentId, cancellationToken))
-            throw new Exception("Подразделение не существует");
+            throw new BadRequestException("Подразделение не существует");
 
         var departmentId = Guid.Parse(request.DepartmentId);
         var positionId = Guid.Parse(request.PositionId);
 
         if (!await context.Departments.AnyAsync(u => u.Id == departmentId, cancellationToken))
-            throw new Exception("Подразделение не существует");
+            throw new BadRequestException("Подразделение не существует");
 
         if (!await context.Positions.AnyAsync(u => u.Id == positionId, cancellationToken))
-            throw new Exception("Должность не существует");
+            throw new BadRequestException("Должность не существует");
 
         var user = mapper.Map<User>(request);
         user.PasswordHash = passwordHasher.Hash(request.Password);

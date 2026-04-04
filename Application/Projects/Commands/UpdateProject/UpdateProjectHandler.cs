@@ -1,3 +1,4 @@
+using Application.Common.Exceptions;
 using Application.DTO.Projects;
 using Application.Interfaces;
 using AutoMapper;
@@ -16,7 +17,7 @@ namespace Application.Projects.Commands.UpdateProject
                 .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
 
             if (project == null)
-                throw new Exception("Project not found");
+                throw new NotFoundException("Проект не найден");
 
             mapper.Map(request, project);
             project.UpdateTimestamp();

@@ -1,3 +1,4 @@
+using Application.Common.Exceptions;
 using Application.DTO.UserProfile;
 using Application.Interfaces;
 using MediatR;
@@ -21,7 +22,7 @@ public class UpdateProfileHandler(
             .FirstOrDefaultAsync(u => u.Id == currentUser.UserId, cancellationToken);
 
         if (user == null)
-            throw new Exception("User not found");
+            throw new NotFoundException("Пользователь не найден");
 
         // --- Аватарка ---
         if (request.AvatarFile != null)
@@ -45,7 +46,7 @@ public class UpdateProfileHandler(
             var exists = await context.Users
                 .AnyAsync(u => u.Email == request.Email && u.Id != user.Id, cancellationToken);
             if (exists)
-                throw new Exception("Email already in use");
+                throw new ConflictException("Этот email уже занят");
 
             user.Email = request.Email;
         }
@@ -55,7 +56,7 @@ public class UpdateProfileHandler(
             var department = await context.Departments
                 .FirstOrDefaultAsync(d => d.Id == request.DepartmentId.Value, cancellationToken);
             if (department == null)
-                throw new Exception("Department not found");
+                throw new NotFoundException("Подразделение не найдено");
 
             user.DepartmentId = department.Id;
         }
@@ -65,7 +66,7 @@ public class UpdateProfileHandler(
             var position = await context.Positions
                 .FirstOrDefaultAsync(p => p.Id == request.PositionId.Value, cancellationToken);
             if (position == null)
-                throw new Exception("Position not found");
+                throw new NotFoundException("Должность не найдена");
 
             user.PositionId = position.Id;
         }

@@ -24,7 +24,7 @@ public class UserProfileController(IMediator mediator, ICurrentUserService _curr
     public async Task<IActionResult> UpdateProfile([FromForm] UpdateUserProfileRequest request)
     {
         var result = await mediator.Send(request);
-        return Ok(result);
+        return result ? NoContent() : NotFound();
     }
     
     [Authorize]

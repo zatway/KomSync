@@ -9,6 +9,8 @@ public class UpdateTaskCommentValidator : AbstractValidator<UpdateTaskCommentReq
     public UpdateTaskCommentValidator()
     {
         RuleFor(x => x.Content)
-            .MaximumLength(200).WithMessage("Название слишком длинное");
+            .NotEmpty()
+            .MaximumLength(500)
+            .WithMessage("Текст не более 500 символов");
     }
 }

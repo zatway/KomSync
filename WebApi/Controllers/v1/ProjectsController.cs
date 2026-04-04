@@ -65,7 +65,7 @@ namespace WebApi.Controllers.v1
         public async Task<IActionResult> UpdateProject(Guid id, [FromBody] UpdateProjectRequest request)
         {
             var updated = await _mediator.Send(request with { Id = id });
-            return Ok(updated);
+            return updated ? NoContent() : NotFound();
         }
 
         // --- Удалить проект ---
@@ -73,7 +73,7 @@ namespace WebApi.Controllers.v1
         public async Task<IActionResult> DeleteProject(Guid id)
         {
             var result = await _mediator.Send(new DeleteProjectRequest(id));
-            return Ok(result);
+            return result ? NoContent() : NotFound();
         }
 
         // --- История проекта ---
@@ -96,7 +96,7 @@ namespace WebApi.Controllers.v1
         public async Task<IActionResult> UpdateComment(Guid id, [FromBody] UpdateProjectCommentRequest request)
         {
             var updated = await _mediator.Send(request with { Id = id });
-            return Ok(updated);
+            return updated ? NoContent() : NotFound();
         }
 
         [HttpGet("{id:guid}/comments")]

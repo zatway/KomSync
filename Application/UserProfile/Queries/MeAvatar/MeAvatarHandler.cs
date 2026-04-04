@@ -1,3 +1,4 @@
+using Application.Common.Exceptions;
 using Application.DTO.Auth;
 using Application.DTO.UserProfile;
 using Application.Interfaces;
@@ -21,7 +22,7 @@ public class MeAvatarHandler(
             .FirstOrDefaultAsync(cancellationToken);
 
         if (user == null || user.Avatar == null)
-            throw new Exception("Avatar not found");
+            throw new NotFoundException("Аватар не найден");
 
         return new AvatarResult(user.Avatar, "image/png"); // MIME можно определять динамически
     }

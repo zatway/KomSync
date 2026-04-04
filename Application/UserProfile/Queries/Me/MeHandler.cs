@@ -1,3 +1,4 @@
+using Application.Common.Exceptions;
 using Application.DTO.UserProfile;
 using Application.Interfaces;
 using MediatR;
@@ -23,7 +24,7 @@ public class MeHandler(
             .FirstOrDefaultAsync(cancellationToken);
         
         if (user == null)
-            throw new UnauthorizedAccessException("Invalid user");
+            throw new NotFoundException("Пользователь не найден");
 
         return user;
     }

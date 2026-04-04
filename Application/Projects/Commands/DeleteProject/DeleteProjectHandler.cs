@@ -1,3 +1,4 @@
+using Application.Common.Exceptions;
 using Application.DTO.Projects;
 using Application.Interfaces;
 using MediatR;
@@ -13,7 +14,7 @@ namespace Application.Projects.Commands.DeleteProject
                 .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
 
             if (project == null)
-                throw new Exception("Project not found");
+                throw new NotFoundException("Проект не найден");
 
             context.Projects.Remove(project);
             await context.SaveChangesAsync(cancellationToken);

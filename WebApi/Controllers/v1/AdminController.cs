@@ -34,21 +34,21 @@ public class AdminController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> Approve(Guid id)
     {
         var ok = await mediator.Send(new ApproveRegistrationCommand(id));
-        return ok ? Ok() : NotFound();
+        return ok ? NoContent() : NotFound();
     }
 
     [HttpPost("registrations/{id:guid}/reject")]
     public async Task<IActionResult> Reject(Guid id)
     {
         var ok = await mediator.Send(new RejectRegistrationCommand(id));
-        return ok ? Ok() : NotFound();
+        return ok ? NoContent() : NotFound();
     }
 
     [HttpPatch("users/{userId:guid}/role")]
     public async Task<IActionResult> UpdateRole(Guid userId, [FromBody] UpdateUserRoleBody body)
     {
         var ok = await mediator.Send(new UpdateUserRoleCommand(userId, body.Role));
-        return ok ? Ok() : NotFound();
+        return ok ? NoContent() : NotFound();
     }
 
     [HttpPatch("users/{userId:guid}")]
@@ -63,7 +63,7 @@ public class AdminController(IMediator mediator) : ControllerBase
             DepartmentId: body.DepartmentId,
             PositionId: body.PositionId
         ));
-        return ok ? Ok() : NotFound();
+        return ok ? NoContent() : NotFound();
     }
 
     public record UpdateUserRoleBody(UserRole Role);
