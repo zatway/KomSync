@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class snapShot : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -117,7 +117,7 @@ namespace Infrastructure.Migrations
                     StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     DueDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     CompletedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    Color = table.Column<string>(type: "character varying(6)", maxLength: 6, nullable: false),
+                    Color = table.Column<string>(type: "character varying(7)", maxLength: 7, nullable: false),
                     Icon = table.Column<string>(type: "text", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     Progress = table.Column<decimal>(type: "numeric", nullable: false),
