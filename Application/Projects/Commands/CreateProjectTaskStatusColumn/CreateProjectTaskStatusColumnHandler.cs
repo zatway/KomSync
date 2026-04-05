@@ -23,6 +23,11 @@ public class CreateProjectTaskStatusColumnHandler(IKomSyncContext context, ICurr
         if (!exists)
             throw new NotFoundException("Проект не найден");
 
+        var columnCount = await context.ProjectTaskStatusColumns
+            .CountAsync(c => c.ProjectId == request.ProjectId, cancellationToken);
+        if (columnCount >= 10)
+            throw new BadRequestException("В проекте может быть не более 10 колонок статусов.");
+
         var maxOrder = await context.ProjectTaskStatusColumns
             .Where(c => c.ProjectId == request.ProjectId)
             .Select(c => (int?)c.SortOrder)

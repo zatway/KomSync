@@ -9,6 +9,7 @@ public record TaskHistoryDto
     public Guid Id { get; set; }
     public Guid TaskId { get; set; }
     public Guid ChangedById { get; set; }
+    public string? ChangedByName { get; set; }
     public string PropertyName { get; set; }
     public string? OldValue { get; set; }
     public string? NewValue { get; set; }

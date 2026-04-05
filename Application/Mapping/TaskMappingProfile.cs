@@ -52,7 +52,8 @@ public class TaskMappingProfile : AutoMapper.Profile
                 a.CreatedAt
             ));
 
-        CreateMap<TaskHistory, TaskHistoryDto>();
+        CreateMap<TaskHistory, TaskHistoryDto>()
+            .ForMember(d => d.ChangedByName, opt => opt.MapFrom(s => s.ChangedBy != null ? s.ChangedBy.FullName : null));
 
         CreateMap<User, TaskAssigneeDto>()
             .ConstructUsing(u => new TaskAssigneeDto(u.Id, u.FullName, null));

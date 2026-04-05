@@ -26,7 +26,7 @@ public class GetTaskByIdHandler(IKomSyncContext context, IMapper mapper, ICurren
             .Include(t => t.Attachments)
             .Include(t => t.Comments).ThenInclude(c => c.User)
             .Include(t => t.Comments).ThenInclude(c => c.Attachments)
-            .Include(t => t.History)
+            .Include(t => t.History).ThenInclude(h => h.ChangedBy)
             .Include(t => t.Watchers).ThenInclude(w => w.User)
             .FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
 
