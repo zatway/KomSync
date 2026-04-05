@@ -1,7 +1,7 @@
 {
   "format": 1,
   "restore": {
-    "C:\\work\\kom_Sync\\KomSync\\WebApi\\WebApi.csproj": {}
+    "C:\\work\\kom_Sync\\KomSync\\webApi\\WebApi.csproj": {}
   },
   "projects": {
     "C:\\work\\kom_Sync\\KomSync\\Application\\Application.csproj": {
@@ -321,14 +321,14 @@
         }
       }
     },
-    "C:\\work\\kom_Sync\\KomSync\\WebApi\\WebApi.csproj": {
+    "C:\\work\\kom_Sync\\KomSync\\webApi\\WebApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\work\\kom_Sync\\KomSync\\WebApi\\WebApi.csproj",
+        "projectUniqueName": "C:\\work\\kom_Sync\\KomSync\\webApi\\WebApi.csproj",
         "projectName": "WebApi",
-        "projectPath": "C:\\work\\kom_Sync\\KomSync\\WebApi\\WebApi.csproj",
+        "projectPath": "C:\\work\\kom_Sync\\KomSync\\webApi\\WebApi.csproj",
         "packagesPath": "C:\\Users\\zatway\\.nuget\\packages\\",
-        "outputPath": "C:\\work\\kom_Sync\\KomSync\\WebApi\\obj\\",
+        "outputPath": "C:\\work\\kom_Sync\\KomSync\\webApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -1,6 +1,7 @@
 using Application.Interfaces;
 using Domain.Entities;
 using Domain.Enums;
+using Infrastructure.Service.TaskHistory;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence;
@@ -40,44 +41,71 @@ public class KomSyncDbContext(DbContextOptions<KomSyncDbContext> options, ICurre
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(KomSyncDbContext).Assembly);
     }
+
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var ignored = new[] { "UpdatedAt", "CreatedAt" };
-        
-        var historyEntries = new List<ProjectHistory>();
+        var ignoredProperties = new[] { "Id", "CreatedAt", "UpdatedAt" };
 
-        var entries = ChangeTracker.Entries<Project>()
-            .Where(e => e.State == EntityState.Modified);
+        var projectHistories = new List<ProjectHistory>();
+        var taskHistories = new List<TaskHistory>();
 
-        foreach (var entry in entries)
+        foreach (var entry in ChangeTracker.Entries<Project>().Where(e => e.State == EntityState.Modified))
         {
             var projectId = entry.Entity.Id;
 
             foreach (var property in entry.Properties)
             {
-                if (ignored.Contains(property.Metadata.Name) || !property.IsModified)
+                if (ignoredProperties.Contains(property.Metadata.Name) || !property.IsModified)
                     continue;
 
-                var oldValue = property.OriginalValue?.ToString();
-                var newValue = property.CurrentValue?.ToString();
+                var oldValue = property.OriginalValue?.ToString() ?? string.Empty;
+                var newValue = property.CurrentValue?.ToString() ?? string.Empty;
 
                 if (oldValue == newValue) continue;
 
-                historyEntries.Add(new ProjectHistory
+                projectHistories.Add(new ProjectHistory
                 {
                     ProjectId = projectId,
                     Field = property.Metadata.Name,
-                    OldValue = oldValue ?? string.Empty,
-                    NewValue = newValue ?? string.Empty,
+                    OldValue = oldValue,
+                    NewValue = newValue,
                     ChangedById = _currentUserService.UserId
                 });
             }
         }
 
-        if (historyEntries.Count > 0)
-            await ProjectHistories.AddRangeAsync(historyEntries, cancellationToken);
+        foreach (var entry in ChangeTracker.Entries<ProjectTask>().Where(e => e.State == EntityState.Modified))
+        {
+            var taskId = entry.Entity.Id;
+
+            foreach (var property in entry.Properties)
+            {
+                if (ignoredProperties.Contains(property.Metadata.Name) || !property.IsModified)
+                    continue;
+
+                var oldValue = property.OriginalValue?.ToString() ?? string.Empty;
+                var newValue = property.CurrentValue?.ToString() ?? string.Empty;
+
+                if (oldValue == newValue) continue;
+
+                taskHistories.Add(new TaskHistory
+                {
+                    TaskId = taskId,
+                    PropertyName = property.Metadata.Name,
+                    OldValue = oldValue,
+                    NewValue = newValue,
+                    ChangedById = _currentUserService.UserId,
+                    Action = TaskHistoryService.DetermineTaskHistoryAction(property.Metadata.Name)
+                });
+            }
+        }
+
+        if (projectHistories.Count > 0)
+            await ProjectHistories.AddRangeAsync(projectHistories, cancellationToken);
+
+        if (taskHistories.Count > 0)
+            await TaskHistories.AddRangeAsync(taskHistories, cancellationToken);
 
         return await base.SaveChangesAsync(cancellationToken);
     }
-
 }
