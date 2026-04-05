@@ -33,7 +33,8 @@ namespace Application.Mapping
 
             CreateMap<Project, ProjectBriefDto>()
                 .ForMember(d => d.OwnerName, opt => opt.MapFrom(s => s.Owner != null ? s.Owner.FullName : "Не назначен"))
-                .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.Icon ?? ""));
+                .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.Icon ?? ""))
+                .ForMember(dest => dest.IsArchived, opt => opt.MapFrom(src => src.IsArchived));
             
             CreateMap<Project, MemberDto>();
 

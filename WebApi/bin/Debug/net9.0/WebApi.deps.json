@@ -867,6 +867,7 @@
           "FluentValidation.DependencyInjectionExtensions": "12.1.1",
           "MediatR": "14.0.0",
           "Microsoft.Extensions.DependencyInjection": "9.0.13",
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.4",
           "Swashbuckle.AspNetCore.SwaggerGen": "10.1.3",
           "Swashbuckle.AspNetCore.SwaggerUI": "10.1.3"
         },

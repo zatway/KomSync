@@ -82,6 +82,39 @@ namespace Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Domain.Entities.DeadlineReminderLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("BucketDays")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("LogKey")
+                        .IsRequired()
+                        .HasMaxLength(96)
+                        .HasColumnType("character varying(96)");
+
+                    b.Property<Guid>("ProjectTaskId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("SentAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateOnly>("SentOnDateUtc")
+                        .HasColumnType("date");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LogKey")
+                        .IsUnique();
+
+                    b.HasIndex("ProjectTaskId");
+
+                    b.ToTable("DeadlineReminderLogs");
+                });
+
             modelBuilder.Entity("Domain.Entities.Department", b =>
                 {
                     b.Property<Guid>("Id")
@@ -105,6 +138,98 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("Domain.Entities.KnowledgeArticle", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ContentMarkdown")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ProjectTaskId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(320)
+                        .HasColumnType("character varying(320)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("ProjectTaskId");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.ToTable("KnowledgeArticles");
+                });
+
+            modelBuilder.Entity("Domain.Entities.PasswordResetToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("ExpiresAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("UsedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TokenHash");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PasswordResetTokens");
                 });
 
             modelBuilder.Entity("Domain.Entities.Position", b =>
@@ -168,6 +293,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Icon")
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -197,6 +325,47 @@ namespace Infrastructure.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ProjectAttachment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ContentType")
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(260)
+                        .HasColumnType("character varying(260)");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<long>("SizeBytes")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("StoredPath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<Guid>("UploadedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UploadedByUserId");
+
+                    b.ToTable("ProjectAttachments");
                 });
 
             modelBuilder.Entity("Domain.Entities.ProjectComment", b =>
@@ -495,6 +664,47 @@ namespace Infrastructure.Migrations
                     b.ToTable("Tags");
                 });
 
+            modelBuilder.Entity("Domain.Entities.TaskAttachment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ContentType")
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(260)
+                        .HasColumnType("character varying(260)");
+
+                    b.Property<Guid>("ProjectTaskId")
+                        .HasColumnType("uuid");
+
+                    b.Property<long>("SizeBytes")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("StoredPath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<Guid>("UploadedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectTaskId");
+
+                    b.HasIndex("UploadedByUserId");
+
+                    b.ToTable("TaskAttachments");
+                });
+
             modelBuilder.Entity("Domain.Entities.TaskComment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -702,6 +912,60 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("ProjectId");
                 });
 
+            modelBuilder.Entity("Domain.Entities.DeadlineReminderLog", b =>
+                {
+                    b.HasOne("Domain.Entities.ProjectTask", "ProjectTask")
+                        .WithMany("DeadlineReminderLogs")
+                        .HasForeignKey("ProjectTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProjectTask");
+                });
+
+            modelBuilder.Entity("Domain.Entities.KnowledgeArticle", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "Author")
+                        .WithMany("AuthoredKnowledgeArticles")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.KnowledgeArticle", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Entities.Project", "Project")
+                        .WithMany("KnowledgeArticles")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Domain.Entities.ProjectTask", "LinkedTask")
+                        .WithMany("KnowledgeArticles")
+                        .HasForeignKey("ProjectTaskId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Author");
+
+                    b.Navigation("LinkedTask");
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Domain.Entities.PasswordResetToken", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("PasswordResetTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Entities.Position", b =>
                 {
                     b.HasOne("Domain.Entities.Department", "Department")
@@ -730,6 +994,25 @@ namespace Infrastructure.Migrations
                     b.Navigation("Department");
 
                     b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ProjectAttachment", b =>
+                {
+                    b.HasOne("Domain.Entities.Project", "Project")
+                        .WithMany("Attachments")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "UploadedBy")
+                        .WithMany()
+                        .HasForeignKey("UploadedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+
+                    b.Navigation("UploadedBy");
                 });
 
             modelBuilder.Entity("Domain.Entities.ProjectComment", b =>
@@ -889,6 +1172,25 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("ProjectId");
                 });
 
+            modelBuilder.Entity("Domain.Entities.TaskAttachment", b =>
+                {
+                    b.HasOne("Domain.Entities.ProjectTask", "ProjectTask")
+                        .WithMany("Attachments")
+                        .HasForeignKey("ProjectTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "UploadedBy")
+                        .WithMany()
+                        .HasForeignKey("UploadedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ProjectTask");
+
+                    b.Navigation("UploadedBy");
+                });
+
             modelBuilder.Entity("Domain.Entities.TaskComment", b =>
                 {
                     b.HasOne("Domain.Entities.ProjectTask", "Task")
@@ -980,6 +1282,11 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Entities.KnowledgeArticle", b =>
+                {
+                    b.Navigation("Children");
+                });
+
             modelBuilder.Entity("Domain.Entities.Position", b =>
                 {
                     b.Navigation("Users");
@@ -987,7 +1294,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Project", b =>
                 {
+                    b.Navigation("Attachments");
+
                     b.Navigation("Categories");
+
+                    b.Navigation("KnowledgeArticles");
 
                     b.Navigation("ProjectComments");
 
@@ -1009,9 +1320,15 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.ProjectTask", b =>
                 {
+                    b.Navigation("Attachments");
+
                     b.Navigation("Comments");
 
+                    b.Navigation("DeadlineReminderLogs");
+
                     b.Navigation("History");
+
+                    b.Navigation("KnowledgeArticles");
 
                     b.Navigation("SubTasks");
 
@@ -1030,9 +1347,13 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
+                    b.Navigation("AuthoredKnowledgeArticles");
+
                     b.Navigation("OwnedProjects");
 
                     b.Navigation("OwnedTasks");
+
+                    b.Navigation("PasswordResetTokens");
 
                     b.Navigation("RefreshTokens");
                 });

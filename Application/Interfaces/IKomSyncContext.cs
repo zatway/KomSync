@@ -22,6 +22,11 @@ public interface IKomSyncContext
     DbSet<ProjectCommentAttachment> ProjectCommentAttachments { get; }
     DbSet<TaskHistory> TaskHistories { get; }
     DbSet<TaskComment> TaskComments { get; }
+    DbSet<KnowledgeArticle> KnowledgeArticles { get; }
+    DbSet<PasswordResetToken> PasswordResetTokens { get; }
+    DbSet<TaskAttachment> TaskAttachments { get; }
+    DbSet<ProjectAttachment> ProjectAttachments { get; }
+    DbSet<DeadlineReminderLog> DeadlineReminderLogs { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

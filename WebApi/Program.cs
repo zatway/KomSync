@@ -19,6 +19,9 @@ builder.Services.AddScoped<IRealtimeNotificationPublisher, WebApi.Services.Signa
 builder.Services.AddScoped<IFileStorage, WebApi.Services.LocalFileStorage>();
 builder.Services.Configure<WebApi.Services.SeedAdminSettings>(builder.Configuration.GetSection("SeedAdmin"));
 builder.Services.AddHostedService<WebApi.Services.SeedAdminHostedService>();
+builder.Services.Configure<WebApi.Services.DeadlineReminderOptions>(
+    builder.Configuration.GetSection(WebApi.Services.DeadlineReminderOptions.SectionName));
+builder.Services.AddHostedService<WebApi.Services.DeadlineReminderHostedService>();
 
 // ---------------------------
 // Контроллеры и JSON
@@ -144,13 +147,17 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
+// В dev API часто на http://localhost:PORT — редирект на HTTPS ломает negotiate SignalR и клиенты без HTTPS.
+if (!app.Environment.IsDevelopment())
+    app.UseHttpsRedirection();
+
 app.UseCors("AllowFrontendDev");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<WebApi.Hubs.NotificationHub>("/hubs/notifications");
+app.MapHub<WebApi.Hubs.NotificationHub>("/hubs/notifications")
+    .RequireCors("AllowFrontendDev");
 
 app.Run();

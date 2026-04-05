@@ -11,5 +11,6 @@ public record UpdateProjectRequest(
     DateTime? DueDate,
     string? Color,
     string? Icon,
-    List<string>? Tags
+    List<string>? Tags,
+    bool? IsArchived
 ) : IRequest<bool>;

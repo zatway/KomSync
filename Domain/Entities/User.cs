@@ -54,4 +54,6 @@ public class User : BaseEntity
     public ICollection<Project> OwnedProjects { get; set; } = new List<Project>();
     public ICollection<ProjectTask> OwnedTasks { get; set; } = new List<ProjectTask>();
     public ICollection<Project> Projects { get; set; } = new List<Project>();
+    public ICollection<KnowledgeArticle> AuthoredKnowledgeArticles { get; set; } = new List<KnowledgeArticle>();
+    public ICollection<PasswordResetToken> PasswordResetTokens { get; set; } = new List<PasswordResetToken>();
 }

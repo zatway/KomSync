@@ -61,4 +61,7 @@ public class ProjectTask : IAuditable
 
     public ICollection<TaskComment> Comments { get; set; } = new List<TaskComment>();
     public ICollection<TaskHistory> History { get; set; } = new List<TaskHistory>();
+    public ICollection<TaskAttachment> Attachments { get; set; } = new List<TaskAttachment>();
+    public ICollection<DeadlineReminderLog> DeadlineReminderLogs { get; set; } = new List<DeadlineReminderLog>();
+    public ICollection<KnowledgeArticle> KnowledgeArticles { get; set; } = new List<KnowledgeArticle>();
 }

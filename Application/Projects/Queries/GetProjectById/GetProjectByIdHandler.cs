@@ -1,4 +1,6 @@
+using Application.Common;
 using Application.Common.Exceptions;
+using Application.DTO.Attachments;
 using Application.DTO.Projects;
 using Application.Interfaces;
 using MediatR;
@@ -18,14 +20,29 @@ public class GetProjectByIdHandler(IKomSyncContext context, ICurrentUserService 
             .Include(p => p.Tags)
             .Include(p => p.Categories)
             .Include(p => p.Department)
+            .Include(p => p.Attachments)
             .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
 
         if (project == null)
             throw new NotFoundException("Проект не найден");
 
-        var currentUserId = currentUser.UserId ?? Guid.Empty;
+        var currentUserId = currentUser.UserId ?? throw new UnauthorizedAccessException();
+
+        if (!ProjectAccessRules.UserCanViewProject(currentUser.Role, currentUserId, project))
+            throw new ForbiddenException("Нет доступа к этому проекту");
 
         var tasks = project.Tasks.ToList();
+
+        var attachments = project.Attachments
+            .OrderBy(a => a.CreatedAt)
+            .Select(a => new FileAttachmentDto(
+                a.Id,
+                a.FileName,
+                a.ContentType,
+                a.SizeBytes,
+                $"/api/v1/projects/{project.Id}/attachments/{a.Id}/download",
+                a.CreatedAt))
+            .ToList();
 
         return new ProjectDetailedDto(
             project.Id,
@@ -54,6 +71,7 @@ public class GetProjectByIdHandler(IKomSyncContext context, ICurrentUserService 
             project.Tags.Select(t => t.Name).ToList(),
             project.Categories.FirstOrDefault()?.Name,
             project.Department?.Name,
+            project.IsArchived,
             false,
             new PermissionsDto(
                 CanEdit: project.OwnerId == currentUserId,
@@ -61,6 +79,7 @@ public class GetProjectByIdHandler(IKomSyncContext context, ICurrentUserService 
                 CanManageMembers: project.OwnerId == currentUserId,
                 CanViewHistory: true
             ),
+            attachments,
             null
         );
     }

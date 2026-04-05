@@ -28,6 +28,11 @@ public class KomSyncDbContext(DbContextOptions<KomSyncDbContext> options, ICurre
     public DbSet<ProjectCommentAttachment> ProjectCommentAttachments => Set<ProjectCommentAttachment>();
     public DbSet<TaskHistory> TaskHistories => Set<TaskHistory>();
     public DbSet<TaskComment> TaskComments => Set<TaskComment>();
+    public DbSet<KnowledgeArticle> KnowledgeArticles => Set<KnowledgeArticle>();
+    public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
+    public DbSet<TaskAttachment> TaskAttachments => Set<TaskAttachment>();
+    public DbSet<ProjectAttachment> ProjectAttachments => Set<ProjectAttachment>();
+    public DbSet<DeadlineReminderLog> DeadlineReminderLogs => Set<DeadlineReminderLog>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

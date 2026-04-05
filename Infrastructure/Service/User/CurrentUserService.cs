@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Application.Interfaces;
+using Domain.Enums;
 using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure.Service.User;
@@ -15,6 +16,15 @@ public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICur
             return Guid.TryParse(idClaim, out var parsedGuid) 
                 ? parsedGuid 
                 : null;
+        }
+    }
+
+    public UserRole? Role
+    {
+        get
+        {
+            var r = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Role);
+            return Enum.TryParse<UserRole>(r, out var role) ? role : null;
         }
     }
 }

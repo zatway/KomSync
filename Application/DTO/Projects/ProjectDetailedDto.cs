@@ -1,3 +1,5 @@
+using Application.DTO.Attachments;
+
 namespace Application.DTO.Projects;
 public record ProjectDetailedDto(
     Guid Id,
@@ -18,7 +20,9 @@ public record ProjectDetailedDto(
     IEnumerable<string>? Tags,
     string? Category,
     string? Department,
+    bool IsArchived,
     bool IsFavorite,
     PermissionsDto Permissions,
+    IReadOnlyList<FileAttachmentDto>? ProjectAttachments,
     IDictionary<string, object>? CustomFields
 );

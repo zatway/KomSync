@@ -1,3 +1,4 @@
+using Application.DTO.Attachments;
 using Application.DTO.TaskComment;
 using Application.DTO.TaskHistory;
 using Domain.Enums;
@@ -25,4 +26,5 @@ public class TaskDetailedDto
     public IReadOnlyList<TaskAssigneeDto> Watchers { get; set; } = Array.Empty<TaskAssigneeDto>();
     public TaskCommentDto[] Comments { get; set; } = [];
     public TaskHistoryDto[] History { get; set; } = [];
+    public IReadOnlyList<FileAttachmentDto> FileAttachments { get; set; } = Array.Empty<FileAttachmentDto>();
 }

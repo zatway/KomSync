@@ -71,6 +71,7 @@ public class TaskMappingProfile : AutoMapper.Profile
             .ForMember(d => d.Comments, opt => opt.Ignore())
             .ForMember(d => d.History, opt => opt.Ignore())
             .ForMember(d => d.Watchers, opt => opt.Ignore())
+            .ForMember(d => d.FileAttachments, opt => opt.Ignore())
             .ForMember(d => d.Status, opt => opt.MapFrom(s => s.StatusColumn));
     }
 }

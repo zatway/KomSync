@@ -1,8 +1,7 @@
-using Application.DTO.Projects;
 using Application.DTO.TaskComments;
 using FluentValidation;
 
-namespace Application.TaskComments.Commands.DeleteProject;
+namespace Application.TaskComments.Commands.DeleteTaskComment;
 
 public class DeleteTaskCommentValidator : AbstractValidator<DeleteTaskCommentRequest>
 {

@@ -29,10 +29,10 @@ public class TaskCommentsController(IMediator mediator) : ControllerBase
         return result ? NoContent() : NotFound();
     }
     
-    [HttpDelete]
-    public async Task<IActionResult> Delete([FromBody] DeleteTaskCommentRequest command)
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id)
     {
-        var result = await mediator.Send(command);
+        var result = await mediator.Send(new DeleteTaskCommentRequest(id));
         return result ? NoContent() : NotFound();
     }
 

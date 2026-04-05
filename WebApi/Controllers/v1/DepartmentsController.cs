@@ -1,4 +1,5 @@
 using Application.Interfaces;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,21 @@ public class DepartmentsController(IKomSyncContext context) : ControllerBase
             .ToListAsync(cancellationToken);
 
         return Ok(items);
+    }
+
+    public record CreateDepartmentBody(string Name);
+
+    [Authorize(Roles = "Admin")]
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] CreateDepartmentBody body, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(body.Name))
+            return BadRequest("Укажите название");
+
+        var entity = new Department { Name = body.Name.Trim() };
+        context.Departments.Add(entity);
+        await context.SaveChangesAsync(cancellationToken);
+        return Ok(new { id = entity.Id, name = entity.Name });
     }
 }
 

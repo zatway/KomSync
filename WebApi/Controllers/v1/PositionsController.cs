@@ -1,4 +1,5 @@
 using Application.Interfaces;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,28 @@ public class PositionsController(IKomSyncContext context) : ControllerBase
             .ToListAsync(cancellationToken);
 
         return Ok(items);
+    }
+
+    public record CreatePositionBody(string Name, Guid DepartmentId);
+
+    [Authorize(Roles = "Admin")]
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] CreatePositionBody body, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(body.Name))
+            return BadRequest("Укажите название");
+        var depExists = await context.Departments.AnyAsync(d => d.Id == body.DepartmentId, cancellationToken);
+        if (!depExists)
+            return BadRequest("Подразделение не найдено");
+
+        var entity = new Position
+        {
+            Name = body.Name.Trim(),
+            DepartmentId = body.DepartmentId
+        };
+        context.Positions.Add(entity);
+        await context.SaveChangesAsync(cancellationToken);
+        return Ok(new { id = entity.Id, name = entity.Name, departmentId = entity.DepartmentId });
     }
 }
 

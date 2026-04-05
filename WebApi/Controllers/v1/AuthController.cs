@@ -36,4 +36,18 @@ public class AuthController(IMediator mediator, ICurrentUserService _currentUser
         await mediator.Send(new RevokeTokenRequest(_currentUser.UserId));
         return NoContent();
     }
+
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+    {
+        await mediator.Send(request);
+        return NoContent();
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+    {
+        await mediator.Send(request);
+        return NoContent();
+    }
 }

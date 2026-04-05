@@ -1,5 +1,6 @@
 using Application.Interfaces;
 using Application.Mapping;
+using Application.Options;
 using Infrastructure.Persistence;
 using Application.Interfaces;
 using Infrastructure.Service.Auth;
@@ -27,6 +28,7 @@ public static class DependencyInjection
         services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         services.Configure<SmtpEmailSettings>(configuration.GetSection("SmtpEmail"));
+        services.Configure<PasswordResetOptions>(configuration.GetSection(PasswordResetOptions.SectionName));
         services.AddSingleton<IEmailSender>(sp =>
         {
             var settings = sp.GetRequiredService<IOptions<SmtpEmailSettings>>().Value;

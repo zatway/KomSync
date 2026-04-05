@@ -70,7 +70,12 @@ public class Project : BaseEntity
     
     public ICollection<ProjectComment> ProjectComments { get; set; } = new List<ProjectComment>();
     public ICollection<ProjectHistory> ProjectHistories { get; set; } = new List<ProjectHistory>();
+    public ICollection<ProjectAttachment> Attachments { get; set; } = new List<ProjectAttachment>();
+    public ICollection<KnowledgeArticle> KnowledgeArticles { get; set; } = new List<KnowledgeArticle>();
     
+    /// <summary>Архивирован (скрыт из списков по умолчанию).</summary>
+    public bool IsArchived { get; set; }
+
     /// <summary>
     /// Прогресс выполнения проекта
     /// </summary>

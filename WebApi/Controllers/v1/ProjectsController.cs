@@ -1,6 +1,7 @@
 using Application.DTO.Projects;
 using Application.Interfaces;
 using Application.Projects.Commands.CreateProjectTaskStatusColumn;
+using Application.Projects.Commands.UploadProjectAttachment;
 using Application.Projects.Commands.UploadProjectCommentAttachments;
 using Application.Projects.Queries.GetProjectTaskStatusColumns;
 using MediatR;
@@ -24,9 +25,9 @@ namespace WebApi.Controllers.v1
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProjects()
+        public async Task<IActionResult> GetProjects([FromQuery] bool includeArchived = false)
         {
-            var result = await _mediator.Send(new GetProjectsQuery());
+            var result = await _mediator.Send(new GetProjectsQuery(includeArchived));
             return Ok(result);
         }
 
@@ -99,6 +100,13 @@ namespace WebApi.Controllers.v1
             return updated ? NoContent() : NotFound();
         }
 
+        [HttpDelete("comments/{id:guid}")]
+        public async Task<IActionResult> DeleteComment(Guid id)
+        {
+            var deleted = await _mediator.Send(new DeleteProjectCommentRequest(id));
+            return deleted ? NoContent() : NotFound();
+        }
+
         [HttpGet("{id:guid}/comments")]
         public async Task<IActionResult> GetComments(Guid id)
         {
@@ -125,6 +133,40 @@ namespace WebApi.Controllers.v1
                 .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
 
             if (att == null) return NotFound();
+
+            var stream = await storage.OpenReadAsync(att.StoredPath, cancellationToken);
+            if (stream == null) return NotFound();
+
+            return File(stream, att.ContentType ?? "application/octet-stream", att.FileName);
+        }
+
+        [HttpPost("{id:guid}/attachments")]
+        public async Task<IActionResult> UploadProjectAttachments(Guid id, [FromForm] List<IFormFile> files)
+        {
+            var result = await _mediator.Send(new UploadProjectAttachmentCommand(id, files));
+            return Ok(result);
+        }
+
+        [HttpGet("{projectId:guid}/attachments/{attachmentId:guid}/download")]
+        public async Task<IActionResult> DownloadProjectAttachment(
+            [FromServices] IKomSyncContext context,
+            [FromServices] IFileStorage storage,
+            [FromServices] ICurrentUserService currentUser,
+            [FromRoute] Guid projectId,
+            [FromRoute] Guid attachmentId,
+            CancellationToken cancellationToken)
+        {
+            var att = await context.ProjectAttachments
+                .AsNoTracking()
+                .Include(a => a.Project)
+                .ThenInclude(p => p.Members)
+                .FirstOrDefaultAsync(a => a.Id == attachmentId && a.ProjectId == projectId, cancellationToken);
+
+            if (att == null) return NotFound();
+
+            var uid = currentUser.UserId ?? Guid.Empty;
+            if (!Application.Common.ProjectAccessRules.UserCanViewProject(currentUser.Role, uid, att.Project))
+                return Forbid();
 
             var stream = await storage.OpenReadAsync(att.StoredPath, cancellationToken);
             if (stream == null) return NotFound();

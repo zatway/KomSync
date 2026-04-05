@@ -17,5 +17,6 @@ public record ProjectBriefDto(
     DateTimeOffset CreatedAt,
     DateTimeOffset? UpdatedAt,
     string? Color,
-    string? Icon
+    string? Icon,
+    bool IsArchived
 );
