@@ -41,7 +41,6 @@ public class SmtpEmailSender(IOptions<SmtpEmailSettings> options) : IEmailSender
                 : new NetworkCredential(_settings.Username, _settings.Password),
         };
 
-        // SmtpClient doesn't support CancellationToken directly
         await client.SendMailAsync(message);
     }
 }

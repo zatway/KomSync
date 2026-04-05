@@ -1,4 +1,5 @@
 using Application.Admin.Commands.ApproveRegistration;
+using Application.Admin.Commands.DeleteUserAdmin;
 using Application.Admin.Commands.RejectRegistration;
 using Application.Admin.Commands.UpdateUserAdmin;
 using Application.Admin.Commands.UpdateUserRole;
@@ -62,6 +63,15 @@ public class AdminController(IMediator mediator) : ControllerBase
             Role: body.Role,
             DepartmentId: body.DepartmentId,
             PositionId: body.PositionId
+        ));
+        return ok ? NoContent() : NotFound();
+    } 
+    
+    [HttpDelete("users/{userId:guid}")]
+    public async Task<IActionResult> DeleteUser(Guid userId)
+    {
+        var ok = await mediator.Send(new DeleteUserAdminCommand(
+            userId
         ));
         return ok ? NoContent() : NotFound();
     }
