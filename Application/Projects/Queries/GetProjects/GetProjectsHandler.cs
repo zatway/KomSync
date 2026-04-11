@@ -39,7 +39,7 @@ public class GetProjectsHandler(IKomSyncContext context, ICurrentUserService cur
             p.Tasks.Count,
             p.Tasks.Count(t => t.StatusColumn is { IsDoneColumn: false }),
             p.Tasks.Count(t => t.StatusColumn is { IsDoneColumn: true }),
-            p.Progress,
+            ProjectProgressCalculator.Compute(p.Tasks.ToList()),
             p.DueDate,
             p.UpdatedAt,
             p.CreatedAt,

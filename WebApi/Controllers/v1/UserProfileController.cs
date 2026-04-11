@@ -35,4 +35,13 @@ public class UserProfileController(IMediator mediator, ICurrentUserService _curr
 
         return File(result.Data, result.ContentType);
     }
+
+    /// <summary>Аватар любого пользователя (для UI списков). Доступно авторизованным клиентам.</summary>
+    [Authorize]
+    [HttpGet("users/{userId:guid}/avatar")]
+    public async Task<IActionResult> GetUserAvatar(Guid userId)
+    {
+        var result = await mediator.Send(new MeAvatarRequest(userId));
+        return File(result.Data, result.ContentType);
+    }
 }

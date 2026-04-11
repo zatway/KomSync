@@ -12,8 +12,8 @@ namespace WebApi.Controllers.v1;
 public class AnalyticsController(IMediator mediator) : ControllerBase
 {
     [HttpGet("dashboard")]
-    public async Task<ActionResult<AnalyticsDashboardDto>> Dashboard(CancellationToken cancellationToken)
+    public async Task<ActionResult<AnalyticsDashboardDto>> Dashboard([FromQuery] Guid? projectId, CancellationToken cancellationToken)
     {
-        return Ok(await mediator.Send(new GetAnalyticsDashboardQuery(), cancellationToken));
+        return Ok(await mediator.Send(new GetAnalyticsDashboardQuery(projectId), cancellationToken));
     }
 }

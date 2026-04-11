@@ -1,5 +1,7 @@
 using Application.Interfaces;
+using Application.Organization.Commands.DeleteDepartment;
 using Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +10,7 @@ namespace WebApi.Controllers.v1;
 
 [ApiController]
 [Route("api/v1/departments")]
-public class DepartmentsController(IKomSyncContext context) : ControllerBase
+public class DepartmentsController(IKomSyncContext context, IMediator mediator) : ControllerBase
 {
     [AllowAnonymous]
     [HttpGet]
@@ -37,5 +39,26 @@ public class DepartmentsController(IKomSyncContext context) : ControllerBase
         await context.SaveChangesAsync(cancellationToken);
         return Ok(new { id = entity.Id, name = entity.Name });
     }
-}
 
+    public record DeleteDepartmentBody(
+        Guid? ReassignToDepartmentId = null,
+        Guid? PositionIdForReassignedUsers = null,
+        bool DeleteAllUsers = false);
+
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(
+        Guid id,
+        [FromBody] DeleteDepartmentBody? body,
+        CancellationToken cancellationToken)
+    {
+        var ok = await mediator.Send(
+            new DeleteDepartmentCommand(
+                id,
+                body?.ReassignToDepartmentId,
+                body?.PositionIdForReassignedUsers,
+                body?.DeleteAllUsers ?? false),
+            cancellationToken);
+        return ok ? NoContent() : NotFound();
+    }
+}

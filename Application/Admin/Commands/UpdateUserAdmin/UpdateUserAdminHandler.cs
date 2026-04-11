@@ -1,10 +1,14 @@
+using Application.Common.Exceptions;
 using Application.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Admin.Commands.UpdateUserAdmin;
 
-public class UpdateUserAdminHandler(IKomSyncContext context, ICurrentUserService currentUser)
+public class UpdateUserAdminHandler(
+    IKomSyncContext context,
+    ICurrentUserService currentUser,
+    IPasswordHasher passwordHasher)
     : IRequestHandler<UpdateUserAdminCommand, bool>
 {
     public async Task<bool> Handle(UpdateUserAdminCommand request, CancellationToken cancellationToken)
@@ -14,10 +18,17 @@ public class UpdateUserAdminHandler(IKomSyncContext context, ICurrentUserService
         var user = await context.Users.FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
         if (user == null) return false;
 
+        if (!string.IsNullOrWhiteSpace(request.NewPassword))
+            user.PasswordHash = passwordHasher.Hash(request.NewPassword.Trim());
+
         if (request.FullName != null) user.FullName = request.FullName.Trim();
         if (request.Email != null)
         {
             var email = request.Email.Trim();
+            var exists = await context.Users
+                .AnyAsync(u => u.NormalizedEmail == email.ToUpperInvariant() && u.Id != user.Id, cancellationToken);
+            if (exists)
+                throw new ConflictException("Этот email уже занят.");
             user.Email = email;
             user.NormalizedEmail = email.ToUpperInvariant();
         }

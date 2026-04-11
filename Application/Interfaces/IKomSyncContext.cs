@@ -1,10 +1,12 @@
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Application.Interfaces;
 
 public interface IKomSyncContext
 {
+    DatabaseFacade Database { get; }
     DbSet<User> Users { get; }
     DbSet<ApplicationForRegistration> ApplicationForRegistrations { get; }
     DbSet<Category> Categories { get; }

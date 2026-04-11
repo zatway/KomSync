@@ -17,10 +17,7 @@ public class GlobalSearchHandler(IKomSyncContext context, ICurrentUserService cu
         var raw = request.Q.Trim();
         if (raw.Length < 2) return Array.Empty<SearchHitDto>();
 
-        var safe = new string(raw.Where(c => c is not '%' and not '_' and not '\\').ToArray());
-        if (safe.Length < 2) return Array.Empty<SearchHitDto>();
-
-        var pattern = $"%{safe}%";
+        var searchText = raw;
         var take = Math.Clamp(request.Take, 1, 100);
         var perKind = Math.Max(1, take / 4);
 
@@ -34,7 +31,9 @@ public class GlobalSearchHandler(IKomSyncContext context, ICurrentUserService cu
 
         var projects = await visible
             .AsNoTracking()
-            .Where(p => EF.Functions.ILike(p.Name, pattern) || EF.Functions.ILike(p.Description, pattern))
+            .Where(p => EF.Functions
+                .ToTsVector("simple", (p.Name ?? string.Empty) + " " + (p.Description ?? string.Empty))
+                .Matches(searchText))
             .Take(perKind)
             .Select(p => new SearchHitDto("project", p.Id, p.Name, p.Key, p.Id, p.Key))
             .ToListAsync(cancellationToken);
@@ -46,8 +45,9 @@ public class GlobalSearchHandler(IKomSyncContext context, ICurrentUserService cu
                 .AsNoTracking()
                 .Include(t => t.Project)
                 .Where(t => visibleIds.Contains(t.ProjectId))
-                .Where(t => EF.Functions.ILike(t.Title, pattern) ||
-                            (t.Description != null && EF.Functions.ILike(t.Description, pattern)))
+                .Where(t => EF.Functions
+                    .ToTsVector("simple", (t.Title ?? string.Empty) + " " + (t.Description ?? string.Empty))
+                    .Matches(searchText))
                 .Take(perKind)
                 .ToListAsync(cancellationToken);
 
@@ -67,7 +67,9 @@ public class GlobalSearchHandler(IKomSyncContext context, ICurrentUserService cu
                 .Include(c => c.Task)
                 .ThenInclude(t => t!.Project)
                 .Where(c => c.Task != null && visibleIds.Contains(c.Task.ProjectId))
-                .Where(c => EF.Functions.ILike(c.Content, pattern))
+                .Where(c => EF.Functions
+                    .ToTsVector("simple", c.Content ?? string.Empty)
+                    .Matches(searchText))
                 .Take(perKind)
                 .ToListAsync(cancellationToken);
 
@@ -86,7 +88,9 @@ public class GlobalSearchHandler(IKomSyncContext context, ICurrentUserService cu
             var projectComments = await context.ProjectComments
                 .AsNoTracking()
                 .Where(c => visibleIds.Contains(c.ProjectId))
-                .Where(c => EF.Functions.ILike(c.Content, pattern))
+                .Where(c => EF.Functions
+                    .ToTsVector("simple", c.Content ?? string.Empty)
+                    .Matches(searchText))
                 .Take(perKind)
                 .ToListAsync(cancellationToken);
 
@@ -99,8 +103,9 @@ public class GlobalSearchHandler(IKomSyncContext context, ICurrentUserService cu
 
         var articles = await context.KnowledgeArticles
             .AsNoTracking()
-            .Where(a => EF.Functions.ILike(a.Title, pattern) ||
-                        EF.Functions.ILike(a.ContentMarkdown, pattern))
+            .Where(a => EF.Functions
+                .ToTsVector("simple", (a.Title ?? string.Empty) + " " + (a.ContentMarkdown ?? string.Empty))
+                .Matches(searchText))
             .Take(perKind)
             .Select(a => new SearchHitDto("knowledge", a.Id, a.Title, a.Slug, null, null))
             .ToListAsync(cancellationToken);

@@ -455,6 +455,10 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ChangedByDisplayName")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
                     b.Property<Guid?>("ChangedById")
                         .HasColumnType("uuid");
 
@@ -793,7 +797,11 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("ChangedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("ChangedById")
+                    b.Property<string>("ChangedByDisplayName")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<Guid?>("ChangedById")
                         .HasColumnType("uuid");
 
                     b.Property<string>("NewValue")
@@ -1063,7 +1071,8 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.User", "ChangedBy")
                         .WithMany()
-                        .HasForeignKey("ChangedById");
+                        .HasForeignKey("ChangedById")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.Project", "Project")
                         .WithMany("ProjectHistories")
@@ -1234,8 +1243,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.User", "ChangedBy")
                         .WithMany()
                         .HasForeignKey("ChangedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Domain.Entities.ProjectTask", "Task")
                         .WithMany("History")

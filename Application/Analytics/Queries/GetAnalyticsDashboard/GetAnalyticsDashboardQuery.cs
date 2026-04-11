@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Application.Analytics.Queries.GetAnalyticsDashboard;
 
-public record GetAnalyticsDashboardQuery : IRequest<AnalyticsDashboardDto>;
+public record GetAnalyticsDashboardQuery(Guid? ProjectId = null) : IRequest<AnalyticsDashboardDto>;

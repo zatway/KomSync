@@ -1,5 +1,7 @@
 using Application.Interfaces;
+using Application.Organization.Commands.DeletePosition;
 using Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +10,7 @@ namespace WebApi.Controllers.v1;
 
 [ApiController]
 [Route("api/v1/positions")]
-public class PositionsController(IKomSyncContext context) : ControllerBase
+public class PositionsController(IKomSyncContext context, IMediator mediator) : ControllerBase
 {
     [AllowAnonymous]
     [HttpGet]
@@ -47,5 +49,19 @@ public class PositionsController(IKomSyncContext context) : ControllerBase
         await context.SaveChangesAsync(cancellationToken);
         return Ok(new { id = entity.Id, name = entity.Name, departmentId = entity.DepartmentId });
     }
-}
 
+    public record DeletePositionBody(Guid? ReassignToPositionId = null, bool DeleteAllUsers = false);
+
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(
+        Guid id,
+        [FromBody] DeletePositionBody? body,
+        CancellationToken cancellationToken)
+    {
+        var ok = await mediator.Send(
+            new DeletePositionCommand(id, body?.ReassignToPositionId, body?.DeleteAllUsers ?? false),
+            cancellationToken);
+        return ok ? NoContent() : NotFound();
+    }
+}

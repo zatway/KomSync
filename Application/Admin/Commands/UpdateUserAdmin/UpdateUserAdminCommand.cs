@@ -10,6 +10,7 @@ public record UpdateUserAdminCommand(
     bool? IsApproved = null,
     UserRole? Role = null,
     Guid? DepartmentId = null,
-    Guid? PositionId = null
+    Guid? PositionId = null,
+    string? NewPassword = null
 ) : IRequest<bool>;
 

@@ -18,7 +18,11 @@ public class TaskHistory
 
     public Guid? ChangedById { get; set; }
     [ForeignKey(nameof(ChangedById))]
-    public User ChangedBy { get; set; } = null!;
+    public User? ChangedBy { get; set; }
+
+    /// <summary>Снимок ФИО на момент записи; сохраняется при удалении пользователя.</summary>
+    [MaxLength(255)]
+    public string? ChangedByDisplayName { get; set; }
 
     // Название свойства (Title, Status, AssigneeId и т.д.)
     [Required, MaxLength(100)]

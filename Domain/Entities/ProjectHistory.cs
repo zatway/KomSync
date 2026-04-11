@@ -37,5 +37,9 @@ public class ProjectHistory : BaseEntity
     /// </summary>
     public Guid? ChangedById { get; set; }
 
-    [ForeignKey(nameof(ChangedById))] public User ChangedBy { get; set; } = null!;
+    [ForeignKey(nameof(ChangedById))] public User? ChangedBy { get; set; }
+
+    /// <summary>Снимок ФИО; сохраняется при удалении пользователя.</summary>
+    [MaxLength(255)]
+    public string? ChangedByDisplayName { get; set; }
 }

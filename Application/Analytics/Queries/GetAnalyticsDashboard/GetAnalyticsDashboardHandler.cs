@@ -1,4 +1,5 @@
 using Application.Common;
+using Application.Common.Exceptions;
 using Application.DTO.Analytics;
 using Application.Interfaces;
 using MediatR;
@@ -21,6 +22,14 @@ public class GetAnalyticsDashboardHandler(IKomSyncContext context, ICurrentUserS
             visible = visible.Where(p => p.OwnerId == uid || p.Members.Any(m => m.Id == uid));
 
         var visibleIds = await visible.Select(p => p.Id).ToListAsync(cancellationToken);
+
+        if (request.ProjectId.HasValue)
+        {
+            if (!visibleIds.Contains(request.ProjectId.Value))
+                throw new ForbiddenException("Нет доступа к этому проекту или проект не найден.");
+            visibleIds = new List<Guid> { request.ProjectId.Value };
+        }
+
         if (visibleIds.Count == 0)
         {
             return new AnalyticsDashboardDto(0, 0, Array.Empty<StatusCountDto>(), Array.Empty<UserLoadDto>());

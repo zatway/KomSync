@@ -27,9 +27,22 @@ public class ChangeTaskStatusHandler(
         if (!columnOk)
             return false;
 
+        var columnChanged = task.ProjectTaskStatusColumnId != request.NewStatusColumnId;
         task.ProjectTaskStatusColumnId = request.NewStatusColumnId;
+
         if (request.NewSortOrder.HasValue)
             task.SortOrder = request.NewSortOrder.Value;
+        else if (columnChanged)
+        {
+            var maxOrder = await context.Tasks
+                .AsNoTracking()
+                .Where(t => t.ProjectId == task.ProjectId
+                    && t.ProjectTaskStatusColumnId == request.NewStatusColumnId
+                    && t.Id != task.Id)
+                .Select(t => (int?)t.SortOrder)
+                .MaxAsync(cancellationToken) ?? -1;
+            task.SortOrder = maxOrder + 1;
+        }
 
         task.UpdatedAt = DateTime.UtcNow;
 

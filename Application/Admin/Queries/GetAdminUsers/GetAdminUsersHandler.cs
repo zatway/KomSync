@@ -10,7 +10,11 @@ public record AdminUserListItemDto(
     string FullName,
     string Email,
     UserRole Role,
-    bool IsApproved);
+    bool IsApproved,
+    Guid DepartmentId,
+    Guid PositionId,
+    string DepartmentName,
+    string PositionName);
 
 public record GetAdminUsersQuery : IRequest<IReadOnlyList<AdminUserListItemDto>>;
 
@@ -23,8 +27,18 @@ public class GetAdminUsersHandler(IKomSyncContext context)
     {
         return await context.Users
             .AsNoTracking()
+            .Where(u => u.IsApproved)
             .OrderBy(u => u.FullName)
-            .Select(u => new AdminUserListItemDto(u.Id, u.FullName, u.Email, u.Role, u.IsApproved))
+            .Select(u => new AdminUserListItemDto(
+                u.Id,
+                u.FullName,
+                u.Email,
+                u.Role,
+                u.IsApproved,
+                u.DepartmentId,
+                u.PositionId,
+                u.Department.Name,
+                u.Position.Name))
             .ToListAsync(cancellationToken);
     }
 }

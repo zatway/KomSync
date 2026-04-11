@@ -5,17 +5,21 @@ using Application.Admin.Commands.UpdateUserAdmin;
 using Application.Admin.Commands.UpdateUserRole;
 using Application.Admin.Queries.GetAdminUsers;
 using Application.Admin.Queries.GetPendingRegistrations;
+using Application.Interfaces;
+using Application.Organization.Queries.GetDepartmentUsers;
+using Application.Organization.Queries.GetPositionUsers;
 using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Controllers.v1;
 
 [ApiController]
 [Route("api/v1/admin")]
 [Authorize(Roles = nameof(UserRole.Admin))]
-public class AdminController(IMediator mediator) : ControllerBase
+public class AdminController(IMediator mediator, IKomSyncContext context) : ControllerBase
 {
     [HttpGet("registrations")]
     public async Task<IActionResult> GetPendingRegistrations()
@@ -28,6 +32,24 @@ public class AdminController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetUsers()
     {
         var list = await mediator.Send(new GetAdminUsersQuery());
+        return Ok(list);
+    }
+
+    [HttpGet("departments/{departmentId:guid}/users")]
+    public async Task<IActionResult> GetDepartmentUsers(Guid departmentId, CancellationToken cancellationToken)
+    {
+        if (!await context.Departments.AnyAsync(d => d.Id == departmentId, cancellationToken))
+            return NotFound();
+        var list = await mediator.Send(new GetDepartmentUsersQuery(departmentId), cancellationToken);
+        return Ok(list);
+    }
+
+    [HttpGet("positions/{positionId:guid}/users")]
+    public async Task<IActionResult> GetPositionUsers(Guid positionId, CancellationToken cancellationToken)
+    {
+        if (!await context.Positions.AnyAsync(p => p.Id == positionId, cancellationToken))
+            return NotFound();
+        var list = await mediator.Send(new GetPositionUsersQuery(positionId), cancellationToken);
         return Ok(list);
     }
 
@@ -62,7 +84,8 @@ public class AdminController(IMediator mediator) : ControllerBase
             IsApproved: body.IsApproved,
             Role: body.Role,
             DepartmentId: body.DepartmentId,
-            PositionId: body.PositionId
+            PositionId: body.PositionId,
+            NewPassword: body.NewPassword
         ));
         return ok ? NoContent() : NotFound();
     } 
@@ -84,5 +107,6 @@ public class AdminController(IMediator mediator) : ControllerBase
         bool? IsApproved,
         UserRole? Role,
         Guid? DepartmentId,
-        Guid? PositionId);
+        Guid? PositionId,
+        string? NewPassword);
 }

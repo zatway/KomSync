@@ -32,6 +32,7 @@ public class GetProjectByIdHandler(IKomSyncContext context, ICurrentUserService 
             throw new ForbiddenException("Нет доступа к этому проекту");
 
         var tasks = project.Tasks.ToList();
+        var progress = ProjectProgressCalculator.Compute(tasks);
 
         var attachments = project.Attachments
             .OrderBy(a => a.CreatedAt)
@@ -67,7 +68,7 @@ public class GetProjectByIdHandler(IKomSyncContext context, ICurrentUserService 
                 tasks.Count(t => t.StatusColumn.IsBlockedColumn),
                 0
             ),
-            project.Progress,
+            progress,
             project.Tags.Select(t => t.Name).ToList(),
             project.Categories.FirstOrDefault()?.Name,
             project.Department?.Name,

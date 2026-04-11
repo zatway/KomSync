@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Enums;
 using Infrastructure.Service.TaskHistory;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Infrastructure.Persistence;
 
@@ -12,6 +13,7 @@ namespace Infrastructure.Persistence;
 public class KomSyncDbContext(DbContextOptions<KomSyncDbContext> options, ICurrentUserService _currentUserService)
     : DbContext(options), IKomSyncContext
 {
+    DatabaseFacade IKomSyncContext.Database => Database;
     public DbSet<User> Users => Set<User>();
     public DbSet<ApplicationForRegistration> ApplicationForRegistrations => Set<ApplicationForRegistration>();
     public DbSet<Category> Categories => Set<Category>();
@@ -98,6 +100,25 @@ public class KomSyncDbContext(DbContextOptions<KomSyncDbContext> options, ICurre
                     Action = TaskHistoryService.DetermineTaskHistoryAction(property.Metadata.Name)
                 });
             }
+        }
+
+        string? actorDisplayName = null;
+        if (_currentUserService.UserId is { } aid)
+        {
+            actorDisplayName = await Users.AsNoTracking()
+                .Where(u => u.Id == aid)
+                .Select(u => u.FullName)
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        foreach (var h in projectHistories)
+        {
+            h.ChangedByDisplayName = actorDisplayName;
+        }
+
+        foreach (var h in taskHistories)
+        {
+            h.ChangedByDisplayName = actorDisplayName;
         }
 
         if (projectHistories.Count > 0)

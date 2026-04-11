@@ -39,7 +39,7 @@ public class TaskMappingProfile : AutoMapper.Profile
             .ForAllMembers(opts => opts.Condition((_, _, srcMember) => srcMember != null));
 
         CreateMap<TaskComment, TaskCommentDto>()
-            .ForMember(d => d.AuthorName, opt => opt.MapFrom(s => s.User.FullName))
+            .ForMember(d => d.AuthorName, opt => opt.MapFrom(s => s.User != null ? s.User.FullName : "—"))
             .ForMember(d => d.Attachments, opt => opt.Ignore());
 
         CreateMap<TaskCommentAttachment, CommentAttachmentDto>()
@@ -53,7 +53,9 @@ public class TaskMappingProfile : AutoMapper.Profile
             ));
 
         CreateMap<TaskHistory, TaskHistoryDto>()
-            .ForMember(d => d.ChangedByName, opt => opt.MapFrom(s => s.ChangedBy != null ? s.ChangedBy.FullName : null));
+            .ForMember(d => d.ChangedByName, opt => opt.MapFrom(s =>
+                s.ChangedByDisplayName
+                ?? (s.ChangedBy != null ? s.ChangedBy.FullName : null)));
 
         CreateMap<User, TaskAssigneeDto>()
             .ConstructUsing(u => new TaskAssigneeDto(u.Id, u.FullName, null));

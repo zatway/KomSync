@@ -18,6 +18,7 @@ public class GetTaskByIdHandler(IKomSyncContext context, IMapper mapper, ICurren
     {
         var task = await context.Tasks
             .AsNoTracking()
+            .AsSplitQuery()
             .Include(t => t.Project)
             .ThenInclude(p => p.Members)
             .Include(t => t.StatusColumn)
@@ -48,7 +49,8 @@ public class GetTaskByIdHandler(IKomSyncContext context, IMapper mapper, ICurren
         dto.Comments = commentDtos;
         dto.History = mapper.Map<TaskHistoryDto[]>(task.History.OrderByDescending(h => h.ChangedAt).ToArray());
         dto.Watchers = task.Watchers
-            .Select(w => new TaskAssigneeDto(w.User.Id, w.User.FullName, null))
+            .Where(w => w.User != null)
+            .Select(w => new TaskAssigneeDto(w.User!.Id, w.User.FullName, null))
             .ToList();
 
         dto.FileAttachments = task.Attachments
