@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Admin.Commands.UpdateUserAdmin;
 
 public class UpdateUserAdminHandler(
-    IKomSyncContext context,
+    IFmkSyncContext context,
     ICurrentUserService currentUser,
     IPasswordHasher passwordHasher)
     : IRequestHandler<UpdateUserAdminCommand, bool>

@@ -19,7 +19,7 @@ namespace WebApi.Controllers.v1;
 [ApiController]
 [Route("api/v1/admin")]
 [Authorize(Roles = nameof(UserRole.Admin))]
-public class AdminController(IMediator mediator, IKomSyncContext context) : ControllerBase
+public class AdminController(IMediator mediator, IFmkSyncContext context) : ControllerBase
 {
     [HttpGet("registrations")]
     public async Task<IActionResult> GetPendingRegistrations()

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.UserProfile.Commands.UpdateProfile;
 
 public class UpdateProfileHandler(
-    IKomSyncContext context,
+    IFmkSyncContext context,
     ICurrentUserService currentUser
 ) : IRequestHandler<UpdateUserProfileRequest, bool>
 {

@@ -8,7 +8,7 @@ using Application.DTO.Auth;
 namespace Application.Auth.Commands.RefreshTokenControl;
 
 public class RefreshTokenControlHandler(
-    IKomSyncContext context,
+    IFmkSyncContext context,
     IJwtProvider jwtProvider
 ) : IRequestHandler<RefreshTokenRequest, TokenResponse>
 {

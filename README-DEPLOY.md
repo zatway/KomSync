@@ -1,4 +1,4 @@
-# KomSync — развёртывание
+# FMK Sync — развёртывание
 
 ## Требования
 
@@ -8,7 +8,7 @@
 
 ## База данных
 
-1. Создайте БД (например `komSync`).
+1. Создайте БД (например `fmkSync`).
 2. Укажите строку подключения в `WebApi/appsettings.json` → `ConnectionStrings:DefaultConnection`.
 3. Примените миграции из каталога `Infrastructure/Migrations`:
 

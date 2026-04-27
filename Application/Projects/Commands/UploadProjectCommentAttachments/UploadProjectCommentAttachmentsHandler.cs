@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Projects.Commands.UploadProjectCommentAttachments;
 
 public class UploadProjectCommentAttachmentsHandler(
-    IKomSyncContext context,
+    IFmkSyncContext context,
     ICurrentUserService currentUser,
     IFileStorage storage,
     IRealtimeNotificationPublisher notifications

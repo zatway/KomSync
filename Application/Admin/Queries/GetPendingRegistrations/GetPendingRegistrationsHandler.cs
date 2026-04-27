@@ -16,7 +16,7 @@ public record RegistrationApplicationAdminDto(
 
 public record GetPendingRegistrationsQuery : IRequest<IReadOnlyList<RegistrationApplicationAdminDto>>;
 
-public class GetPendingRegistrationsHandler(IKomSyncContext context)
+public class GetPendingRegistrationsHandler(IFmkSyncContext context)
     : IRequestHandler<GetPendingRegistrationsQuery, IReadOnlyList<RegistrationApplicationAdminDto>>
 {
     public async Task<IReadOnlyList<RegistrationApplicationAdminDto>> Handle(

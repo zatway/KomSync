@@ -80,7 +80,7 @@ public class TaskController(IMediator mediator) : ControllerBase
 
     [HttpGet("{taskId:guid}/attachments/{attachmentId:guid}/download")]
     public async Task<IActionResult> DownloadTaskAttachment(
-        [FromServices] IKomSyncContext context,
+        [FromServices] IFmkSyncContext context,
         [FromServices] IFileStorage storage,
         [FromServices] ICurrentUserService currentUser,
         [FromRoute] Guid taskId,

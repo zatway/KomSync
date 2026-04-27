@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Organization.Commands.DeletePosition;
 
-public class DeletePositionHandler(IKomSyncContext context, ICurrentUserService currentUser, IMediator mediator)
+public class DeletePositionHandler(IFmkSyncContext context, ICurrentUserService currentUser, IMediator mediator)
     : IRequestHandler<DeletePositionCommand, bool>
 {
     public async Task<bool> Handle(DeletePositionCommand request, CancellationToken cancellationToken)

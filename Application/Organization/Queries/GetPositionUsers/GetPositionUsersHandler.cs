@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Organization.Queries.GetPositionUsers;
 
-public class GetPositionUsersHandler(IKomSyncContext context)
+public class GetPositionUsersHandler(IFmkSyncContext context)
     : IRequestHandler<GetPositionUsersQuery, IReadOnlyList<OrgMemberDto>>
 {
     public async Task<IReadOnlyList<OrgMemberDto>> Handle(

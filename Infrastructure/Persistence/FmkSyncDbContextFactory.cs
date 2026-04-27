@@ -5,15 +5,11 @@ using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Persistence;
 
-/// <summary>
-/// Фабрика для создания экземпляра контекста во время разработки (миграции).
-/// Подтягивает строку подключения из WebApi/appsettings.json.
-/// </summary>
-public class KomSyncDbContextFactory : IDesignTimeDbContextFactory<KomSyncDbContext>
+public class FmkSyncDbContextFactory : IDesignTimeDbContextFactory<FmkSyncDbContext>
 {
-    public KomSyncDbContext CreateDbContext(string[] args)
+    public FmkSyncDbContext CreateDbContext(string[] args)
     {
-        var optionsBuilder = new DbContextOptionsBuilder<KomSyncDbContext>();
+        var optionsBuilder = new DbContextOptionsBuilder<FmkSyncDbContext>();
         
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "..", "WebApi"))
@@ -29,7 +25,7 @@ public class KomSyncDbContextFactory : IDesignTimeDbContextFactory<KomSyncDbCont
         optionsBuilder.UseNpgsql(cs, b => b.MigrationsAssembly("Infrastructure"));
 
         // Создаем заглушку сервиса пользователя для миграций
-        return new KomSyncDbContext(optionsBuilder.Options, new DesignTimeUserService());
+        return new FmkSyncDbContext(optionsBuilder.Options, new DesignTimeUserService());
     }
 }
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Projects.Queries.GetProjectComments
 {
-    public class GetProjectCommentsHandler(IKomSyncContext context)
+    public class GetProjectCommentsHandler(IFmkSyncContext context)
         : IRequestHandler<GetProjectCommentsQuery, List<ProjectCommentDto>>
     {
         public async Task<List<ProjectCommentDto>> Handle(GetProjectCommentsQuery request, CancellationToken cancellationToken)

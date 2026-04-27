@@ -22,7 +22,7 @@ public sealed class DeadlineReminderHostedService(
             try
             {
                 await using var scope = scopeFactory.CreateAsyncScope();
-                var context = scope.ServiceProvider.GetRequiredService<IKomSyncContext>();
+                var context = scope.ServiceProvider.GetRequiredService<IFmkSyncContext>();
                 var email = scope.ServiceProvider.GetRequiredService<IEmailSender>();
                 var notifications = scope.ServiceProvider.GetRequiredService<IRealtimeNotificationPublisher>();
                 await RunOnceAsync(context, email, notifications, opt, stoppingToken);
@@ -38,7 +38,7 @@ public sealed class DeadlineReminderHostedService(
     }
 
     private static async Task RunOnceAsync(
-        IKomSyncContext context,
+        IFmkSyncContext context,
         IEmailSender email,
         IRealtimeNotificationPublisher notifications,
         DeadlineReminderOptions opt,

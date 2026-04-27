@@ -1,6 +1,9 @@
 using Application.DTO.Projects;
 using Application.Interfaces;
 using Application.Projects.Commands.CreateProjectTaskStatusColumn;
+using Application.Projects.Commands.DeleteProjectTaskStatusColumn;
+using Application.Projects.Commands.ReorderProjectTaskStatusColumns;
+using Application.Projects.Commands.UpdateProjectTaskStatusColumn;
 using Application.Projects.Commands.UploadProjectAttachment;
 using Application.Projects.Commands.UploadProjectCommentAttachments;
 using Application.Projects.Queries.GetProjectTaskStatusColumns;
@@ -53,6 +56,37 @@ namespace WebApi.Controllers.v1
         }
 
         public record CreateTaskStatusColumnBody(string Name, string? ColorHex);
+
+        [HttpPatch("{id:guid}/task-status-columns/reorder")]
+        public async Task<IActionResult> ReorderTaskStatusColumns(Guid id, [FromBody] ReorderTaskStatusColumnsBody body)
+        {
+            await _mediator.Send(new ReorderProjectTaskStatusColumnsCommand(id, body.OrderedColumnIds));
+            return NoContent();
+        }
+
+        public record ReorderTaskStatusColumnsBody(IReadOnlyList<Guid> OrderedColumnIds);
+
+        [HttpPatch("{projectId:guid}/task-status-columns/{columnId:guid}")]
+        public async Task<IActionResult> UpdateTaskStatusColumn(
+            Guid projectId,
+            Guid columnId,
+            [FromBody] UpdateTaskStatusColumnBody body)
+        {
+            await _mediator.Send(new UpdateProjectTaskStatusColumnCommand(projectId, columnId, body.Name, body.ColorHex));
+            return NoContent();
+        }
+
+        public record UpdateTaskStatusColumnBody(string Name, string? ColorHex);
+
+        [HttpDelete("{projectId:guid}/task-status-columns/{columnId:guid}")]
+        public async Task<IActionResult> DeleteTaskStatusColumn(
+            Guid projectId,
+            Guid columnId,
+            [FromQuery] Guid? moveTasksToColumnId)
+        {
+            await _mediator.Send(new DeleteProjectTaskStatusColumnCommand(projectId, columnId, moveTasksToColumnId));
+            return NoContent();
+        }
 
         [HttpPut]
         public async Task<IActionResult> CreateProject([FromBody] CreateProjectRequest request)
@@ -123,7 +157,7 @@ namespace WebApi.Controllers.v1
 
         [HttpGet("comment-attachments/{id:guid}")]
         public async Task<IActionResult> DownloadProjectCommentAttachment(
-            [FromServices] IKomSyncContext context,
+            [FromServices] IFmkSyncContext context,
             [FromServices] IFileStorage storage,
             [FromRoute] Guid id,
             CancellationToken cancellationToken)
@@ -149,7 +183,7 @@ namespace WebApi.Controllers.v1
 
         [HttpGet("{projectId:guid}/attachments/{attachmentId:guid}/download")]
         public async Task<IActionResult> DownloadProjectAttachment(
-            [FromServices] IKomSyncContext context,
+            [FromServices] IFmkSyncContext context,
             [FromServices] IFileStorage storage,
             [FromServices] ICurrentUserService currentUser,
             [FromRoute] Guid projectId,

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Knowledge.Queries.GetKnowledgeArticles;
 
-public class GetKnowledgeArticlesHandler(IKomSyncContext context, ICurrentUserService currentUser)
+public class GetKnowledgeArticlesHandler(IFmkSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<GetKnowledgeArticlesQuery, IReadOnlyList<KnowledgeArticleListItemDto>>
 {
     public async Task<IReadOnlyList<KnowledgeArticleListItemDto>> Handle(

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Tasks.Commands.DeleteTask;
 
-public class DeleteTaskHandler(IKomSyncContext context) 
+public class DeleteTaskHandler(IFmkSyncContext context) 
     : IRequestHandler<DeleteTaskRequest, bool>
 {
     public async Task<bool> Handle(DeleteTaskRequest request, CancellationToken cancellationToken)

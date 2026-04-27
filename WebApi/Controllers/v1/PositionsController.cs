@@ -10,7 +10,7 @@ namespace WebApi.Controllers.v1;
 
 [ApiController]
 [Route("api/v1/positions")]
-public class PositionsController(IKomSyncContext context, IMediator mediator) : ControllerBase
+public class PositionsController(IFmkSyncContext context, IMediator mediator) : ControllerBase
 {
     [AllowAnonymous]
     [HttpGet]

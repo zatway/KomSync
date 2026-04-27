@@ -12,7 +12,7 @@ public record CreateProjectTaskStatusColumnCommand(
     string? ColorHex
 ) : IRequest<Guid>;
 
-public class CreateProjectTaskStatusColumnHandler(IKomSyncContext context, ICurrentUserService currentUser)
+public class CreateProjectTaskStatusColumnHandler(IFmkSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<CreateProjectTaskStatusColumnCommand, Guid>
 {
     public async Task<Guid> Handle(CreateProjectTaskStatusColumnCommand request, CancellationToken cancellationToken)

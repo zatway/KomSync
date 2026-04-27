@@ -18,4 +18,8 @@
         <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
         <ProjectReference Include="..\Application\Application.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="uploads\c8e34abd0e3744adae53ec2c4a6d2c81_Untitled.png" />
+    </ItemGroup>
 </Project>

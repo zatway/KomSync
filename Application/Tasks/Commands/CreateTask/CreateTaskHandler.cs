@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Tasks.Commands.CreateTask;
 
 public class CreateTaskHandler(
-    IKomSyncContext context,
+    IFmkSyncContext context,
     IMapper mapper,
     ICurrentUserService currentUserService
 ) : IRequestHandler<CreateTaskRequest, Guid>

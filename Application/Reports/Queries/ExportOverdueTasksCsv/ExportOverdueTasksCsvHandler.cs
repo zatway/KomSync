@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Reports.Queries.ExportOverdueTasksCsv;
 
-public class ExportOverdueTasksCsvHandler(IKomSyncContext context, ICurrentUserService currentUser)
+public class ExportOverdueTasksCsvHandler(IFmkSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<ExportOverdueTasksCsvQuery, byte[]>
 {
     public async Task<byte[]> Handle(ExportOverdueTasksCsvQuery request, CancellationToken cancellationToken)
@@ -21,7 +21,7 @@ public class ExportOverdueTasksCsvHandler(IKomSyncContext context, ICurrentUserS
 
         var visibleIds = await visible.Select(p => p.Id).ToListAsync(cancellationToken);
         if (visibleIds.Count == 0)
-            return Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes("TaskKey;Title;Project;Deadline;Assignee\n")).ToArray();
+            return Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes("КлючЗадачи;Название;Проект;Срок;Исполнитель\n")).ToArray();
 
         var today = DateTime.UtcNow.Date;
 
@@ -37,7 +37,7 @@ public class ExportOverdueTasksCsvHandler(IKomSyncContext context, ICurrentUserS
             .ToListAsync(cancellationToken);
 
         var sb = new StringBuilder();
-        sb.AppendLine("TaskKey;Title;Project;Deadline;Assignee");
+        sb.AppendLine("КлючЗадачи;Название;Проект;Срок;Исполнитель");
         foreach (var t in tasks)
         {
             var key = $"{t.Project.Key}-{t.TaskNumber}";

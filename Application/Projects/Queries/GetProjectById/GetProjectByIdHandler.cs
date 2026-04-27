@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Projects.Queries.GetProjectById;
 
-public class GetProjectByIdHandler(IKomSyncContext context, ICurrentUserService currentUser)
+public class GetProjectByIdHandler(IFmkSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<GetProjectByIdQuery, ProjectDetailedDto>
 {
     public async Task<ProjectDetailedDto> Handle(GetProjectByIdQuery request, CancellationToken cancellationToken)
@@ -61,9 +61,9 @@ public class GetProjectByIdHandler(IKomSyncContext context, ICurrentUserService 
             project.Members.Select(m => new MemberDto(m.Id, m.FullName, m.Email, m.Role)).ToList(),
             new TaskStatsDto(
                 tasks.Count,
-                tasks.Count(t => !t.StatusColumn.IsDoneColumn),
-                tasks.Count(t => t.StatusColumn.SemanticKind == 1),
-                tasks.Count(t => t.StatusColumn.SemanticKind == 2),
+                tasks.Count(t => t.StatusColumn.SemanticKind == 0 && !t.StatusColumn.IsDoneColumn),
+                tasks.Count(t => t.StatusColumn.SemanticKind == 1 && !t.StatusColumn.IsDoneColumn),
+                tasks.Count(t => t.StatusColumn.SemanticKind == 2 && !t.StatusColumn.IsDoneColumn),
                 tasks.Count(t => t.StatusColumn.IsDoneColumn),
                 tasks.Count(t => t.StatusColumn.IsBlockedColumn),
                 0

@@ -14,7 +14,7 @@ public record SmtpEmailSettings
     public string Username { get; init; } = "";
     public string Password { get; init; } = "";
     public string FromEmail { get; init; } = "";
-    public string FromName { get; init; } = "KomSync";
+    public string FromName { get; init; } = "FmkSync";
 }
 
 public class SmtpEmailSender(IOptions<SmtpEmailSettings> options) : IEmailSender

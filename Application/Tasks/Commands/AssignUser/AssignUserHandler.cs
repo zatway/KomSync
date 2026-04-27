@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Tasks.Commands.AssignUser;
 
 public class AssignUserHandler(
-    IKomSyncContext context,
+    IFmkSyncContext context,
     ICurrentUserService currentUserService,
     IRealtimeNotificationPublisher notifications
 ) : IRequestHandler<AssignUserRequest, bool>

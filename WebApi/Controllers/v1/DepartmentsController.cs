@@ -10,7 +10,7 @@ namespace WebApi.Controllers.v1;
 
 [ApiController]
 [Route("api/v1/departments")]
-public class DepartmentsController(IKomSyncContext context, IMediator mediator) : ControllerBase
+public class DepartmentsController(IFmkSyncContext context, IMediator mediator) : ControllerBase
 {
     [AllowAnonymous]
     [HttpGet]

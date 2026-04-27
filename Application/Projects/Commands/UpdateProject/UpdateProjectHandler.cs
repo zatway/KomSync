@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Projects.Commands.UpdateProject
 {
-    public class UpdateProjectHandler(IKomSyncContext context, IMapper mapper)
+    public class UpdateProjectHandler(IFmkSyncContext context, IMapper mapper)
         : IRequestHandler<UpdateProjectRequest, bool>
     {
         public async Task<bool> Handle(UpdateProjectRequest request, CancellationToken cancellationToken)

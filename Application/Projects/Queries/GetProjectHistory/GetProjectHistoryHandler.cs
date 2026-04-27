@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Projects.Queries.GetProjectHistory
 {
-    public class GetProjectHistoryHandler(IKomSyncContext context)
+    public class GetProjectHistoryHandler(IFmkSyncContext context)
         : IRequestHandler<GetProjectHistoryQuery, List<ProjectHistoryEntryDto>>
     {
         public async Task<List<ProjectHistoryEntryDto>> Handle(GetProjectHistoryQuery request, CancellationToken cancellationToken)

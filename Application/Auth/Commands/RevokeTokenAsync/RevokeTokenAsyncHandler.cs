@@ -8,7 +8,7 @@ using Application.DTO.Auth;
 namespace Application.Auth.Commands.RevokeTokenAsync;
 
 public class RevokeTokenAsyncHandler(
-    IKomSyncContext context
+    IFmkSyncContext context
     ) : IRequestHandler<RevokeTokenRequest, bool>
 {
     public async Task<bool> Handle(RevokeTokenRequest request, CancellationToken cancellationToken)

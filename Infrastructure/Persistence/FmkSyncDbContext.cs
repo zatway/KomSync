@@ -10,10 +10,10 @@ namespace Infrastructure.Persistence;
 /// <summary>
 /// Основной DbContext для приложения KomSync.
 /// </summary>
-public class KomSyncDbContext(DbContextOptions<KomSyncDbContext> options, ICurrentUserService _currentUserService)
-    : DbContext(options), IKomSyncContext
+public class FmkSyncDbContext(DbContextOptions<FmkSyncDbContext> options, ICurrentUserService _currentUserService)
+    : DbContext(options), IFmkSyncContext
 {
-    DatabaseFacade IKomSyncContext.Database => Database;
+    DatabaseFacade IFmkSyncContext.Database => Database;
     public DbSet<User> Users => Set<User>();
     public DbSet<ApplicationForRegistration> ApplicationForRegistrations => Set<ApplicationForRegistration>();
     public DbSet<Category> Categories => Set<Category>();
@@ -41,7 +41,7 @@ public class KomSyncDbContext(DbContextOptions<KomSyncDbContext> options, ICurre
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(KomSyncDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(FmkSyncDbContext).Assembly);
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

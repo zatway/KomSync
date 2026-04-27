@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.TaskComments.Commands.DeleteTaskComment;
 
-public class DeleteTaskCommentHandler(IKomSyncContext context, ICurrentUserService currentUser)
+public class DeleteTaskCommentHandler(IFmkSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<DeleteTaskCommentRequest, bool>
 {
     public async Task<bool> Handle(DeleteTaskCommentRequest request, CancellationToken cancellationToken)

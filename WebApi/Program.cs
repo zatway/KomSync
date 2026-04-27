@@ -9,9 +9,6 @@ using WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ---------------------------
-// Подключаем слои
-// ---------------------------
 builder.Services.ConfigureAddApplication();
 builder.Services.ConfigureAddInfrastructure(builder.Configuration);
 builder.Services.AddSignalR();
@@ -23,9 +20,6 @@ builder.Services.Configure<WebApi.Services.DeadlineReminderOptions>(
     builder.Configuration.GetSection(WebApi.Services.DeadlineReminderOptions.SectionName));
 builder.Services.AddHostedService<WebApi.Services.DeadlineReminderHostedService>();
 
-// ---------------------------
-// Контроллеры и JSON
-// ---------------------------
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -33,20 +27,14 @@ builder.Services.AddControllers()
     });
 builder.Services.AddEndpointsApiExplorer();
 
-// ---------------------------
-// Глобальный обработчик ошибок
-// ---------------------------
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
-// ---------------------------
-// Swagger
-// ---------------------------
 builder.Services.AddSwaggerGen(opt =>
 {
     opt.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "KomSync API",
+        Title = "FmkSync API",
         Version = "v1"
     });
 
@@ -77,8 +65,7 @@ builder.Services.AddCors(options =>
                 "http://localhost:3000",     // React/Vite/Next и т.д.
                 "http://localhost:5173",     // Vite default
                 "http://localhost:5174",     // Vite (другой порт)
-                "http://localhost:4200",     // Angular
-                "https://your-frontend-domain.com"   // продакшен потом
+                "http://localhost:4200"
             )
             .AllowAnyHeader()           // ← важно для Content-Type, Authorization и т.д.
             .AllowAnyMethod()           // GET, POST, PUT, PATCH, DELETE, OPTIONS
@@ -86,9 +73,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-// ---------------------------
-// JWT Authentication
-// ---------------------------
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secret = jwtSettings["Secret"] ?? "Super_Secret_Key_At_Least_32_Chars_Long";
 var key = Encoding.ASCII.GetBytes(secret);
@@ -125,16 +109,10 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
-// ---------------------------
-// HTTP Context
-// ---------------------------
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-// ---------------------------
-// Middleware pipeline
-// ---------------------------
 app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
@@ -142,12 +120,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "KomSync API V1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "FmkSync API V1");
         c.RoutePrefix = string.Empty;
     });
 }
 
-// В dev API часто на http://localhost:PORT — редирект на HTTPS ломает negotiate SignalR и клиенты без HTTPS.
 if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 

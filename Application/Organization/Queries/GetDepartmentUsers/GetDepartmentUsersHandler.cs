@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Organization.Queries.GetDepartmentUsers;
 
-public class GetDepartmentUsersHandler(IKomSyncContext context)
+public class GetDepartmentUsersHandler(IFmkSyncContext context)
     : IRequestHandler<GetDepartmentUsersQuery, IReadOnlyList<OrgMemberDto>>
 {
     public async Task<IReadOnlyList<OrgMemberDto>> Handle(

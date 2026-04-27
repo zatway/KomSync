@@ -4,15 +4,14 @@ namespace Application.Projects.ProjectTaskStatusColumns;
 
 public static class ProjectTaskStatusColumnSeeder
 {
-    public static void SeedDefaultsForProject(IKomSyncContext context, Guid projectId)
+    public static void SeedDefaultsForProject(IFmkSyncContext context, Guid projectId)
     {
+        // Три обязательных этапа для корректной аналитики: открытые / в работе / закрытые.
         var defs = new (string Name, int Order, byte Kind, bool Done, bool Blocked)[]
         {
-            ("К выполнению", 0, 0, false, false),
+            ("Открыта", 0, 0, false, false),
             ("В работе", 1, 1, false, false),
-            ("На проверке", 2, 2, false, false),
-            ("Готово", 3, 3, true, false),
-            ("Заблокировано", 4, 4, false, true),
+            ("Закрыто", 2, 3, true, false),
         };
 
         foreach (var d in defs)

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Auth.Commands.ResetPassword;
 
 public class ResetPasswordHandler(
-    IKomSyncContext context,
+    IFmkSyncContext context,
     IPasswordHasher passwordHasher)
     : IRequestHandler<ResetPasswordRequest, bool>
 {

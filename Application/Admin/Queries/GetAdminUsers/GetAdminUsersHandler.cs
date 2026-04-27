@@ -18,7 +18,7 @@ public record AdminUserListItemDto(
 
 public record GetAdminUsersQuery : IRequest<IReadOnlyList<AdminUserListItemDto>>;
 
-public class GetAdminUsersHandler(IKomSyncContext context)
+public class GetAdminUsersHandler(IFmkSyncContext context)
     : IRequestHandler<GetAdminUsersQuery, IReadOnlyList<AdminUserListItemDto>>
 {
     public async Task<IReadOnlyList<AdminUserListItemDto>> Handle(

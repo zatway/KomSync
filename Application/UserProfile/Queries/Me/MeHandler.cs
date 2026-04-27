@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.UserProfile.Queries.Me;
 
 public class MeHandler(
-    IKomSyncContext context
+    IFmkSyncContext context
 ) : IRequestHandler<MeRequest, UserResponse>
 {
     public async Task<UserResponse> Handle(MeRequest request, CancellationToken cancellationToken)

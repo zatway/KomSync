@@ -15,13 +15,13 @@ public class ReportsController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> ExportProjectTasks(Guid projectId, CancellationToken cancellationToken)
     {
         var bytes = await mediator.Send(new ExportProjectTasksCsvQuery(projectId), cancellationToken);
-        return File(bytes, "text/csv; charset=utf-8", $"tasks-{projectId}.csv");
+        return File(bytes, "text/csv; charset=utf-8", $"zadachi-proekta-{projectId}.csv");
     }
 
     [HttpGet("tasks/overdue.csv")]
     public async Task<IActionResult> ExportOverdue(CancellationToken cancellationToken)
     {
         var bytes = await mediator.Send(new ExportOverdueTasksCsvQuery(), cancellationToken);
-        return File(bytes, "text/csv; charset=utf-8", "overdue-tasks.csv");
+        return File(bytes, "text/csv; charset=utf-8", "prosrochennye-zadachi.csv");
     }
 }

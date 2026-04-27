@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Auth.Commands.Register;
 
 public class RegisterHandler(
-    IKomSyncContext context,
+    IFmkSyncContext context,
     IPasswordHasher passwordHasher,
     IMapper mapper) : IRequestHandler<RegisterRequest>
 {
