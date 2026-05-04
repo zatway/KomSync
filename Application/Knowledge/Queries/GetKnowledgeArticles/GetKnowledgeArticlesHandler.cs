@@ -28,7 +28,7 @@ public class GetKnowledgeArticlesHandler(IFmkSyncContext context, ICurrentUserSe
                 .FirstOrDefaultAsync(t => t.Id == request.TaskId.Value, cancellationToken)
                 ?? throw new NotFoundException("Задача не найдена");
 
-            if (!ProjectAccessRules.UserCanViewProject(role, uid, task.Project))
+            if (!ProjectAccessRules.UserCanViewProject(role, uid, task.Project, currentUser.DepartmentId))
                 throw new ForbiddenException("Нет доступа к задаче");
 
             query = query.Where(a => a.ProjectTaskId == request.TaskId.Value);
@@ -40,7 +40,7 @@ public class GetKnowledgeArticlesHandler(IFmkSyncContext context, ICurrentUserSe
                 .FirstOrDefaultAsync(p => p.Id == request.ProjectId.Value, cancellationToken)
                 ?? throw new NotFoundException("Проект не найден");
 
-            if (!ProjectAccessRules.UserCanViewProject(role, uid, project))
+            if (!ProjectAccessRules.UserCanViewProject(role, uid, project, currentUser.DepartmentId))
                 throw new ForbiddenException("Нет доступа к проекту");
 
             var pid = request.ProjectId.Value;
@@ -52,7 +52,8 @@ public class GetKnowledgeArticlesHandler(IFmkSyncContext context, ICurrentUserSe
         else if (!ProjectAccessRules.CanViewAllProjects(role))
         {
             var accessibleIds = context.Projects
-                .Where(p => !p.IsArchived && (p.OwnerId == uid || p.Members.Any(m => m.Id == uid)))
+                .Where(p => !p.IsArchived)
+                .WhereUserCanSeeProject(role, uid, currentUser.DepartmentId)
                 .Select(p => p.Id);
 
             query = query.Where(a =>

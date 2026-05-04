@@ -24,7 +24,7 @@ public class ExportProjectTasksCsvHandler(IFmkSyncContext context, ICurrentUserS
         if (project == null)
             throw new NotFoundException("Проект не найден");
 
-        if (!ProjectAccessRules.UserCanViewProject(role, uid, project))
+        if (!ProjectAccessRules.UserCanViewProject(role, uid, project, currentUser.DepartmentId))
             throw new ForbiddenException("Нет доступа к проекту");
 
         var tasks = await context.Tasks

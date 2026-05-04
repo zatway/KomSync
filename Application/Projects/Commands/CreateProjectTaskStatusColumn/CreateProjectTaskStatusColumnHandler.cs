@@ -21,11 +21,18 @@ public class CreateProjectTaskStatusColumnHandler(IFmkSyncContext context, ICurr
 {
     public async Task<Guid> Handle(CreateProjectTaskStatusColumnCommand request, CancellationToken cancellationToken)
     {
-        _ = currentUser.UserId ?? throw new UnauthorizedAccessException();
+        var uid = currentUser.UserId ?? throw new UnauthorizedAccessException();
+        var role = currentUser.Role;
 
-        var exists = await context.Projects.AnyAsync(p => p.Id == request.ProjectId, cancellationToken);
-        if (!exists)
+        var project = await context.Projects
+            .Include(p => p.Members)
+            .FirstOrDefaultAsync(p => p.Id == request.ProjectId, cancellationToken);
+        if (project == null)
             throw new NotFoundException("Проект не найден");
+        if (!ProjectAccessRules.UserCanViewProject(role, uid, project, currentUser.DepartmentId))
+            throw new ForbiddenException("Нет доступа к проекту");
+        if (!ProjectAccessRules.UserCanManageProjectsAndColumns(role))
+            throw new ForbiddenException("Добавлять колонки могут только администратор или менеджер");
 
         var columnCount = await context.ProjectTaskStatusColumns
             .CountAsync(c => c.ProjectId == request.ProjectId, cancellationToken);

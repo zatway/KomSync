@@ -1,3 +1,4 @@
+using Application.Common;
 using Application.Common.Exceptions;
 using Application.DTO.TaskComments;
 using Application.Interfaces;
@@ -19,6 +20,17 @@ public class AddTaskCommentHandler(
     {
         var userId = currentUserService.UserId
                      ?? throw new UnauthorizedAccessException("User must be logged in to create tasks.");
+
+        var taskForAccess = await context.Tasks
+            .Include(t => t.Project)
+            .ThenInclude(p => p.Members)
+            .FirstOrDefaultAsync(t => t.Id == request.TaskId, cancellationToken)
+            ?? throw new NotFoundException("Задача не найдена");
+        if (!ProjectAccessRules.UserCanViewProject(
+                currentUserService.Role, userId, taskForAccess.Project, currentUserService.DepartmentId))
+            throw new ForbiddenException("Нет доступа к задаче");
+        if (!TaskAccessRules.UserCanAddComments(currentUserService.Role))
+            throw new ForbiddenException("Читатель не может оставлять комментарии");
 
         TaskComment? parentComment = null;
         if (request.ParentCommentId.HasValue)

@@ -19,8 +19,7 @@ public class GetProjectsHandler(IFmkSyncContext context, ICurrentUserService cur
         if (!request.IncludeArchived)
             query = query.Where(p => !p.IsArchived);
 
-        if (!ProjectAccessRules.CanViewAllProjects(role))
-            query = query.Where(p => p.OwnerId == userId || p.Members.Any(m => m.Id == userId));
+        query = query.WhereUserCanSeeProject(role, userId, currentUser.DepartmentId);
 
         var projects = await query
             .Include(p => p.Owner)

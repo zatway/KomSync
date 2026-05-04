@@ -27,8 +27,10 @@ public class DeleteProjectTaskStatusColumnHandler(IFmkSyncContext context, ICurr
         if (project == null)
             throw new NotFoundException("Проект не найден");
 
-        if (!ProjectAccessRules.UserCanViewProject(role, uid, project))
+        if (!ProjectAccessRules.UserCanViewProject(role, uid, project, currentUser.DepartmentId))
             throw new ForbiddenException("Нет доступа к проекту");
+        if (!ProjectAccessRules.UserCanManageProjectsAndColumns(role))
+            throw new ForbiddenException("Удалять колонки могут только администратор или менеджер");
 
         var cols = await context.ProjectTaskStatusColumns
             .Where(c => c.ProjectId == request.ProjectId)

@@ -4,5 +4,7 @@ public record PermissionsDto(
     bool CanEdit,
     bool CanDelete,
     bool CanManageMembers,
-    bool CanViewHistory
+    bool CanViewHistory,
+    bool CanManageTaskColumns,
+    bool CanCreateTasks
 );

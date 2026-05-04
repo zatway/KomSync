@@ -28,8 +28,10 @@ public class UpdateProjectTaskStatusColumnHandler(IFmkSyncContext context, ICurr
         if (project == null)
             throw new NotFoundException("Проект не найден");
 
-        if (!ProjectAccessRules.UserCanViewProject(role, uid, project))
+        if (!ProjectAccessRules.UserCanViewProject(role, uid, project, currentUser.DepartmentId))
             throw new ForbiddenException("Нет доступа к проекту");
+        if (!ProjectAccessRules.UserCanManageProjectsAndColumns(role))
+            throw new ForbiddenException("Редактировать колонки могут только администратор или менеджер");
 
         var col = await context.ProjectTaskStatusColumns
             .FirstOrDefaultAsync(

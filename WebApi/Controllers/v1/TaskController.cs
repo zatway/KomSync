@@ -98,7 +98,8 @@ public class TaskController(IMediator mediator) : ControllerBase
 
         var uid = currentUser.UserId ?? Guid.Empty;
         if (att.ProjectTask == null ||
-            !Application.Common.ProjectAccessRules.UserCanViewProject(currentUser.Role, uid, att.ProjectTask.Project))
+            !Application.Common.ProjectAccessRules.UserCanViewProject(
+                currentUser.Role, uid, att.ProjectTask.Project, currentUser.DepartmentId))
             return Forbid();
 
         var stream = await storage.OpenReadAsync(att.StoredPath, cancellationToken);

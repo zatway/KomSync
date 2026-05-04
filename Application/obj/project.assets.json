@@ -1333,11 +1333,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\work\\kom_Sync\\FmkSync\\Application\\Application.csproj",
+      "projectUniqueName": "C:\\work\\kom_Sync\\FmkSync\\Application\\Application.csproj",
       "projectName": "Application",
-      "projectPath": "c:\\work\\kom_Sync\\FmkSync\\Application\\Application.csproj",
+      "projectPath": "C:\\work\\kom_Sync\\FmkSync\\Application\\Application.csproj",
       "packagesPath": "C:\\Users\\zatway\\.nuget\\packages\\",
-      "outputPath": "c:\\work\\kom_Sync\\FmkSync\\Application\\obj\\",
+      "outputPath": "C:\\work\\kom_Sync\\FmkSync\\Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -1359,8 +1359,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "c:\\work\\kom_Sync\\FmkSync\\Domain\\Domain.csproj": {
-              "projectPath": "c:\\work\\kom_Sync\\FmkSync\\Domain\\Domain.csproj"
+            "C:\\work\\kom_Sync\\FmkSync\\Domain\\Domain.csproj": {
+              "projectPath": "C:\\work\\kom_Sync\\FmkSync\\Domain\\Domain.csproj"
             }
           }
         }

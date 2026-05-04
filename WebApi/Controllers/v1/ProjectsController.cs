@@ -210,7 +210,8 @@ namespace WebApi.Controllers.v1
             if (att == null) return NotFound();
 
             var uid = currentUser.UserId ?? Guid.Empty;
-            if (!Application.Common.ProjectAccessRules.UserCanViewProject(currentUser.Role, uid, att.Project))
+            if (!Application.Common.ProjectAccessRules.UserCanViewProject(
+                    currentUser.Role, uid, att.Project, currentUser.DepartmentId))
                 return Forbid();
 
             var stream = await storage.OpenReadAsync(att.StoredPath, cancellationToken);

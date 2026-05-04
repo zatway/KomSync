@@ -28,8 +28,10 @@ public class UploadProjectAttachmentHandler(
         if (project == null)
             throw new NotFoundException("Проект не найден");
 
-        if (!ProjectAccessRules.UserCanViewProject(role, userId, project))
+        if (!ProjectAccessRules.UserCanViewProject(role, userId, project, currentUser.DepartmentId))
             throw new ForbiddenException("Нет доступа к проекту");
+        if (!ProjectAccessRules.UserCanManageProjectsAndColumns(role))
+            throw new ForbiddenException("Прикреплять файлы к проекту могут только администратор или менеджер");
 
         var created = new List<FileAttachmentDto>();
 

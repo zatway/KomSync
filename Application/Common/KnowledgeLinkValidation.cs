@@ -27,7 +27,7 @@ public static class KnowledgeLinkValidation
                 .FirstOrDefaultAsync(t => t.Id == requestedTaskId.Value, cancellationToken)
                 ?? throw new BadRequestException("Задача не найдена");
 
-            if (!ProjectAccessRules.UserCanViewProject(role, uid, task.Project))
+            if (!ProjectAccessRules.UserCanViewProject(role, uid, task.Project, currentUser.DepartmentId))
                 throw new ForbiddenException("Нет доступа к задаче");
 
             if (requestedProjectId.HasValue && requestedProjectId.Value != task.ProjectId)
@@ -43,7 +43,7 @@ public static class KnowledgeLinkValidation
                 .FirstOrDefaultAsync(p => p.Id == requestedProjectId.Value, cancellationToken)
                 ?? throw new NotFoundException("Проект не найден");
 
-            if (!ProjectAccessRules.UserCanViewProject(role, uid, project))
+            if (!ProjectAccessRules.UserCanViewProject(role, uid, project, currentUser.DepartmentId))
                 throw new ForbiddenException("Нет доступа к проекту");
 
             return (requestedProjectId, null);
@@ -91,7 +91,7 @@ public static class KnowledgeLinkValidation
             var p = await context.Projects
                 .Include(x => x.Members)
                 .FirstOrDefaultAsync(x => x.Id == article.ProjectId.Value, cancellationToken);
-            if (p != null && ProjectAccessRules.UserCanViewProject(role, uid, p))
+            if (p != null && ProjectAccessRules.UserCanViewProject(role, uid, p, currentUser.DepartmentId))
                 return;
         }
 
@@ -101,7 +101,7 @@ public static class KnowledgeLinkValidation
                 .Include(x => x.Project)
                 .ThenInclude(x => x.Members)
                 .FirstOrDefaultAsync(x => x.Id == article.ProjectTaskId.Value, cancellationToken);
-            if (t != null && ProjectAccessRules.UserCanViewProject(role, uid, t.Project))
+            if (t != null && ProjectAccessRules.UserCanViewProject(role, uid, t.Project, currentUser.DepartmentId))
                 return;
         }
 

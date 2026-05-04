@@ -23,14 +23,14 @@ public class ProjectHistory : BaseEntity
     /// <summary>
     /// Старое значение.
     /// </summary>
-    [Required]
+    [Required, MaxLength(4000)]
     public string OldValue { get; set; } = null!;
 
     /// <summary>
     /// Новое значение.
     /// </summary>
-    [Required, MaxLength(30)]
-    public string NewValue { get; set; }
+    [Required, MaxLength(4000)]
+    public string NewValue { get; set; } = null!;
 
     /// <summary>
     /// Инициатор изменения

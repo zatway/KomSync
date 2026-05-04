@@ -29,8 +29,10 @@ public class UploadTaskAttachmentHandler(
         if (task == null)
             throw new NotFoundException("Задача не найдена");
 
-        if (!ProjectAccessRules.UserCanViewProject(role, userId, task.Project))
+        if (!ProjectAccessRules.UserCanViewProject(role, userId, task.Project, currentUser.DepartmentId))
             throw new ForbiddenException("Нет доступа к задаче");
+        if (!TaskAccessRules.UserCanModifyTask(role, userId, task))
+            throw new ForbiddenException("Недостаточно прав для вложений к задаче");
 
         var created = new List<FileAttachmentDto>();
 

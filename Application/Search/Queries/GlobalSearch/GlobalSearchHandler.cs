@@ -22,8 +22,7 @@ public class GlobalSearchHandler(IFmkSyncContext context, ICurrentUserService cu
         var perKind = Math.Max(1, take / 4);
 
         IQueryable<Domain.Entities.Project> visible = context.Projects.Where(p => !p.IsArchived);
-        if (!ProjectAccessRules.CanViewAllProjects(role))
-            visible = visible.Where(p => p.OwnerId == uid || p.Members.Any(m => m.Id == uid));
+        visible = visible.WhereUserCanSeeProject(role, uid, currentUser.DepartmentId);
 
         var visibleIds = await visible.Select(p => p.Id).ToListAsync(cancellationToken);
 

@@ -1,3 +1,5 @@
+using Application.Common;
+using Application.Common.Exceptions;
 using Application.DTO.Projects;
 using Application.Interfaces;
 using AutoMapper;
@@ -13,6 +15,8 @@ namespace Application.Projects.Commands.CreateProject
         {
             if (currentUser.UserId == null)
                 throw new UnauthorizedAccessException("User not authorized");
+            if (!ProjectAccessRules.UserCanManageProjectsAndColumns(currentUser.Role))
+                throw new ForbiddenException("Создавать проекты могут только администратор или менеджер");
 
             var project = mapper.Map<Project>(request);
             project.OwnerId = currentUser.UserId.Value;

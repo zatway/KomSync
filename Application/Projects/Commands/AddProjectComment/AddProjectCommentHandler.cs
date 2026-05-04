@@ -1,3 +1,4 @@
+using Application.Common;
 using Application.Common.Exceptions;
 using Application.DTO.Projects;
 using Application.Interfaces;
@@ -16,11 +17,19 @@ namespace Application.Projects.Commands.AddProjectComment
     {
         public async Task<ProjectCommentDto> Handle(CreateProjectCommentRequest request, CancellationToken cancellationToken)
         {
-            if (currentUser.UserId == null)
-                throw new UnauthorizedAccessException("User not authorized");
+            var actorId = currentUser.UserId ?? throw new UnauthorizedAccessException("User not authorized");
+            if (!TaskAccessRules.UserCanAddComments(currentUser.Role))
+                throw new ForbiddenException("Читатель не может комментировать проект");
+
+            var project = await context.Projects
+                .Include(p => p.Members)
+                .FirstOrDefaultAsync(p => p.Id == request.ProjectId, cancellationToken)
+                ?? throw new NotFoundException("Проект не найден");
+            if (!ProjectAccessRules.UserCanViewProject(currentUser.Role, actorId, project, currentUser.DepartmentId))
+                throw new ForbiddenException("Нет доступа к проекту");
 
             var user = await context.Users
-                .FirstOrDefaultAsync(u => u.Id == currentUser.UserId, cancellationToken);
+                .FirstOrDefaultAsync(u => u.Id == actorId, cancellationToken);
 
             if (user == null)
                 throw new NotFoundException("Пользователь не найден");

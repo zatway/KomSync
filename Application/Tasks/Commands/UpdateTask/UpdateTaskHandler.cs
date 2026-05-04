@@ -1,3 +1,5 @@
+using Application.Common;
+using Application.Common.Exceptions;
 using Application.DTO.Tasks;
 using Application.Interfaces;
 using Domain.Entities;
@@ -17,6 +19,8 @@ public class UpdateTaskHandler(
     public async Task<bool> Handle(UpdateTaskRequest request, CancellationToken cancellationToken)
     {
         var task = await context.Tasks
+            .Include(t => t.Project)
+            .ThenInclude(p => p.Members)
             .Include(t => t.Watchers)
             .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
 
@@ -28,6 +32,12 @@ public class UpdateTaskHandler(
 
         if (task.ProjectId != request.ProjectId)
             return false;
+
+        if (!ProjectAccessRules.UserCanViewProject(
+                currentUserService.Role, actorId, task.Project, currentUserService.DepartmentId))
+            throw new ForbiddenException("Нет доступа к проекту");
+        if (!TaskAccessRules.UserCanModifyTask(currentUserService.Role, actorId, task))
+            throw new ForbiddenException("Недостаточно прав для изменения задачи");
 
         mapper.Map(request, task);
         task.UpdatedAt = DateTime.UtcNow;

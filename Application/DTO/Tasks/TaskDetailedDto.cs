@@ -23,6 +23,7 @@ public class TaskDetailedDto
     public int SortOrder { get; init; }
     public TaskAssigneeDto? Assignee { get; init; }
     public TaskAssigneeDto? Responsible { get; init; }
+    public TaskAssigneeDto? Creator { get; init; }
     public IReadOnlyList<TaskAssigneeDto> Watchers { get; set; } = Array.Empty<TaskAssigneeDto>();
     public TaskCommentDto[] Comments { get; set; } = [];
     public TaskHistoryDto[] History { get; set; } = [];

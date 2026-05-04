@@ -1,3 +1,5 @@
+using Application.Common;
+using Application.Common.Exceptions;
 using Application.DTO.Tasks;
 using Application.Interfaces;
 using MediatR;
@@ -13,7 +15,11 @@ public class ChangeTaskStatusHandler(
 {
     public async Task<bool> Handle(ChangeTaskStatusCommand request, CancellationToken cancellationToken)
     {
+        var actorId = currentUserService.UserId ?? throw new UnauthorizedAccessException();
+
         var task = await context.Tasks
+            .Include(t => t.Project)
+            .ThenInclude(p => p.Members)
             .FirstOrDefaultAsync(p => p.Id == request.TaskId, cancellationToken);
 
         if (task == null)
@@ -21,6 +27,12 @@ public class ChangeTaskStatusHandler(
 
         if (task.ProjectId != request.ProjectId)
             return false;
+
+        if (!ProjectAccessRules.UserCanViewProject(
+                currentUserService.Role, actorId, task.Project, currentUserService.DepartmentId))
+            throw new ForbiddenException("Нет доступа к проекту");
+        if (!TaskAccessRules.UserCanModifyTask(currentUserService.Role, actorId, task))
+            throw new ForbiddenException("Недостаточно прав для смены статуса");
 
         var columnOk = await context.ProjectTaskStatusColumns
             .AnyAsync(c => c.Id == request.NewStatusColumnId && c.ProjectId == request.ProjectId, cancellationToken);
@@ -48,11 +60,10 @@ public class ChangeTaskStatusHandler(
 
         await context.SaveChangesAsync(cancellationToken);
 
-        var actorId = currentUserService.UserId;
         var recipients = new HashSet<Guid> { task.CreatorId };
         if (task.AssigneeId.HasValue) recipients.Add(task.AssigneeId.Value);
         if (task.ResponsibleId.HasValue) recipients.Add(task.ResponsibleId.Value);
-        if (actorId.HasValue) recipients.Remove(actorId.Value);
+        recipients.Remove(actorId);
 
         foreach (var recipientId in recipients)
         {

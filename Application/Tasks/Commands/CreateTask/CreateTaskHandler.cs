@@ -1,3 +1,4 @@
+using Application.Common;
 using Application.Common.Exceptions;
 using Application.DTO.Tasks;
 using Application.Interfaces;
@@ -19,9 +20,17 @@ public class CreateTaskHandler(
         var userId = currentUserService.UserId
                      ?? throw new UnauthorizedAccessException("User must be logged in to create tasks.");
 
-        var projectExists = await context.Projects.AnyAsync(p => p.Id == request.ProjectId, cancellationToken);
-        if (!projectExists)
+        if (!TaskAccessRules.UserCanCreateTasks(currentUserService.Role))
+            throw new ForbiddenException("Недостаточно прав для создания задач");
+
+        var project = await context.Projects
+            .Include(p => p.Members)
+            .FirstOrDefaultAsync(p => p.Id == request.ProjectId, cancellationToken);
+        if (project == null)
             throw new NotFoundException("Проект не найден");
+        if (!ProjectAccessRules.UserCanViewProject(
+                currentUserService.Role, userId, project, currentUserService.DepartmentId))
+            throw new ForbiddenException("Нет доступа к проекту");
 
         var columnOk = await context.ProjectTaskStatusColumns
             .AnyAsync(c => c.Id == request.ProjectTaskStatusColumnId && c.ProjectId == request.ProjectId, cancellationToken);

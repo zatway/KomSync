@@ -24,6 +24,7 @@ public class GetTaskByIdHandler(IFmkSyncContext context, IMapper mapper, ICurren
             .Include(t => t.StatusColumn)
             .Include(t => t.Assignee)
             .Include(t => t.Responsible)
+            .Include(t => t.Creator)
             .Include(t => t.Attachments)
             .Include(t => t.Comments).ThenInclude(c => c.User)
             .Include(t => t.Comments).ThenInclude(c => c.Attachments)
@@ -35,7 +36,7 @@ public class GetTaskByIdHandler(IFmkSyncContext context, IMapper mapper, ICurren
             return null;
 
         var uid = currentUser.UserId ?? throw new UnauthorizedAccessException();
-        if (!ProjectAccessRules.UserCanViewProject(currentUser.Role, uid, task.Project))
+        if (!ProjectAccessRules.UserCanViewProject(currentUser.Role, uid, task.Project, currentUser.DepartmentId))
             throw new ForbiddenException("Нет доступа к этой задаче");
 
         var dto = mapper.Map<TaskDetailedDto>(task);

@@ -1,3 +1,5 @@
+using Application.Common;
+using Application.Common.Exceptions;
 using Application.DTO.Tasks;
 using Application.Interfaces;
 using Domain.Entities;
@@ -15,16 +17,23 @@ public class AssignUserHandler(
 {
     public async Task<bool> Handle(AssignUserRequest request, CancellationToken cancellationToken)
     {
-        // 1. Ищем задачу
-        var task = await context.Tasks
-            .FirstOrDefaultAsync(p => p.Id == request.TaskId, cancellationToken);
-
-        if (task == null) 
-            return false;
-        
         var userId = currentUserService.UserId
                      ?? throw new UnauthorizedAccessException("User must be logged in to create tasks.");
-        
+
+        var task = await context.Tasks
+            .Include(t => t.Project)
+            .ThenInclude(p => p.Members)
+            .FirstOrDefaultAsync(p => p.Id == request.TaskId, cancellationToken);
+
+        if (task == null)
+            return false;
+
+        if (!ProjectAccessRules.UserCanViewProject(
+                currentUserService.Role, userId, task.Project, currentUserService.DepartmentId))
+            throw new ForbiddenException("Нет доступа к проекту");
+        if (!TaskAccessRules.UserCanModifyTask(currentUserService.Role, userId, task))
+            throw new ForbiddenException("Недостаточно прав для назначения исполнителя");
+
         task.AssigneeId = request.AssigneeId;
         task.UpdatedAt = DateTime.UtcNow;
         

@@ -21,7 +21,7 @@ public class GetTasksListHandler(IFmkSyncContext context, IMapper mapper, ICurre
             throw new NotFoundException("Проект не найден");
 
         var uid = currentUser.UserId ?? throw new UnauthorizedAccessException();
-        if (!ProjectAccessRules.UserCanViewProject(currentUser.Role, uid, project))
+        if (!ProjectAccessRules.UserCanViewProject(currentUser.Role, uid, project, currentUser.DepartmentId))
             throw new ForbiddenException("Нет доступа к проекту");
 
         var tasks = await context.Tasks

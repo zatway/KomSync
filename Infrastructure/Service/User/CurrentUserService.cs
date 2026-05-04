@@ -27,4 +27,13 @@ public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICur
             return Enum.TryParse<UserRole>(r, out var role) ? role : null;
         }
     }
+
+    public Guid? DepartmentId
+    {
+        get
+        {
+            var raw = httpContextAccessor.HttpContext?.User?.FindFirst("departmentId")?.Value;
+            return Guid.TryParse(raw, out var id) ? id : null;
+        }
+    }
 }

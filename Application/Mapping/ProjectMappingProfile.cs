@@ -46,9 +46,16 @@ namespace Application.Mapping
                 .ConstructUsing(u => new AuthorDto(u.Id, u.FullName, u.Email, u.Avatar != null));
 
             CreateMap<ProjectHistory, ProjectHistoryEntryDto>()
-                .ForMember(d => d.ChangedBy, opt => opt.MapFrom(s => s.ChangedBy));
-            
-            CreateMap<User, ChangedByDto>();
+                .ForMember(d => d.ChangedAt, opt => opt.MapFrom(s => s.CreatedAt))
+                .ForMember(d => d.ChangedBy, opt => opt.MapFrom(s =>
+                    s.ChangedBy != null
+                        ? new ChangedByDto(s.ChangedBy.Id, s.ChangedBy.FullName)
+                        : new ChangedByDto(
+                            Guid.Empty,
+                            string.IsNullOrWhiteSpace(s.ChangedByDisplayName) ? "—" : s.ChangedByDisplayName!)));
+
+            CreateMap<User, ChangedByDto>()
+                .ConstructUsing(u => new ChangedByDto(u.Id, u.FullName));
         }
     }
 }

@@ -1,3 +1,5 @@
+using Application.Common;
+using Application.Common.Exceptions;
 using Application.DTO.Attachments;
 using Application.Interfaces;
 using Domain.Entities;
@@ -18,11 +20,20 @@ public class UploadTaskCommentAttachmentsHandler(
     {
         var userId = currentUser.UserId ?? throw new UnauthorizedAccessException();
 
+        if (!TaskAccessRules.UserCanAddComments(currentUser.Role))
+            throw new ForbiddenException("Читатель не может прикреплять файлы к комментариям");
+
         var comment = await context.TaskComments
             .Include(c => c.Attachments)
+            .Include(c => c.Task)
+            .ThenInclude(t => t.Project)
+            .ThenInclude(p => p.Members)
             .FirstOrDefaultAsync(c => c.Id == request.CommentId, cancellationToken);
 
-        if (comment == null) throw new KeyNotFoundException("Comment not found");
+        if (comment == null) throw new NotFoundException("Комментарий не найден");
+        if (!ProjectAccessRules.UserCanViewProject(
+                currentUser.Role, userId, comment.Task.Project, currentUser.DepartmentId))
+            throw new ForbiddenException("Нет доступа к задаче");
 
         var created = new List<CommentAttachmentDto>();
 

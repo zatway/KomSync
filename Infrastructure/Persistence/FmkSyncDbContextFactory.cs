@@ -34,4 +34,5 @@ public class DesignTimeUserService : ICurrentUserService
 {
     public Guid? UserId => Guid.Empty;
     public Domain.Enums.UserRole? Role => null;
+    public Guid? DepartmentId => null;
 }
