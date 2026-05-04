@@ -26,7 +26,7 @@ namespace Application.Projects.Queries.GetProjectComments
                     c.Id,
                     c.ProjectId,
                     c.Content,
-                    new AuthorDto(c.AuthorId, c.Author.FullName, c.Author.Email),
+                    new AuthorDto(c.AuthorId, c.Author.FullName, c.Author.Email, c.Author.Avatar != null),
                     c.CreatedAt,
                     c.UpdatedAt,
                     c.ParentId

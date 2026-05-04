@@ -12,5 +12,6 @@ public record UpdateProjectRequest(
     string? Color,
     string? Icon,
     List<string>? Tags,
-    bool? IsArchived
+    bool? IsArchived,
+    Guid? DepartmentId
 ) : IRequest<bool>;

@@ -28,5 +28,13 @@ public class TaskComment
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
+    /// <summary>Родительский комментарий (ответ в ветке).</summary>
+    public Guid? ParentCommentId { get; set; }
+
+    [ForeignKey(nameof(ParentCommentId))]
+    public TaskComment? ParentComment { get; set; }
+
+    public ICollection<TaskComment> Replies { get; set; } = new List<TaskComment>();
+
     public ICollection<TaskCommentAttachment> Attachments { get; set; } = new List<TaskCommentAttachment>();
 }

@@ -75,7 +75,7 @@ namespace Application.Projects.Commands.AddProjectComment
                 comment.Id,
                 comment.ProjectId,
                 comment.Content,
-                new AuthorDto(user.Id, user.FullName, user.Email),
+                new AuthorDto(user.Id, user.FullName, user.Email, user.Avatar != null),
                 comment.CreatedAt,
                 comment.UpdatedAt,
                 comment.ParentId

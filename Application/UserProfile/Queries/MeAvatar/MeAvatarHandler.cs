@@ -21,7 +21,10 @@ public class MeAvatarHandler(
             .Select(u => new { u.Avatar })
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (user == null || user.Avatar == null)
+        if (user == null)
+            throw new NotFoundException("Пользователь не найден");
+
+        if (user.Avatar == null)
             throw new NotFoundException("Аватар не найден");
 
         return new AvatarResult(user.Avatar, "image/png"); // MIME можно определять динамически

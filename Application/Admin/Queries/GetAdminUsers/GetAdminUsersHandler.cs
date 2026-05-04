@@ -14,7 +14,8 @@ public record AdminUserListItemDto(
     Guid DepartmentId,
     Guid PositionId,
     string DepartmentName,
-    string PositionName);
+    string PositionName,
+    bool HasAvatar);
 
 public record GetAdminUsersQuery : IRequest<IReadOnlyList<AdminUserListItemDto>>;
 
@@ -38,7 +39,8 @@ public class GetAdminUsersHandler(IFmkSyncContext context)
                 u.DepartmentId,
                 u.PositionId,
                 u.Department.Name,
-                u.Position.Name))
+                u.Position.Name,
+                u.Avatar != null))
             .ToListAsync(cancellationToken);
     }
 }

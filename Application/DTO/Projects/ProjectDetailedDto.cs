@@ -20,6 +20,7 @@ public record ProjectDetailedDto(
     IEnumerable<string>? Tags,
     string? Category,
     string? Department,
+    Guid DepartmentId,
     bool IsArchived,
     bool IsFavorite,
     PermissionsDto Permissions,

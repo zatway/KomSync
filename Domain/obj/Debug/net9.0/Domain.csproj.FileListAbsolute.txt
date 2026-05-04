@@ -37,3 +37,16 @@ E:\KomSync\back\Domain\obj\Debug\net9.0\Domain.dll
 E:\KomSync\back\Domain\obj\Debug\net9.0\refint\Domain.dll
 E:\KomSync\back\Domain\obj\Debug\net9.0\Domain.pdb
 E:\KomSync\back\Domain\obj\Debug\net9.0\ref\Domain.dll
+C:\work\kom_Sync\FmkSync\Domain\bin\Debug\net9.0\Domain.deps.json
+C:\work\kom_Sync\FmkSync\Domain\bin\Debug\net9.0\Domain.dll
+C:\work\kom_Sync\FmkSync\Domain\bin\Debug\net9.0\Domain.pdb
+C:\work\kom_Sync\FmkSync\Domain\obj\Debug\net9.0\Domain.csproj.AssemblyReference.cache
+C:\work\kom_Sync\FmkSync\Domain\obj\Debug\net9.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\work\kom_Sync\FmkSync\Domain\obj\Debug\net9.0\Domain.AssemblyInfoInputs.cache
+C:\work\kom_Sync\FmkSync\Domain\obj\Debug\net9.0\Domain.AssemblyInfo.cs
+C:\work\kom_Sync\FmkSync\Domain\obj\Debug\net9.0\Domain.csproj.CoreCompileInputs.cache
+C:\work\kom_Sync\FmkSync\Domain\obj\Debug\net9.0\Domain.sourcelink.json
+C:\work\kom_Sync\FmkSync\Domain\obj\Debug\net9.0\Domain.dll
+C:\work\kom_Sync\FmkSync\Domain\obj\Debug\net9.0\refint\Domain.dll
+C:\work\kom_Sync\FmkSync\Domain\obj\Debug\net9.0\Domain.pdb
+C:\work\kom_Sync\FmkSync\Domain\obj\Debug\net9.0\ref\Domain.dll

@@ -8,7 +8,7 @@ public static class ProjectProgressCalculator
     public static decimal Compute(IReadOnlyCollection<ProjectTask> tasks)
     {
         if (tasks.Count == 0) return 0;
-        var done = tasks.Count(t => t.StatusColumn is { IsDoneColumn: true });
+        var done = tasks.Count(t => t.StatusColumn != null && TaskStatusColumnRules.IsDoneLike(t.StatusColumn));
         return Math.Round((decimal)done / tasks.Count * 100, 2);
     }
 }

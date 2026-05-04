@@ -35,8 +35,8 @@ public class DeleteProjectTaskStatusColumnHandler(IFmkSyncContext context, ICurr
             .OrderBy(c => c.SortOrder)
             .ToListAsync(cancellationToken);
 
-        if (cols.Count <= 3)
-            throw new BadRequestException("Нельзя удалить колонку: в проекте должно остаться минимум 3 этапа.");
+        if (cols.Count <= 1)
+            throw new BadRequestException("Нельзя удалить последнюю колонку статусов.");
 
         var column = cols.FirstOrDefault(c => c.Id == request.ColumnId)
                      ?? throw new NotFoundException("Колонка не найдена");

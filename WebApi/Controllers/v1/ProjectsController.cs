@@ -51,11 +51,22 @@ namespace WebApi.Controllers.v1
         [HttpPut("{id:guid}/task-status-columns")]
         public async Task<IActionResult> CreateTaskStatusColumn(Guid id, [FromBody] CreateTaskStatusColumnBody body)
         {
-            var colId = await _mediator.Send(new CreateProjectTaskStatusColumnCommand(id, body.Name, body.ColorHex));
+            var colId = await _mediator.Send(new CreateProjectTaskStatusColumnCommand(
+                id,
+                body.Name,
+                body.ColorHex,
+                body.SemanticKind,
+                body.IsDoneColumn,
+                body.IsBlockedColumn));
             return Ok(colId);
         }
 
-        public record CreateTaskStatusColumnBody(string Name, string? ColorHex);
+        public record CreateTaskStatusColumnBody(
+            string Name,
+            string? ColorHex,
+            byte? SemanticKind = null,
+            bool? IsDoneColumn = null,
+            bool? IsBlockedColumn = null);
 
         [HttpPatch("{id:guid}/task-status-columns/reorder")]
         public async Task<IActionResult> ReorderTaskStatusColumns(Guid id, [FromBody] ReorderTaskStatusColumnsBody body)

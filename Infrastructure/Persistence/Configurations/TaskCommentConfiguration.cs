@@ -15,5 +15,10 @@ public class TaskCommentConfiguration : IEntityTypeConfiguration<TaskComment>
             .WithMany(t => t.Comments)
             .HasForeignKey(h => h.TaskId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(c => c.ParentComment)
+            .WithMany(c => c.Replies)
+            .HasForeignKey(c => c.ParentCommentId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

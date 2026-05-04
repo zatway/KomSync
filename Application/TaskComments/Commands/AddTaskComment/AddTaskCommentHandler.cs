@@ -1,3 +1,4 @@
+using Application.Common.Exceptions;
 using Application.DTO.TaskComments;
 using Application.Interfaces;
 using AutoMapper;
@@ -18,6 +19,15 @@ public class AddTaskCommentHandler(
     {
         var userId = currentUserService.UserId
                      ?? throw new UnauthorizedAccessException("User must be logged in to create tasks.");
+
+        TaskComment? parentComment = null;
+        if (request.ParentCommentId.HasValue)
+        {
+            parentComment = await context.TaskComments.AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Id == request.ParentCommentId.Value, cancellationToken);
+            if (parentComment == null || parentComment.TaskId != request.TaskId)
+                throw new BadRequestException("Родительский комментарий не найден или относится к другой задаче.");
+        }
 
         var comment = mapper.Map<TaskComment>(request);
 
@@ -46,6 +56,7 @@ public class AddTaskCommentHandler(
             if (task.ResponsibleId.HasValue) recipients.Add(task.ResponsibleId.Value);
             foreach (var w in task.Watchers) recipients.Add(w.UserId);
             if (request.ReplyToUserId.HasValue) recipients.Add(request.ReplyToUserId.Value);
+            if (parentComment != null) recipients.Add(parentComment.UserId);
             if (request.MentionsUserIds != null)
                 foreach (var uid in request.MentionsUserIds) recipients.Add(uid);
 
@@ -53,6 +64,7 @@ public class AddTaskCommentHandler(
 
             foreach (var recipientId in recipients)
             {
+                var isThreadReply = parentComment != null && parentComment.UserId == recipientId;
                 await notifications.PublishToUserAsync(
                     recipientId,
                     "task.comment.added",
@@ -61,7 +73,7 @@ public class AddTaskCommentHandler(
                         taskId = task.Id,
                         commentId = comment.Id,
                         byUserId = userId,
-                        isReply = request.ReplyToUserId.HasValue && request.ReplyToUserId.Value == recipientId,
+                        isReply = (request.ReplyToUserId.HasValue && request.ReplyToUserId.Value == recipientId) || isThreadReply,
                         isMention = request.MentionsUserIds?.Contains(recipientId) == true
                     },
                     cancellationToken);

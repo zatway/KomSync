@@ -40,7 +40,9 @@ public class TaskMappingProfile : AutoMapper.Profile
 
         CreateMap<TaskComment, TaskCommentDto>()
             .ForMember(d => d.AuthorName, opt => opt.MapFrom(s => s.User != null ? s.User.FullName : "—"))
-            .ForMember(d => d.Attachments, opt => opt.Ignore());
+            .ForMember(d => d.AuthorHasAvatar, opt => opt.MapFrom(s => s.User != null && s.User.Avatar != null))
+            .ForMember(d => d.Attachments, opt => opt.Ignore())
+            .ForMember(d => d.Replies, opt => opt.Ignore());
 
         CreateMap<TaskCommentAttachment, CommentAttachmentDto>()
             .ConstructUsing(a => new CommentAttachmentDto(
@@ -58,7 +60,7 @@ public class TaskMappingProfile : AutoMapper.Profile
                 ?? (s.ChangedBy != null ? s.ChangedBy.FullName : null)));
 
         CreateMap<User, TaskAssigneeDto>()
-            .ConstructUsing(u => new TaskAssigneeDto(u.Id, u.FullName, null));
+            .ConstructUsing(u => new TaskAssigneeDto(u.Id, u.FullName, null, u.Avatar != null));
 
         CreateMap<ProjectTaskStatusColumn, TaskStatusColumnDto>();
 

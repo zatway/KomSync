@@ -42,7 +42,8 @@ namespace Application.Mapping
                 .ForMember(d => d.Author, opt => opt.MapFrom(s => s.Author))
                 .ForMember(d => d.Replies, opt => opt.MapFrom(s => s.Children));
 
-            CreateMap<User, AuthorDto>();
+            CreateMap<User, AuthorDto>()
+                .ConstructUsing(u => new AuthorDto(u.Id, u.FullName, u.Email, u.Avatar != null));
 
             CreateMap<ProjectHistory, ProjectHistoryEntryDto>()
                 .ForMember(d => d.ChangedBy, opt => opt.MapFrom(s => s.ChangedBy));

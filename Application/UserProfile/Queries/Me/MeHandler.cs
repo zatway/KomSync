@@ -19,7 +19,8 @@ public class MeHandler(
                 u.Email,
                 u.Role,
                 u.Department.Name,
-                u.Position.Name
+                u.Position.Name,
+                u.Avatar != null
             ))
             .FirstOrDefaultAsync(cancellationToken);
         

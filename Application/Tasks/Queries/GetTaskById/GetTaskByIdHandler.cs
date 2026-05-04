@@ -46,11 +46,26 @@ public class GetTaskByIdHandler(IFmkSyncContext context, IMapper mapper, ICurren
             var entity = task.Comments.First(e => e.Id == c.Id);
             c.Attachments = mapper.Map<CommentAttachmentDto[]>(entity.Attachments.OrderBy(a => a.CreatedAt).ToArray());
         }
-        dto.Comments = commentDtos;
+
+        var commentList = commentDtos.ToList();
+        var byId = commentList.ToDictionary(c => c.Id);
+        foreach (var c in byId.Values)
+            c.Replies = new List<TaskCommentDto>();
+
+        foreach (var c in commentList)
+        {
+            if (c.ParentCommentId.HasValue && byId.TryGetValue(c.ParentCommentId.Value, out var parent))
+                parent.Replies.Add(c);
+        }
+
+        foreach (var c in byId.Values)
+            c.Replies = c.Replies.OrderBy(r => r.CreatedAt).ToList();
+
+        dto.Comments = commentList.Where(c => !c.ParentCommentId.HasValue).OrderBy(c => c.CreatedAt).ToArray();
         dto.History = mapper.Map<TaskHistoryDto[]>(task.History.OrderByDescending(h => h.ChangedAt).ToArray());
         dto.Watchers = task.Watchers
             .Where(w => w.User != null)
-            .Select(w => new TaskAssigneeDto(w.User!.Id, w.User.FullName, null))
+            .Select(w => new TaskAssigneeDto(w.User!.Id, w.User.FullName, null, w.User.Avatar != null))
             .ToList();
 
         dto.FileAttachments = task.Attachments
