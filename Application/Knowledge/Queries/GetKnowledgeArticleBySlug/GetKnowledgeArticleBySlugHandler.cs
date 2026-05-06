@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Knowledge.Queries.GetKnowledgeArticleBySlug;
 
-public class GetKnowledgeArticleBySlugHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+public class GetKnowledgeArticleBySlugHandler(IKomSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<GetKnowledgeArticleBySlugQuery, KnowledgeArticleDetailDto?>
 {
     public async Task<KnowledgeArticleDetailDto?> Handle(

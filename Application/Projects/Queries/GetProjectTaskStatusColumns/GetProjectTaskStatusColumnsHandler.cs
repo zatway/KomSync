@@ -9,7 +9,7 @@ namespace Application.Projects.Queries.GetProjectTaskStatusColumns;
 
 public record GetProjectTaskStatusColumnsQuery(Guid ProjectId) : IRequest<IReadOnlyList<TaskStatusColumnDto>>;
 
-public class GetProjectTaskStatusColumnsHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+public class GetProjectTaskStatusColumnsHandler(IKomSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<GetProjectTaskStatusColumnsQuery, IReadOnlyList<TaskStatusColumnDto>>
 {
     public async Task<IReadOnlyList<TaskStatusColumnDto>> Handle(

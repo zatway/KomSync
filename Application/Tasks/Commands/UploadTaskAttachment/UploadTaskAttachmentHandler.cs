@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Tasks.Commands.UploadTaskAttachment;
 
 public class UploadTaskAttachmentHandler(
-    IFmkSyncContext context,
+    IKomSyncContext context,
     ICurrentUserService currentUser,
     IFileStorage storage)
     : IRequestHandler<UploadTaskAttachmentCommand, IReadOnlyList<FileAttachmentDto>>

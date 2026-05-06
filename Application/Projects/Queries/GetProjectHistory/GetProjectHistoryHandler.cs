@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Projects.Queries.GetProjectHistory;
 
 public class GetProjectHistoryHandler(
-    IFmkSyncContext context,
+    IKomSyncContext context,
     ICurrentUserService currentUser,
     IMapper mapper)
     : IRequestHandler<GetProjectHistoryQuery, List<ProjectHistoryEntryDto>>

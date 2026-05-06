@@ -28,7 +28,7 @@ public class SeedAdminHostedService(
         if (!_settings.Enabled) return;
 
         using var scope = sp.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<IFmkSyncContext>();
+        var context = scope.ServiceProvider.GetRequiredService<IKomSyncContext>();
         var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
 
         var normalized = _settings.Email.Trim().ToUpperInvariant();

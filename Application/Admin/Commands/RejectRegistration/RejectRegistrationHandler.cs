@@ -7,7 +7,7 @@ namespace Application.Admin.Commands.RejectRegistration;
 
 public record RejectRegistrationCommand(Guid ApplicationId) : IRequest<bool>;
 
-public class RejectRegistrationHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+public class RejectRegistrationHandler(IKomSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<RejectRegistrationCommand, bool>
 {
     public async Task<bool> Handle(RejectRegistrationCommand request, CancellationToken cancellationToken)

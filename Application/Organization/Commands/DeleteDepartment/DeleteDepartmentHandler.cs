@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Organization.Commands.DeleteDepartment;
 
-public class DeleteDepartmentHandler(IFmkSyncContext context, ICurrentUserService currentUser, IMediator mediator)
+public class DeleteDepartmentHandler(IKomSyncContext context, ICurrentUserService currentUser, IMediator mediator)
     : IRequestHandler<DeleteDepartmentCommand, bool>
 {
     public async Task<bool> Handle(DeleteDepartmentCommand request, CancellationToken cancellationToken)

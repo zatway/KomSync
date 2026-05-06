@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.TaskComments.Commands.DeleteTaskComment;
 
-public class DeleteTaskCommentHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+public class DeleteTaskCommentHandler(IKomSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<DeleteTaskCommentRequest, bool>
 {
     public async Task<bool> Handle(DeleteTaskCommentRequest request, CancellationToken cancellationToken)
@@ -33,7 +33,7 @@ public class DeleteTaskCommentHandler(IFmkSyncContext context, ICurrentUserServi
         return true;
     }
 
-    private static async Task DeleteSubtreeAsync(Guid id, IFmkSyncContext context, CancellationToken cancellationToken)
+    private static async Task DeleteSubtreeAsync(Guid id, IKomSyncContext context, CancellationToken cancellationToken)
     {
         var childIds = await context.TaskComments
             .Where(c => c.ParentCommentId == id)

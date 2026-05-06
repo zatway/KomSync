@@ -168,7 +168,7 @@ namespace WebApi.Controllers.v1
 
         [HttpGet("comment-attachments/{id:guid}")]
         public async Task<IActionResult> DownloadProjectCommentAttachment(
-            [FromServices] IFmkSyncContext context,
+            [FromServices] IKomSyncContext context,
             [FromServices] IFileStorage storage,
             [FromRoute] Guid id,
             CancellationToken cancellationToken)
@@ -194,7 +194,7 @@ namespace WebApi.Controllers.v1
 
         [HttpGet("{projectId:guid}/attachments/{attachmentId:guid}/download")]
         public async Task<IActionResult> DownloadProjectAttachment(
-            [FromServices] IFmkSyncContext context,
+            [FromServices] IKomSyncContext context,
             [FromServices] IFileStorage storage,
             [FromServices] ICurrentUserService currentUser,
             [FromRoute] Guid projectId,

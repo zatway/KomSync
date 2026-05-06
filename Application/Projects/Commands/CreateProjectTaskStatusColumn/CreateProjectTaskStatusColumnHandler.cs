@@ -16,7 +16,7 @@ public record CreateProjectTaskStatusColumnCommand(
     bool? IsBlockedColumn
 ) : IRequest<Guid>;
 
-public class CreateProjectTaskStatusColumnHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+public class CreateProjectTaskStatusColumnHandler(IKomSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<CreateProjectTaskStatusColumnCommand, Guid>
 {
     public async Task<Guid> Handle(CreateProjectTaskStatusColumnCommand request, CancellationToken cancellationToken)

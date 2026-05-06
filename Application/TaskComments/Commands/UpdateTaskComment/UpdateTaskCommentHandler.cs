@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.TaskComments.Commands.UpdateTaskComment;
 
 public class UpdateTaskCommentHandler(
-    IFmkSyncContext context, 
+    IKomSyncContext context, 
     IMapper mapper) : IRequestHandler<UpdateTaskCommentRequest, bool>
 {
     public async Task<bool> Handle(UpdateTaskCommentRequest request, CancellationToken cancellationToken)

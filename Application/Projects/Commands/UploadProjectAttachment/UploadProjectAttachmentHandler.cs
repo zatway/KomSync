@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Projects.Commands.UploadProjectAttachment;
 
 public class UploadProjectAttachmentHandler(
-    IFmkSyncContext context,
+    IKomSyncContext context,
     ICurrentUserService currentUser,
     IFileStorage storage)
     : IRequestHandler<UploadProjectAttachmentCommand, IReadOnlyList<FileAttachmentDto>>

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Projects.Commands.DeleteProject
 {
-    public class DeleteProjectHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+    public class DeleteProjectHandler(IKomSyncContext context, ICurrentUserService currentUser)
         : IRequestHandler<DeleteProjectRequest, bool>
     {
         public async Task<bool> Handle(DeleteProjectRequest request, CancellationToken cancellationToken)

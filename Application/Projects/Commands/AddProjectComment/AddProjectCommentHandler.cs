@@ -10,7 +10,7 @@ using System.Text.Json;
 namespace Application.Projects.Commands.AddProjectComment
 {
     public class AddProjectCommentHandler(
-        IFmkSyncContext context,
+        IKomSyncContext context,
         ICurrentUserService currentUser,
         IRealtimeNotificationPublisher notifications)
         : IRequestHandler<CreateProjectCommentRequest, ProjectCommentDto>

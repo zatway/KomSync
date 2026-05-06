@@ -10,7 +10,7 @@ public static class KnowledgeLinkValidation
 {
     /// <summary>Нормализует связи проект/задача и проверяет доступ.</summary>
     public static async Task<(Guid? ProjectId, Guid? TaskId)> NormalizeAndValidateAsync(
-        IFmkSyncContext context,
+        IKomSyncContext context,
         ICurrentUserService currentUser,
         Guid? requestedProjectId,
         Guid? requestedTaskId,
@@ -53,7 +53,7 @@ public static class KnowledgeLinkValidation
     }
 
     public static async Task ValidateParentScopeAsync(
-        IFmkSyncContext context,
+        IKomSyncContext context,
         Guid? parentId,
         Guid? projectId,
         Guid? taskId,
@@ -72,7 +72,7 @@ public static class KnowledgeLinkValidation
     }
 
     public static async Task EnsureArticleVisibleAsync(
-        IFmkSyncContext context,
+        IKomSyncContext context,
         ICurrentUserService currentUser,
         KnowledgeArticle article,
         CancellationToken cancellationToken)

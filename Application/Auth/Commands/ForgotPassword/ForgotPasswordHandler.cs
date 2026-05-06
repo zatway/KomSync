@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 namespace Application.Auth.Commands.ForgotPassword;
 
 public class ForgotPasswordHandler(
-    IFmkSyncContext context,
+    IKomSyncContext context,
     IEmailSender emailSender,
     IOptions<PasswordResetOptions> options)
     : IRequestHandler<ForgotPasswordRequest, bool>
@@ -50,7 +50,7 @@ public class ForgotPasswordHandler(
 
         await emailSender.SendAsync(
             user.Email,
-            "Восстановление пароля FmkSync",
+            "Восстановление пароля KomSync",
             $"<p>Ссылка для сброса пароля (действует {options.Value.TokenLifetimeHours} ч.):</p><p><a href=\"{url}\">{url}</a></p>",
             cancellationToken);
 

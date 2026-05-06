@@ -8,7 +8,7 @@ namespace Application.Admin.Commands.ApproveRegistration;
 public record ApproveRegistrationCommand(Guid ApplicationId) : IRequest<bool>;
 
 public class ApproveRegistrationHandler(
-    IFmkSyncContext context,
+    IKomSyncContext context,
     ICurrentUserService currentUser,
     IEmailSender emailSender,
     IRealtimeNotificationPublisher notifications
@@ -38,7 +38,7 @@ public class ApproveRegistrationHandler(
 
         await emailSender.SendAsync(
             app.User.Email,
-            "FmkSync — регистрация одобрена",
+            "KomSync — регистрация одобрена",
             $"<p>Здравствуйте, {app.User.FullName}!</p><p>Ваша учётная запись активирована. Можно войти в систему.</p>",
             cancellationToken);
 

@@ -5,11 +5,11 @@ using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Persistence;
 
-public class FmkSyncDbContextFactory : IDesignTimeDbContextFactory<FmkSyncDbContext>
+public class KomSyncDbContextFactory : IDesignTimeDbContextFactory<KomSyncDbContext>
 {
-    public FmkSyncDbContext CreateDbContext(string[] args)
+    public KomSyncDbContext CreateDbContext(string[] args)
     {
-        var optionsBuilder = new DbContextOptionsBuilder<FmkSyncDbContext>();
+        var optionsBuilder = new DbContextOptionsBuilder<KomSyncDbContext>();
         
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "..", "WebApi"))
@@ -25,7 +25,7 @@ public class FmkSyncDbContextFactory : IDesignTimeDbContextFactory<FmkSyncDbCont
         optionsBuilder.UseNpgsql(cs, b => b.MigrationsAssembly("Infrastructure"));
 
         // Создаем заглушку сервиса пользователя для миграций
-        return new FmkSyncDbContext(optionsBuilder.Options, new DesignTimeUserService());
+        return new KomSyncDbContext(optionsBuilder.Options, new DesignTimeUserService());
     }
 }
 

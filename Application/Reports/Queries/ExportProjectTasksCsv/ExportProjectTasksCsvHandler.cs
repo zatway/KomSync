@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Reports.Queries.ExportProjectTasksCsv;
 
-public class ExportProjectTasksCsvHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+public class ExportProjectTasksCsvHandler(IKomSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<ExportProjectTasksCsvQuery, byte[]>
 {
     public async Task<byte[]> Handle(ExportProjectTasksCsvQuery request, CancellationToken cancellationToken)

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Projects.Commands.UpdateProject
 {
-    public class UpdateProjectHandler(IFmkSyncContext context, IMapper mapper, ICurrentUserService currentUser)
+    public class UpdateProjectHandler(IKomSyncContext context, IMapper mapper, ICurrentUserService currentUser)
         : IRequestHandler<UpdateProjectRequest, bool>
     {
         public async Task<bool> Handle(UpdateProjectRequest request, CancellationToken cancellationToken)

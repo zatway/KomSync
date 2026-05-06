@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.UserProfile.Queries.MeAvatar;
 
 public class MeAvatarHandler(
-    IFmkSyncContext context
+    IKomSyncContext context
 ) : IRequestHandler<MeAvatarRequest, AvatarResult>
 {
     public async Task<AvatarResult> Handle(MeAvatarRequest request, CancellationToken cancellationToken)

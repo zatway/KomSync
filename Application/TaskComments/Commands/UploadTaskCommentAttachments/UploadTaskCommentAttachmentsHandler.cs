@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.TaskComments.Commands.UploadTaskCommentAttachments;
 
 public class UploadTaskCommentAttachmentsHandler(
-    IFmkSyncContext context,
+    IKomSyncContext context,
     ICurrentUserService currentUser,
     IFileStorage storage
 ) : IRequestHandler<UploadTaskCommentAttachmentsCommand, IReadOnlyList<CommentAttachmentDto>>

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Projects.Commands.UpdateComment
 {
-    public class UpdateProjectCommentHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+    public class UpdateProjectCommentHandler(IKomSyncContext context, ICurrentUserService currentUser)
         : IRequestHandler<UpdateProjectCommentRequest, bool>
     {
         public async Task<bool> Handle(UpdateProjectCommentRequest request, CancellationToken cancellationToken)

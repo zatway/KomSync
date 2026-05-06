@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Admin.Commands.DeleteUserAdmin;
 
-public class DeleteUserAdminHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+public class DeleteUserAdminHandler(IKomSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<DeleteUserAdminCommand, bool>
 {
     public async Task<bool> Handle(DeleteUserAdminCommand request, CancellationToken cancellationToken)
@@ -20,7 +20,7 @@ public class DeleteUserAdminHandler(IFmkSyncContext context, ICurrentUserService
 
         if (user == null) return false;
 
-        if (string.Equals(user.Email, "admin@fmksync.local", StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(user.Email, "admin@komsync.local", StringComparison.OrdinalIgnoreCase))
             throw new BadRequestException("Нельзя удалить системного администратора.");
 
         var snapshotName = user.FullName.Trim();
@@ -93,7 +93,7 @@ public class DeleteUserAdminHandler(IFmkSyncContext context, ICurrentUserService
     }
 
     private static async Task RemoveProjectCommentsByAuthorAsync(
-        IFmkSyncContext context,
+        IKomSyncContext context,
         Guid authorId,
         CancellationToken cancellationToken)
     {

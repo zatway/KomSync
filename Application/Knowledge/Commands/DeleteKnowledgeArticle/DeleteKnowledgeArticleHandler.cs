@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Knowledge.Commands.DeleteKnowledgeArticle;
 
 public class DeleteKnowledgeArticleHandler(
-    IFmkSyncContext context,
+    IKomSyncContext context,
     ICurrentUserService currentUser)
     : IRequestHandler<DeleteKnowledgeArticleCommand, bool>
 {

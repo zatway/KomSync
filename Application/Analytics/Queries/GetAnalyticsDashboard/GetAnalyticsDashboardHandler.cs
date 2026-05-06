@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Analytics.Queries.GetAnalyticsDashboard;
 
-public class GetAnalyticsDashboardHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+public class GetAnalyticsDashboardHandler(IKomSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<GetAnalyticsDashboardQuery, AnalyticsDashboardDto>
 {
     public async Task<AnalyticsDashboardDto> Handle(

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Search.Queries.GlobalSearch;
 
-public class GlobalSearchHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+public class GlobalSearchHandler(IKomSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<GlobalSearchQuery, IReadOnlyList<SearchHitDto>>
 {
     public async Task<IReadOnlyList<SearchHitDto>> Handle(GlobalSearchQuery request, CancellationToken cancellationToken)

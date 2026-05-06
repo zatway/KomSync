@@ -7,7 +7,7 @@ namespace Application.Admin.Commands.UpdateUserRole;
 
 public record UpdateUserRoleCommand(Guid UserId, UserRole Role) : IRequest<bool>;
 
-public class UpdateUserRoleHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+public class UpdateUserRoleHandler(IKomSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<UpdateUserRoleCommand, bool>
 {
     public async Task<bool> Handle(UpdateUserRoleCommand request, CancellationToken cancellationToken)

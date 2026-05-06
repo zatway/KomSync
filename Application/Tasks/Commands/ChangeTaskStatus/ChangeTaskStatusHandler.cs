@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Tasks.Commands.ChangeTaskStatus;
 
 public class ChangeTaskStatusHandler(
-    IFmkSyncContext context,
+    IKomSyncContext context,
     ICurrentUserService currentUserService,
     IRealtimeNotificationPublisher notifications
 ) : IRequestHandler<ChangeTaskStatusCommand, bool>

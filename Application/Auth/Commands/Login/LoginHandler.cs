@@ -8,7 +8,7 @@ using Application.DTO.Auth;
 namespace Application.Auth.Commands.Login;
 
 public class LoginHandler(
-    IFmkSyncContext context,
+    IKomSyncContext context,
     IPasswordHasher passwordHasher,
     IJwtProvider jwtProvider
 ) : IRequestHandler<LoginRequest, TokenResponse>

@@ -12,7 +12,7 @@ public record DeleteProjectTaskStatusColumnCommand(
     Guid? MoveTasksToColumnId
 ) : IRequest<Unit>;
 
-public class DeleteProjectTaskStatusColumnHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+public class DeleteProjectTaskStatusColumnHandler(IKomSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<DeleteProjectTaskStatusColumnCommand, Unit>
 {
     public async Task<Unit> Handle(DeleteProjectTaskStatusColumnCommand request, CancellationToken cancellationToken)

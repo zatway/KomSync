@@ -45,7 +45,7 @@ public class TaskCommentsController(IMediator mediator) : ControllerBase
 
     [HttpGet("attachments/{id:guid}")]
     public async Task<IActionResult> DownloadAttachment(
-        [FromServices] IFmkSyncContext context,
+        [FromServices] IKomSyncContext context,
         [FromServices] IFileStorage storage,
         [FromRoute] Guid id,
         CancellationToken cancellationToken)

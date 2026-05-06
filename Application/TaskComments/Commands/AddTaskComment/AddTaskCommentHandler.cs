@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.TaskComments.Commands.AddTaskComment;
 
 public class AddTaskCommentHandler(
-    IFmkSyncContext context,
+    IKomSyncContext context,
     IMapper mapper,
     ICurrentUserService currentUserService,
     IRealtimeNotificationPublisher notifications

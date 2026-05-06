@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Tasks.Queries.GetTaskById;
 
-public class GetTaskByIdHandler(IFmkSyncContext context, IMapper mapper, ICurrentUserService currentUser)
+public class GetTaskByIdHandler(IKomSyncContext context, IMapper mapper, ICurrentUserService currentUser)
     : IRequestHandler<GetTaskByIdQuery, TaskDetailedDto?>
 {
     public async Task<TaskDetailedDto?> Handle(GetTaskByIdQuery request, CancellationToken cancellationToken)

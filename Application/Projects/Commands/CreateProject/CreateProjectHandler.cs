@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Application.Projects.Commands.CreateProject
 {
-    public class CreateProjectHandler(IFmkSyncContext context, IMapper mapper, ICurrentUserService currentUser)
+    public class CreateProjectHandler(IKomSyncContext context, IMapper mapper, ICurrentUserService currentUser)
         : IRequestHandler<CreateProjectRequest, Guid>
     {
         public async Task<Guid> Handle(CreateProjectRequest request, CancellationToken cancellationToken)

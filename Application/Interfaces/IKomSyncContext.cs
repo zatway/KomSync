@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Application.Interfaces;
 
-public interface IFmkSyncContext
+public interface IKomSyncContext
 {
     DatabaseFacade Database { get; }
     DbSet<User> Users { get; }

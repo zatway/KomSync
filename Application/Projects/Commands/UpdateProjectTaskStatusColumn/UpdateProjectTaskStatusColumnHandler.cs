@@ -13,7 +13,7 @@ public record UpdateProjectTaskStatusColumnCommand(
     string? ColorHex
 ) : IRequest<Unit>;
 
-public class UpdateProjectTaskStatusColumnHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+public class UpdateProjectTaskStatusColumnHandler(IKomSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<UpdateProjectTaskStatusColumnCommand, Unit>
 {
     public async Task<Unit> Handle(UpdateProjectTaskStatusColumnCommand request, CancellationToken cancellationToken)

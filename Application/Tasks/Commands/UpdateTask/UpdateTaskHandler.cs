@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Tasks.Commands.UpdateTask;
 
 public class UpdateTaskHandler(
-    IFmkSyncContext context,
+    IKomSyncContext context,
     IMapper mapper,
     ICurrentUserService currentUserService,
     IRealtimeNotificationPublisher notifications

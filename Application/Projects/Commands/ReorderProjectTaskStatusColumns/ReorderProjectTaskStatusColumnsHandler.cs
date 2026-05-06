@@ -9,7 +9,7 @@ namespace Application.Projects.Commands.ReorderProjectTaskStatusColumns;
 public record ReorderProjectTaskStatusColumnsCommand(Guid ProjectId, IReadOnlyList<Guid> OrderedColumnIds)
     : IRequest<Unit>;
 
-public class ReorderProjectTaskStatusColumnsHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+public class ReorderProjectTaskStatusColumnsHandler(IKomSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<ReorderProjectTaskStatusColumnsCommand, Unit>
 {
     public async Task<Unit> Handle(ReorderProjectTaskStatusColumnsCommand request, CancellationToken cancellationToken)

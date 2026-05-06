@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Projects.Queries.GetProjects;
 
-public class GetProjectsHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+public class GetProjectsHandler(IKomSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<GetProjectsQuery, List<ProjectBriefDto>>
 {
     public async Task<List<ProjectBriefDto>> Handle(GetProjectsQuery request, CancellationToken cancellationToken)

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Reports.Queries.ExportOverdueTasksCsv;
 
-public class ExportOverdueTasksCsvHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+public class ExportOverdueTasksCsvHandler(IKomSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<ExportOverdueTasksCsvQuery, byte[]>
 {
     public async Task<byte[]> Handle(ExportOverdueTasksCsvQuery request, CancellationToken cancellationToken)

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Projects.Queries.GetProjectById;
 
-public class GetProjectByIdHandler(IFmkSyncContext context, ICurrentUserService currentUser)
+public class GetProjectByIdHandler(IKomSyncContext context, ICurrentUserService currentUser)
     : IRequestHandler<GetProjectByIdQuery, ProjectDetailedDto>
 {
     public async Task<ProjectDetailedDto> Handle(GetProjectByIdQuery request, CancellationToken cancellationToken)

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Tasks.Queries.GetTasksList;
 
-public class GetTasksListHandler(IFmkSyncContext context, IMapper mapper, ICurrentUserService currentUser)
+public class GetTasksListHandler(IKomSyncContext context, IMapper mapper, ICurrentUserService currentUser)
     : IRequestHandler<GetTasksListQuery, List<TaskShortDto>>
 {
     public async Task<List<TaskShortDto>> Handle(GetTasksListQuery request, CancellationToken cancellationToken)

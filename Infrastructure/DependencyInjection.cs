@@ -17,11 +17,11 @@ public static class DependencyInjection
 {
     public static IServiceCollection ConfigureAddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<FmkSyncDbContext>(options =>
+        services.AddDbContext<KomSyncDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
-                b => b.MigrationsAssembly(typeof(FmkSyncDbContext).Assembly.FullName)));
+                b => b.MigrationsAssembly(typeof(KomSyncDbContext).Assembly.FullName)));
             
-        services.AddScoped<IFmkSyncContext>(provider => provider.GetRequiredService<FmkSyncDbContext>());
+        services.AddScoped<IKomSyncContext>(provider => provider.GetRequiredService<KomSyncDbContext>());
 
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IJwtProvider, JwtProvider>();
