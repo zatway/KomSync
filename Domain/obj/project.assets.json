@@ -544,11 +544,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\work\\kom_Sync\\FmkSync\\Domain\\Domain.csproj",
+      "projectUniqueName": "C:\\work\\kom_Sync\\KomSync\\Domain\\Domain.csproj",
       "projectName": "Domain",
-      "projectPath": "C:\\work\\kom_Sync\\FmkSync\\Domain\\Domain.csproj",
+      "projectPath": "C:\\work\\kom_Sync\\KomSync\\Domain\\Domain.csproj",
       "packagesPath": "C:\\Users\\zatway\\.nuget\\packages\\",
-      "outputPath": "C:\\work\\kom_Sync\\FmkSync\\Domain\\obj\\",
+      "outputPath": "C:\\work\\kom_Sync\\KomSync\\Domain\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

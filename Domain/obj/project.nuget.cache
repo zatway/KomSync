@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ns3MZoCNP3I=",
+  "dgSpecHash": "DbU0WaHuXWU=",
   "success": true,
-  "projectFilePath": "C:\\work\\kom_Sync\\FmkSync\\Domain\\Domain.csproj",
+  "projectFilePath": "C:\\work\\kom_Sync\\KomSync\\Domain\\Domain.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\zatway\\.nuget\\packages\\microsoft.entityframeworkcore\\9.0.13\\microsoft.entityframeworkcore.9.0.13.nupkg.sha512",
     "C:\\Users\\zatway\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.13\\microsoft.entityframeworkcore.abstractions.9.0.13.nupkg.sha512",
