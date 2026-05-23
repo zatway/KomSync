@@ -49,8 +49,8 @@ services:
       App__UseHttpsRedirection: "false"
       Cors__IncludeBackendOrigin: "false"
       Cors__AllowedOriginsCsv: ${CORS_ALLOWED_ORIGINS:-http://komsync.ru,http://www.komsync.ru,http://72.56.234.114}
-      ConnectionStrings__DefaultConnection: Host=127.0.0.1;Port=${POSTGRES_PORT:-5432};Database=${POSTGRES_DB:-komSync};Username=${POSTGRES_USER:-komsync};Password=${POSTGRES_PASSWORD:-CHANGE_ME_POSTGRES_PASSWORD}
-      JwtSettings__Secret: ${JWT_SECRET:-CHANGE_ME_SUPER_SECRET_32_PLUS_CHARS}
+      ConnectionStrings__DefaultConnection: Host=127.0.0.1;Port=${POSTGRES_PORT:-5432};Database=${POSTGRES_DB:-komSync};Username=${POSTGRES_USER:-komsync};Password=${POSTGRES_PASSWORD:-komsync}
+      JwtSettings__Secret: ${JWT_SECRET:-SUPER_SECRET_KEY_KOM_SYNC_ZATWAY_2026}
       PasswordReset__FrontendBaseUrl: ${PASSWORD_RESET_FRONTEND_BASE_URL:-http://komsync.ru}
       PasswordReset__TokenLifetimeHours: ${PASSWORD_RESET_TOKEN_LIFETIME_HOURS:-24}
       DeadlineReminders__Enabled: ${DEADLINE_REMINDERS_ENABLED:-true}
@@ -63,9 +63,9 @@ services:
       SmtpEmail__Host: ${SMTP_HOST:-smtp.gmail.com}
       SmtpEmail__Port: ${SMTP_PORT:-587}
       SmtpEmail__UseSsl: ${SMTP_USE_SSL:-true}
-      SmtpEmail__Username: ${SMTP_USERNAME:-}
-      SmtpEmail__Password: ${SMTP_PASSWORD:-}
-      SmtpEmail__FromEmail: ${SMTP_FROM_EMAIL:-}
+      SmtpEmail__Username: ${SMTP_USERNAME:-arslanbekovr7@gmail.com}
+      SmtpEmail__Password: ${SMTP_PASSWORD:-lyrspwhiysesigse}
+      SmtpEmail__FromEmail: ${SMTP_FROM_EMAIL:-arslanbekovr7@gmail.com}
       SmtpEmail__FromName: ${SMTP_FROM_NAME:-komSync}
       SmtpEmail__TimeoutSeconds: ${SMTP_TIMEOUT_SECONDS:-20}
       SeedAdmin__Enabled: ${SEED_ADMIN_ENABLED:-false}
