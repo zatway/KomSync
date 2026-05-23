@@ -1,5 +1,6 @@
-# Продакшен на komsync.ru: один nginx на :80, фронт и API во внутренней сети.
-# Postgres на хосте Ubuntu — backend ходит на host.docker.internal.
+# Продакшен на komsync.ru: nginx на :80, Postgres на хосте Ubuntu.
+# Backend в host-сети → 127.0.0.1:5432 (без pg_hba для Docker).
+# Скопируйте .env.example в .env перед запуском.
 #
 # На сервере:
 #   cd /root/komSync && git pull
@@ -15,6 +16,8 @@ services:
       - "80:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       - frontend
       - backend
@@ -38,16 +41,15 @@ services:
       dockerfile: ./WebApi/Dockerfile
     container_name: komsync-backend
     restart: unless-stopped
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    network_mode: host
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
-      ASPNETCORE_HTTP_PORTS: "8080"
-      ASPNETCORE_URLS: "http://+:8080"
+      ASPNETCORE_HTTP_PORTS: "${BACKEND_PORT:-5237}"
+      ASPNETCORE_URLS: "http://+:${BACKEND_PORT:-5237}"
       App__UseHttpsRedirection: "false"
       Cors__IncludeBackendOrigin: "false"
-      Cors__AllowedOriginsCsv: ${CORS_ALLOWED_ORIGINS:-http://komsync.ru,http://www.komsync.ru}
-      ConnectionStrings__DefaultConnection: Host=host.docker.internal;Port=${POSTGRES_PORT:-5432};Database=${POSTGRES_DB:-komSync};Username=${POSTGRES_USER:-komsync};Password=${POSTGRES_PASSWORD:-CHANGE_ME_POSTGRES_PASSWORD}
+      Cors__AllowedOriginsCsv: ${CORS_ALLOWED_ORIGINS:-http://komsync.ru,http://www.komsync.ru,http://72.56.234.114}
+      ConnectionStrings__DefaultConnection: Host=127.0.0.1;Port=${POSTGRES_PORT:-5432};Database=${POSTGRES_DB:-komSync};Username=${POSTGRES_USER:-komsync};Password=${POSTGRES_PASSWORD:-CHANGE_ME_POSTGRES_PASSWORD}
       JwtSettings__Secret: ${JWT_SECRET:-CHANGE_ME_SUPER_SECRET_32_PLUS_CHARS}
       PasswordReset__FrontendBaseUrl: ${PASSWORD_RESET_FRONTEND_BASE_URL:-http://komsync.ru}
       PasswordReset__TokenLifetimeHours: ${PASSWORD_RESET_TOKEN_LIFETIME_HOURS:-24}
@@ -72,10 +74,6 @@ services:
       SeedAdmin__FullName: ${SEED_ADMIN_FULLNAME:-System Admin}
       SeedAdmin__DepartmentName: ${SEED_ADMIN_DEPARTMENT:-Admin}
       SeedAdmin__PositionName: ${SEED_ADMIN_POSITION:-Admin}
-    expose:
-      - "8080"
-    networks:
-      - komsync
 
 networks:
   komsync:
